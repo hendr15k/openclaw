@@ -37,8 +37,8 @@ jobs:
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
           mkdir -p "$ANDROID_SDK_ROOT/platform-tools"
 
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-94773861_latest.zip
-          unzip -q commandlinetools-linux-94773861_latest.zip -d "$ANDROID_SDK_ROOT/cmdline-tools"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux_latest.zip
+          unzip -q commandlinetools-linux_latest.zip -d "$ANDROID_SDK_ROOT/cmdline-tools"
           mv "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
 
           export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
