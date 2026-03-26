@@ -66,12 +66,17 @@
 | 49 | Ring | Stephen Baxter | 8 | Xeelee, Wurmloch, kosmischer Maßstab |
 | 50 | Vacuum Diagrams | Stephen Baxter | 7 | Xeelee Kurzgeschichten |
 | 51 | The Time Ships | Stephen Baxter | 8 | Wells Sequel, Zeitreise, Hard Sci-Fi |
+| 52 | Consider Phlebas | Iain M. Banks | 7 | Culture #1, Space Opera, AI |
+| 53 | The Player of Games | Iain M. Banks | 8 | Culture #2, Strategie, Gesellschaft |
+| 54 | Use of Weapons | Iain M. Banks | 7 | Culture #3, Struktur, düster |
+| 55 | Excession | Iain M. Banks | 7 | Culture, AI Kommunikation, kosmisch |
+| 56 | Look to Windward | Iain M. Banks | 7 | Culture, Ethik, Gerechtigkeit |
 
 ---
 
 ## Stats
 
-- **Experiments:** 51 (10 neu via Cixin Liu + Stephen Baxter)
+- **Experiments:** 56 (5 neu via Iain M. Banks Culture)
 - **Mean Absolute Error:** —
 - **Best prediction:** —
 - **Worst prediction:** —
