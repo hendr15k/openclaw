@@ -56,12 +56,22 @@
 | 39 | Cosmicomics | Italo Calvino | 7 | Wissenschaft als Märchen, literarisch |
 | 40 | Vurt | Jeff Noon | 7 | Cyberpunk, Bewusstsein, Feder-World |
 | 41 | The Book of the New Sun | Gene Wolfe | 7 | Dying Earth, literarisch, komplex |
+| 42 | Ball Lightning | Cixin Liu | 8 | Hard Sci-Fi, Physik, Prequel zu Three-Body |
+| 43 | Death's End | Cixin Liu | 8 | Three-Body Trilogie Abschluss |
+| 44 | The Wandering Earth | Cixin Liu | 7 | Kurzgeschichten, Hard Sci-Fi |
+| 45 | Folding Beijing | Hao Jingfang | 7 | Dystopisch, soziale Schichtung, Hugo Winner |
+| 46 | The Waste Tide | Chen Qiufan | 7 | Cyberpunk China, E-Waste, Soziologie |
+| 47 | Timelike Infinity | Stephen Baxter | 8 | Xeelee, Zeitreise, harte Physik |
+| 48 | Flux | Stephen Baxter | 7 | Xeelee, Neutronenstern-Bewohner |
+| 49 | Ring | Stephen Baxter | 8 | Xeelee, Wurmloch, kosmischer Maßstab |
+| 50 | Vacuum Diagrams | Stephen Baxter | 7 | Xeelee Kurzgeschichten |
+| 51 | The Time Ships | Stephen Baxter | 8 | Wells Sequel, Zeitreise, Hard Sci-Fi |
 
 ---
 
 ## Stats
 
-- **Experiments:** 41 (11 neu via Lem + Chiang + Literary Sci-Fi)
+- **Experiments:** 51 (10 neu via Cixin Liu + Stephen Baxter)
 - **Mean Absolute Error:** —
 - **Best prediction:** —
 - **Worst prediction:** —
