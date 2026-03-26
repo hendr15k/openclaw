@@ -39,12 +39,18 @@
 | 22 | Dark Matter | Blake Crouch | 7 | Multiverse, Thriller |
 | 23 | The Prefect | Alastair Reynolds | 8 | Revelation Space Universum, AI, Politik |
 | 24 | House of Suns | Alastair Reynolds | 8 | Posthuman, Galaktische Zivilisation |
+| 25 | Starfish (Rifters #1) | Peter Watts | 8 | Deep Sea, Hard Sci-Fi, düster |
+| 26 | The Freeze-Frame Revolution | Peter Watts | 7 | Zeitreise, AI, Kurzgeschichte |
+| 27 | Beyond the Rift | Peter Watts | 7 | Rifters Kurzgeschichten |
+| 28 | Rose/House | Arkady Martine | 8 | AI als Architektur, Consciousness, 2025 |
+| 29 | Volatile Memory | Seth Haddon | 7 | Consciousness upload, Mask, Revenge |
+| 30 | Service Model | Adrian Tchaikovsky | 8 | AI, Post-Apocalyptic, Robots |
 
 ---
 
 ## Stats
 
-- **Experiments:** 24 (7 neu via Greg Egan research)
+- **Experiments:** 30 (12 neu via Peter Watts + 2025 releases research)
 - **Mean Absolute Error:** —
 - **Best prediction:** —
 - **Worst prediction:** —
