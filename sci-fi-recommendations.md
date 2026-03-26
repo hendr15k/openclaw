@@ -45,12 +45,23 @@
 | 28 | Rose/House | Arkady Martine | 8 | AI als Architektur, Consciousness, 2025 |
 | 29 | Volatile Memory | Seth Haddon | 7 | Consciousness upload, Mask, Revenge |
 | 30 | Service Model | Adrian Tchaikovsky | 8 | AI, Post-Apocalyptic, Robots |
+| 31 | Solaris | Stanisław Lem | 8 | Alien Intelligence, Philosophisch, First Contact |
+| 32 | His Master's Voice | Stanisław Lem | 8 | SETI, Alien Communication, Philosophisch |
+| 33 | Fiasco | Stanisław Lem | 7 | Failed First Contact, düster |
+| 34 | The Cyberiad | Stanisław Lem | 7 | Humoristische AI-Geschichten |
+| 35 | Roadside Picnic | Arkady & Boris Strugatsky | 8 | Alien Artifacts, Zone, Philosophisch |
+| 36 | Hard to Be a God | Arkady & Boris Strugatsky | 7 | Ethik, Beobachter, Medieval Planet |
+| 37 | Stories of Your Life | Ted Chiang | 9 | Linguistik, Zeit, Determinismus |
+| 38 | Invisible Cities | Italo Calvino | 7 | Philosophisch, Literarisch, nicht-klassisches Sci-Fi |
+| 39 | Cosmicomics | Italo Calvino | 7 | Wissenschaft als Märchen, literarisch |
+| 40 | Vurt | Jeff Noon | 7 | Cyberpunk, Bewusstsein, Feder-World |
+| 41 | The Book of the New Sun | Gene Wolfe | 7 | Dying Earth, literarisch, komplex |
 
 ---
 
 ## Stats
 
-- **Experiments:** 30 (12 neu via Peter Watts + 2025 releases research)
+- **Experiments:** 41 (11 neu via Lem + Chiang + Literary Sci-Fi)
 - **Mean Absolute Error:** —
 - **Best prediction:** —
 - **Worst prediction:** —
