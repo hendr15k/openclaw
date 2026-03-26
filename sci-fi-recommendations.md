@@ -32,12 +32,19 @@
 | 15 | Ringworld | Larry Niven | 7 | Megastruktur, harte Physik, Klassiker |
 | 16 | Darwin's Radio | Greg Bear | 7 | Evolutionsbiologie, Genetik |
 | 17 | 2001: A Space Odyssey | Arthur C. Clarke | 7 | AI, Evolution, Klassiker |
+| 18 | Permutation City | Greg Egan | 9 | Simulationstheorie, Mind-Uploading, digital Bewusstsein |
+| 19 | Quarantine | Greg Egan | 8 | Quantenmechanik, Wahrnehmung, Mind-Fuck |
+| 20 | Schild's Ladder | Greg Egan | 8 | Quantenphysik, Vakuumkollaps, harte Physik |
+| 21 | Recursion | Blake Crouch | 8 | Zeitreise, Simulation, Mind-Fuck |
+| 22 | Dark Matter | Blake Crouch | 7 | Multiverse, Thriller |
+| 23 | The Prefect | Alastair Reynolds | 8 | Revelation Space Universum, AI, Politik |
+| 24 | House of Suns | Alastair Reynolds | 8 | Posthuman, Galaktische Zivilisation |
 
 ---
 
 ## Stats
 
-- **Experiments:** 17
+- **Experiments:** 24 (7 neu via Greg Egan research)
 - **Mean Absolute Error:** —
 - **Best prediction:** —
 - **Worst prediction:** —
