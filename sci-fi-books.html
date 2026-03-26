@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hendriks Sci‑Fi Bibliothek</title>
+  <style>
+    :root{--bg:#0b1020;--card:#121a30;--text:#eaf0ff;--muted:#a9b7d9;--acc:#6ea8ff;--line:rgba(255,255,255,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#0a0f1d,#111a2f);color:var(--text)}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    h1{margin:0 0 8px}.sub{color:var(--muted);margin:0 0 20px}
+    .toolbar{display:grid;grid-template-columns:1.4fr .8fr .8fr;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--line);padding:12px;border-radius:12px;position:sticky;top:8px;z-index:9;backdrop-filter: blur(4px)}
+    input,select{background:#0f1730;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+    .chip{padding:6px 10px;border-radius:999px;border:1px solid var(--line);cursor:pointer;font-size:.82rem;color:#cfe0ff;background:#1a2442}
+    .chip.active{outline:2px solid var(--acc)}
+    .panel{margin-top:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:12px}
+    .progress{height:10px;background:#0f1730;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+    .bar{height:100%;background:linear-gradient(90deg,#5b9dff,#7de2c7)}
+    .top5 li{margin:6px 0;color:#d7e6ff}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:14px}
+    .book{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+    .cover{width:100%;height:170px;object-fit:cover;background:#0d152b}
+    .body{padding:14px}
+    .title{font-size:1.05rem;margin:0 0 4px}
+    .author{color:var(--muted);font-size:.9rem;margin:0 0 8px}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+    .badge{font-size:.75rem;padding:3px 8px;border-radius:999px;border:1px solid var(--line)}
+    .desc{font-size:.92rem;line-height:1.45;color:#dbe6ff}
+    .start{margin-top:8px;color:#bfe0ff;font-weight:600;font-size:.9rem}
+    .readrow{display:flex;align-items:center;gap:8px;margin-top:10px;color:#cce0ff;font-size:.9rem}
+    .read{transform:scale(1.15)}
+    .done{opacity:.6}
+    .done .title{text-decoration:line-through}
+    .empty{padding:20px;color:var(--muted);text-align:center;border:1px dashed var(--line);border-radius:12px;margin-top:12px}
+    @media (max-width:800px){.toolbar{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Hendriks Sci‑Fi Bibliothek 🦞</h1>
+    <p class="sub">V4: Suche, Filter, Sortierung, <b>Gelesen/Offen</b>, Fortschritt und persönliche Top‑5.</p>
+
+    <div class="toolbar">
+      <input id="q" placeholder="Suche: Titel, Autor, Stichwort …" />
+      <select id="difficulty">
+        <option value="all">Schwierigkeit: alle</option>
+        <option value="leicht">Leicht</option>
+        <option value="mittel">Mittel</option>
+        <option value="hoch">Hoch</option>
+        <option value="extrem">Extrem</option>
+      </select>
+      <select id="sort">
+        <option value="default">Sortierung: Empfehlung</option>
+        <option value="title">Titel A–Z</option>
+        <option value="difficulty">Schwierigkeit</option>
+      </select>
+    </div>
+
+    <div class="chips" id="chips">
+      <button class="chip active" data-tag="all">Alle</button>
+      <button class="chip" data-tag="mindfuck">Mindfuck</button>
+      <button class="chip" data-tag="hard-sf">Hard Sci‑Fi</button>
+      <button class="chip" data-tag="philosophie">Philosophie</button>
+      <button class="chip" data-tag="space-opera">Space Opera</button>
+      <button class="chip" data-tag="cyberpunk">Cyberpunk</button>
+      <button class="chip" data-tag="einstieg">Einstieg</button>
+      <button class="chip" data-tag="offen">Nur offen</button>
+      <button class="chip" data-tag="gelesen">Nur gelesen</button>
+    </div>
+
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div><b>Lesefortschritt</b> · <span id="progressText">0/20</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="chip" id="pickTonight" style="cursor:pointer">🎲 Pick für heute</button>
+          <button class="chip" id="exportState" style="cursor:pointer">⬇️ Export</button>
+          <button class="chip" id="importStateBtn" style="cursor:pointer">⬆️ Import</button>
+          <button class="chip" id="resetRead" style="cursor:pointer">♻️ Reset</button>
+        </div>
+      </div>
+      <input id="importState" type="file" accept="application/json" style="display:none" />
+      <div class="progress" style="margin-top:8px"><div class="bar" id="bar" style="width:0%"></div></div>
+      <div style="margin-top:12px"><b>Persönliche Top‑5 (automatisch)</b><ol class="top5" id="top5"></ol></div>
+      <div style="margin-top:12px"><b>Heute lesen:</b> <span id="tonightPick" style="color:#bfe0ff">Noch kein Pick</span></div>
+    </div>
+
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+        <b>Leseplan-Generator</b>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="chip" id="plan7">7 Tage Plan</button>
+          <button class="chip" id="plan30">30 Tage Plan</button>
+          <button class="chip" id="copyPlan">📋 Plan kopieren</button>
+          <button class="chip" id="todoistLinks">✅ Todoist Quick-Add</button>
+          <button class="chip" id="syncTodoist">⚡ Sync zu Todoist</button>
+          <button class="chip" id="downloadIcs">🗓️ ICS Export</button>
+        </div>
+      </div>
+      <ol id="planList" style="margin:10px 0 0; color:#d7e6ff"></ol>
+    </div>
+
+    <div class="grid" id="grid"></div>
+    <div id="empty" class="empty" style="display:none">Keine Treffer — probier einen anderen Filter.</div>
+  </div>
+
+<script>
+const books=[
+{id:'children',t:'Children of Time',a:'Adrian Tchaikovsky',d:'hoch',tags:['hard-sf','mindfuck'],cover:'https://covers.openlibrary.org/b/title/Children%20of%20Time-L.jpg',desc:'Evolution und nicht-menschliche Intelligenz über riesige Zeitskalen.',start:'Wenn du große Ideen willst.'},
+{id:'blind',t:'Blindsight',a:'Peter Watts',d:'extrem',tags:['hard-sf','mindfuck','philosophie'],cover:'https://covers.openlibrary.org/b/title/Blindsight-L.jpg',desc:'Bewusstsein als möglicher Nachteil — brutal kluge Kontakt-Sci‑Fi.',start:'Für maximalen Mindfuck.'},
+{id:'threebody',t:'The Three-Body Problem',a:'Liu Cixin',d:'mittel',tags:['hard-sf'],cover:'https://covers.openlibrary.org/b/title/The%20Three-Body%20Problem-L.jpg',desc:'Vom Wissenschaftsthriller zur kosmischen Strategie.',start:'Für Fermi-Paradox-Vibes.'},
+{id:'hyperion',t:'Hyperion',a:'Dan Simmons',d:'hoch',tags:['space-opera','philosophie'],cover:'https://covers.openlibrary.org/b/title/Hyperion-L.jpg',desc:'Mehrstimmige, literarische Space Opera.',start:'Wenn du Stilvielfalt magst.'},
+{id:'hailmary',t:'Project Hail Mary',a:'Andy Weir',d:'leicht',tags:['einstieg','hard-sf'],cover:'https://covers.openlibrary.org/b/title/Project%20Hail%20Mary-L.jpg',desc:'Zugänglich, clever, emotional — starker Einstieg.',start:'Heute-Abend-Startempfehlung.'},
+{id:'dune',t:'Dune',a:'Frank Herbert',d:'mittel',tags:['philosophie','space-opera'],cover:'https://covers.openlibrary.org/b/title/Dune-L.jpg',desc:'Macht, Religion und Ökologie als Systemroman.',start:'Wenn du Politik + Sci‑Fi willst.'},
+{id:'lefthand',t:'The Left Hand of Darkness',a:'Ursula K. Le Guin',d:'mittel',tags:['philosophie'],cover:'https://covers.openlibrary.org/b/title/The%20Left%20Hand%20of%20Darkness-L.jpg',desc:'Anthropologie und Identität statt Technikfokus.',start:'Für gesellschaftliche Tiefe.'},
+{id:'neuro',t:'Neuromancer',a:'William Gibson',d:'mittel',tags:['cyberpunk'],cover:'https://covers.openlibrary.org/b/title/Neuromancer-L.jpg',desc:'Der Cyberpunk-Grundstein.',start:'Wenn du digitale Zukunftsästhetik willst.'},
+{id:'solaris',t:'Solaris',a:'Stanisław Lem',d:'mittel',tags:['philosophie','mindfuck'],cover:'https://covers.openlibrary.org/b/title/Solaris-L.jpg',desc:'Radikal fremde Intelligenz und Erkenntnisgrenzen.',start:'Für ruhigen, tiefen Mindfuck.'},
+{id:'firedeep',t:'A Fire Upon the Deep',a:'Vernor Vinge',d:'hoch',tags:['space-opera','hard-sf'],cover:'https://covers.openlibrary.org/b/title/A%20Fire%20Upon%20the%20Deep-L.jpg',desc:'Intelligenzzonen und kosmische Bedrohung.',start:'Für Big-Idea-Space-Opera.'},
+{id:'dispossessed',t:'The Dispossessed',a:'Ursula K. Le Guin',d:'mittel',tags:['philosophie'],cover:'https://covers.openlibrary.org/b/title/The%20Dispossessed-L.jpg',desc:'Anarchismus vs. Kapitalismus ohne Klischee.',start:'Für politische Sci‑Fi.'},
+{id:'permcity',t:'Permutation City',a:'Greg Egan',d:'extrem',tags:['mindfuck','hard-sf'],cover:'https://covers.openlibrary.org/b/title/Permutation%20City-L.jpg',desc:'Identität und Simulation auf hohem Niveau.',start:'Nur wenn du sehr fit bist.'},
+{id:'diaspora',t:'Diaspora',a:'Greg Egan',d:'extrem',tags:['hard-sf','mindfuck'],cover:'https://covers.openlibrary.org/b/title/Diaspora-L.jpg',desc:'Posthuman, mathematisch, radikal groß.',start:'Hardcore-Mode.'},
+{id:'house',t:'House of Suns',a:'Alastair Reynolds',d:'mittel',tags:['space-opera'],cover:'https://covers.openlibrary.org/b/title/House%20of%20Suns-L.jpg',desc:'Melancholische, weitspannige Space Opera.',start:'Für epische Zeitmaßstäbe.'},
+{id:'forever',t:'The Forever War',a:'Joe Haldeman',d:'leicht',tags:['einstieg'],cover:'https://covers.openlibrary.org/b/title/The%20Forever%20War-L.jpg',desc:'Relativistische Kriegsentfremdung, sehr effektiv.',start:'Kurz, stark, direkt.'},
+{id:'anathem',t:'Anathem',a:'Neal Stephenson',d:'hoch',tags:['philosophie','mindfuck'],cover:'https://covers.openlibrary.org/b/title/Anathem-L.jpg',desc:'Langsamer Start, dann Ideenfeuerwerk.',start:'Wenn du Geduld für Tiefgang hast.'},
+{id:'player',t:'The Player of Games',a:'Iain M. Banks',d:'leicht',tags:['space-opera','einstieg'],cover:'https://covers.openlibrary.org/b/title/The%20Player%20of%20Games-L.jpg',desc:'Eleganter Einstieg ins Culture-Universum.',start:'Bester Banks-Einstieg.'},
+{id:'weapons',t:'Use of Weapons',a:'Iain M. Banks',d:'hoch',tags:['space-opera'],cover:'https://covers.openlibrary.org/b/title/Use%20of%20Weapons-L.jpg',desc:'Fragmentiert, brutal, psychologisch stark.',start:'Wenn du narrative Experimente magst.'},
+{id:'revelation',t:'Revelation Space',a:'Alastair Reynolds',d:'mittel',tags:['space-opera','hard-sf'],cover:'https://covers.openlibrary.org/b/title/Revelation%20Space-L.jpg',desc:'Dunkle, dichte Space Opera mit KI/Archäologie.',start:'Für ernsten Ton.'},
+{id:'spin',t:'Spin',a:'Robert Charles Wilson',d:'leicht',tags:['einstieg','mindfuck'],cover:'https://covers.openlibrary.org/b/title/Spin-L.jpg',desc:'Zeitblase um die Erde — Konzept + Emotion.',start:'Wenn du Idee+Herz willst.'},
+];
+const rank={leicht:1,mittel:2,hoch:3,extrem:4};
+let activeTag='all';
+let readState=JSON.parse(localStorage.getItem('sf_read_state')||'{}');
+const grid=document.getElementById('grid');
+const empty=document.getElementById('empty');
+
+function isRead(id){return !!readState[id]}
+function setRead(id,val){readState[id]=val; localStorage.setItem('sf_read_state',JSON.stringify(readState)); updateProgress(); updateTop5();}
+
+function card(b){
+  const done=isRead(b.id);
+  return `<article class="book ${done?'done':''}">
+    <img class="cover" loading="lazy" src="${b.cover}" alt="${b.t} cover" onerror="this.style.display='none'"/>
+    <div class="body">
+      <h3 class="title">${b.t}</h3><p class="author">${b.a}</p>
+      <div class="meta"><span class="badge">${b.d}</span>${b.tags.map(t=>`<span class='badge'>${t}</span>`).join('')}</div>
+      <p class="desc">${b.desc}</p><p class="start">${b.start}</p>
+      <label class="readrow"><input class="read" type="checkbox" data-id="${b.id}" ${done?'checked':''}/> Gelesen</label>
+    </div>
+  </article>`
+}
+
+function render(){
+  const q=document.getElementById('q').value.toLowerCase().trim();
+  const d=document.getElementById('difficulty').value;
+  const s=document.getElementById('sort').value;
+  let arr=books.filter(b=>{
+    const okQ=!q||(`${b.t} ${b.a} ${b.desc} ${b.tags.join(' ')}`).toLowerCase().includes(q);
+    const okD=d==='all'||b.d===d;
+    const tagCheck = activeTag==='all' ? true :
+      activeTag==='offen' ? !isRead(b.id) :
+      activeTag==='gelesen' ? isRead(b.id) : b.tags.includes(activeTag);
+    return okQ&&okD&&tagCheck;
+  });
+  if(s==='title') arr.sort((a,b)=>a.t.localeCompare(b.t));
+  if(s==='difficulty') arr.sort((a,b)=>rank[a.d]-rank[b.d]);
+  grid.innerHTML=arr.map(card).join('');
+  empty.style.display=arr.length?'none':'block';
+  document.querySelectorAll('.read').forEach(cb=>cb.addEventListener('change',e=>setRead(e.target.dataset.id,e.target.checked)));
+}
+
+function updateProgress(){
+  const read=books.filter(b=>isRead(b.id)).length;
+  const pct=Math.round((read/books.length)*100);
+  document.getElementById('progressText').textContent=`${read}/${books.length} (${pct}%)`;
+  document.getElementById('bar').style.width=`${pct}%`;
+}
+
+function prefScore(b){
+  let s=0;
+  if(b.tags.includes('mindfuck')) s+=3;
+  if(b.tags.includes('hard-sf')) s+=2;
+  if(b.tags.includes('philosophie')) s+=2;
+  if(b.d==='hoch') s+=1;
+  if(b.d==='extrem') s+=1;
+  if(isRead(b.id)) s-=5;
+  return s;
+}
+
+function updateTop5(){
+  const top=books.slice().sort((a,b)=>prefScore(b)-prefScore(a)).filter(b=>!isRead(b.id)).slice(0,5);
+  document.getElementById('top5').innerHTML=top.map(b=>`<li><b>${b.t}</b> — ${b.a} <span style='color:#9ec2ff'>(${b.d})</span></li>`).join('');
+}
+
+function buildPlan(days){
+  const unread=books.filter(b=>!isRead(b.id)).sort((a,b)=>prefScore(b)-prefScore(a));
+  const count=Math.min(unread.length, days>=30 ? 12 : 7);
+  const picked=unread.slice(0,count);
+  const now=new Date();
+  const list=picked.map((b,i)=>{
+    const d=new Date(now); d.setDate(now.getDate()+Math.floor(i*(days/count))+1);
+    const ds=d.toLocaleDateString('de-DE');
+    return `${ds} — ${b.t} (${b.d})`;
+  });
+  localStorage.setItem('sf_plan', JSON.stringify({days, list, createdAt:new Date().toISOString()}));
+  renderPlan();
+}
+
+function renderPlan(){
+  const data=JSON.parse(localStorage.getItem('sf_plan')||'null');
+  const el=document.getElementById('planList');
+  if(!data || !data.list?.length){ el.innerHTML='<li style="color:#9fb2de">Noch kein Plan erstellt.</li>'; return; }
+  el.innerHTML=data.list.map(x=>`<li>${x}</li>`).join('');
+}
+
+['q','difficulty','sort'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  ch.classList.add('active');
+  activeTag=ch.dataset.tag;
+  render();
+}));
+document.getElementById('resetRead').addEventListener('click',()=>{readState={};localStorage.removeItem('sf_read_state');localStorage.removeItem('sf_tonight_pick');updateProgress();updateTop5();document.getElementById('tonightPick').textContent='Noch kein Pick';render();});
+
+document.getElementById('pickTonight').addEventListener('click',()=>{
+  const pool=books.filter(b=>!isRead(b.id));
+  if(!pool.length){document.getElementById('tonightPick').textContent='Alles gelesen 🎉';return;}
+  const weighted=[];
+  pool.forEach(b=>{
+    let w=1;
+    if(b.tags.includes('mindfuck')) w+=2;
+    if(b.tags.includes('hard-sf')) w+=1;
+    if(b.d==='leicht') w+=1;
+    for(let i=0;i<w;i++) weighted.push(b);
+  });
+  const pick=weighted[Math.floor(Math.random()*weighted.length)];
+  const txt=`${pick.t} — ${pick.a} (${pick.d})`;
+  localStorage.setItem('sf_tonight_pick',txt);
+  document.getElementById('tonightPick').textContent=txt;
+});
+
+document.getElementById('exportState').addEventListener('click',()=>{
+  const data={readState, tonight: localStorage.getItem('sf_tonight_pick')||null, exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='hendrik-sci-fi-state.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('importStateBtn').addEventListener('click',()=>document.getElementById('importState').click());
+document.getElementById('importState').addEventListener('change', async (e)=>{
+  const file=e.target.files?.[0]; if(!file) return;
+  try{
+    const txt=await file.text();
+    const obj=JSON.parse(txt);
+    readState=obj.readState||{};
+    localStorage.setItem('sf_read_state',JSON.stringify(readState));
+    if(obj.tonight){localStorage.setItem('sf_tonight_pick',obj.tonight);}
+    updateProgress(); updateTop5(); render(); renderPlan();
+    document.getElementById('tonightPick').textContent=localStorage.getItem('sf_tonight_pick')||'Noch kein Pick';
+  }catch(err){alert('Import fehlgeschlagen: ungültige JSON-Datei.');}
+});
+
+document.getElementById('plan7').addEventListener('click',()=>buildPlan(7));
+document.getElementById('plan30').addEventListener('click',()=>buildPlan(30));
+document.getElementById('copyPlan').addEventListener('click', async ()=>{
+  const data=JSON.parse(localStorage.getItem('sf_plan')||'null');
+  if(!data?.list?.length){ alert('Kein Plan vorhanden. Erstelle zuerst einen 7/30-Tage-Plan.'); return; }
+  const txt='Sci-Fi Leseplan\n'+data.list.map((x,i)=>`${i+1}. ${x}`).join('\n');
+  try{ await navigator.clipboard.writeText(txt); alert('Plan kopiert ✅'); }
+  catch{ alert('Kopieren fehlgeschlagen.'); }
+});
+
+document.getElementById('todoistLinks').addEventListener('click', ()=>{
+  const data=JSON.parse(localStorage.getItem('sf_plan')||'null');
+  if(!data?.list?.length){ alert('Kein Plan vorhanden. Erstelle zuerst einen 7/30-Tage-Plan.'); return; }
+  const items=data.list.slice(0,8); // Browser popup-safe limit
+  items.forEach((line, idx)=>{
+    const m=line.match(/^(\d{2}\.\d{2}\.\d{4})\s—\s(.+)\s\((.+)\)$/);
+    if(!m) return;
+    const [_,date,title,level]=m;
+    const content=`📖 Sci-Fi Leseplan: ${title}`;
+    const desc=`Schwierigkeit: ${level}`;
+    const url=`https://todoist.com/add?content=${encodeURIComponent(content)}&description=${encodeURIComponent(desc)}&date=${encodeURIComponent(date)}`;
+    setTimeout(()=>window.open(url,'_blank'), idx*120);
+  });
+});
+
+document.getElementById('syncTodoist').addEventListener('click', async ()=>{
+  const data=JSON.parse(localStorage.getItem('sf_plan')||'null');
+  if(!data?.list?.length){ alert('Kein Plan vorhanden. Erstelle zuerst einen 7/30-Tage-Plan.'); return; }
+  const btn=document.getElementById('syncTodoist');
+  const orig=btn.textContent;
+  btn.textContent='⏳ Sync läuft...'; btn.disabled=true;
+  try {
+    const parsed=data.list.map(line=>{
+      const m=line.match(/^(\d{2})\.(\d{2})\.(\d{4})\s—\s(.+)\s\((.+)\)$/);
+      if(!m) return null;
+      const [,d,mn,y,title,level]=m;
+      return {date:`${y}-${mn}-${d}`, title, level};
+    }).filter(Boolean).slice(0,12);
+    const resp=await fetch('/.netlify/functions/sync-todoist',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({items:parsed})
+    });
+    const res=await resp.json();
+    const created=res.created?.filter(c=>c.status==='created')?.length||0;
+    const total=res.created?.length||0;
+    alert(`Sync abgeschlossen ✅\n${created}/${total} Tasks angelegt.`);
+  }
+  catch(e){
+    alert('Sync fehlgeschlagen: '+e.message);
+  }
+  finally { btn.textContent=orig; btn.disabled=false; }
+});
+
+document.getElementById('downloadIcs').addEventListener('click', ()=>{
+  const data=JSON.parse(localStorage.getItem('sf_plan')||'null');
+  if(!data?.list?.length){ alert('Kein Plan vorhanden. Erstelle zuerst einen 7/30-Tage-Plan.'); return; }
+  const fmt=(d)=>d.replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Claw//SciFiPlan//DE\n';
+  data.list.forEach((line,i)=>{
+    const m=line.match(/^(\d{2})\.(\d{2})\.(\d{4})\s—\s(.+)\s\((.+)\)$/);
+    if(!m) return;
+    const [,dd,mm,yyyy,title,level]=m;
+    const dt=`${yyyy}${mm}${dd}`;
+    ics += 'BEGIN:VEVENT\n';
+    ics += `UID:sf-${i}-${Date.now()}@claw\n`;
+    ics += `DTSTAMP:${fmt(new Date().toISOString())}\n`;
+    ics += `DTSTART;VALUE=DATE:${dt}\n`;
+    ics += `SUMMARY:📖 Sci-Fi Leseplan: ${title}\n`;
+    ics += `DESCRIPTION:Schwierigkeit: ${level}\n`;
+    ics += 'END:VEVENT\n';
+  });
+  ics+='END:VCALENDAR\n';
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='sci-fi-leseplan.ics';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+updateProgress(); updateTop5(); render(); renderPlan();
+document.getElementById('tonightPick').textContent=localStorage.getItem('sf_tonight_pick')||'Noch kein Pick';
+</script>
+</body>
+</html>

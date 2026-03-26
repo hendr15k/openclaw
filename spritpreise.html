@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spritpreisprognose Deutschland 🇩🇪 — Live</title>
+  <!-- Open Graph -->
+  <meta property="og:title" content="Spritpreisprognose Deutschland – Live & Historisch" />
+  <meta property="og:description" content="Aktuelle Spritpreise, Alarm & Rechner – ohne App" />
+  <meta property="og:image" content="https://hendrik-spritpreise.netlify.app/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--bg:#0b1020;--card:#121a30;--text:#eaf0ff;--muted:#a9b7d9;--acc:#6ea8ff;--up:#ff6b6b;--down:#51cf66;--line:rgba(255,255,255,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#0a0f1d,#111a2f);color:var(--text);line-height:1.5}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    h1{margin:0 0 8px}.sub{color:var(--muted);margin:0 0 20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .label{color:var(--muted);font-size:.88rem;margin-bottom:6px}
+    .price{font-size:1.5rem;font-weight:700}
+    .trend{font-size:.9rem;margin-top:4px}
+    .up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--muted)}
+    .chart-container{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+    .calc-container{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;align-items:start}
+    .calc-group{display:flex;flex-direction:column;gap:8px}
+    .calc-group label{color:var(--muted);font-size:.9rem}
+    .calc-group input,.calc-group select{background:#0f1730;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:1rem}
+    .result{font-size:1.4rem;font-weight:700;color:#bfe0ff}
+    .stations-list{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;max-height:400px;overflow-y:auto}
+    .station{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+    .station:last-child{border:none}
+    .station-info{display:flex;flex-direction:column;gap:2px}
+    .station-name{font-weight:600}.station-brand{color:#9ec2ff;font-size:.9rem}
+    .station-prices{display:flex;gap:12px;font-weight:700}
+    .cheap{color:#51cf66}.expensive{color:#ff6b6b}
+    .alert-box{background:rgba(81,207,102,.1);border:1px solid rgba(81,207,102,.4);border-radius:12px;padding:14px;margin-bottom:16px;display:none}
+    .alert-box.show{display:block}
+    .alert-text{color:#51cf66;font-weight:600}
+    .info{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:16px}
+    .info p{margin:6px 0;color:#d7e6ff;font-size:.9rem}
+    .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .btn{background:#1a2442;color:#bfe0ff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.88rem;transition:background .2s}
+    .btn:hover{background:#223055}
+    .btn.primary{background:#223055;border-color:#6ea8ff}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--muted);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast-container{position:fixed;bottom:20px;right:20px;z-index:1000;max-width:300px}
+    .toast{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:flex;align-items:center;gap:8px}
+    .toast.success{border-color:#51cf66}
+    .toast.error{border-color:#ff6b6b}
+    .toast.info{border-color:#6ea8ff}
+    .last-update{color:var(--muted);font-size:.85rem;margin-top:10px}
+    .threshold-control{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted);margin-top:8px}
+    .threshold-control input{width:60px;padding:6px;border-radius:8px;border:1px solid var(--line);background:#0f1730;color:var(--text)}
+    @media (max-width:800px){.cards{grid-template-columns:1fr 1fr}.calc-container{grid-template-columns:1fr}.station-prices{flex-direction:column;gap:4px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Spritpreisprognose Deutschland 🇩🇪 — Live</h1>
+    <p class="sub">Echtzeit‑Preise + Preis‑Alarm + Rechner</p>
+
+    <div class="alert-box" id="alertBox">
+      <div class="alert-text">🚀 Preis‑Alarm ausgelöst! Günstigster Preis: <span id="alertPrice">0.000</span> €/L</div>
+      <div style="font-size:.85rem;color:#a9b7d9;margin-top:6px">Bei <span id="alertStationName"></span> (<span id="alertDistance"></span> km)</div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn primary" id="getLocation" aria-label="Eigene Position ermitteln">
+        <span class="btn-text">📍 Meine Position</span>
+      </button>
+      <button class="btn" id="fetchPrices" aria-label="Preise laden">
+        <span class="btn-text">🔄 Preise laden</span>
+      </button>
+      <button class="btn" id="syncNotion" aria-label="Daten nach Notion synchronisieren">
+        <span class="btn-text">📋 Nach Notion</span>
+      </button>
+    </div>
+
+    <div class="threshold-control">
+      <label for="alarmThreshold">Alarm bei Preis unter:</label>
+      <input type="number" id="alarmThreshold" step="0.001" min="0" value="1.62" />
+      <span>€/L</span>
+    </div>
+
+    <div class="stations-list" id="stationsList" aria-live="polite">
+      <div style="text-align:center;color:#a9b7d9;padding:20px">Klicke auf „📍 Meine Position“, um Tankstellen in deiner Nähe zu sehen.</div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="label">E5 (Super Plus)</div>
+        <div class="price" id="avgE5">—</div>
+        <div class="trend" id="trendE5">Durchschnitt</div>
+      </div>
+      <div class="card">
+        <div class="label">Diesel</div>
+        <div class="price" id="avgDiesel">—</div>
+        <div class="trend" id="trendDiesel">Durchschnitt</div>
+      </div>
+      <div class="card">
+        <div class="label">Super E10</div>
+        <div class="price" id="avgE10">—</div>
+        <div class="trend" id="trendE10">Durchschnitt</div>
+      </div>
+      <div class="card">
+        <div class="label">Günstigster Preis</div>
+        <div class="price" id="minPrice">—</div>
+        <div class="trend" id="minPriceLabel">Noch geladen</div>
+      </div>
+    </div>
+
+    <div class="calc-container">
+      <div class="calc-group">
+        <label for="fuelType">Treibstoff</label>
+        <select id="fuelType" aria-label="Treibstoff auswählen">
+          <option value="diesel" selected>Diesel</option>
+          <option value="e5">E5</option>
+          <option value="e10">Super E10</option>
+        </select>
+      </div>
+      <div class="calc-group">
+        <label for="liters">Liter</label>
+        <input type="number" id="liters" value="50" min="1" max="200" aria-label="Menge in Litern" />
+      </div>
+      <div class="calc-group">
+        <label for="price">Preis (€/L)</label>
+        <input type="number" id="price" value="1.645" step="0.001" aria-label="Preis pro Liter" />
+      </div>
+      <div class="calc-group">
+        <label>Gesamtkosten</label>
+        <div class="result" id="total">82,25 €</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h3 style="margin:0 0 12px;color:#eaf0ff">📊 Historie + Prognose (14 Tage)</h3>
+      <canvas id="historyChart" aria-label="Preisentwicklung der letzten 14 Tage"></canvas>
+    </div>
+
+    <div class="buttons">
+      <button class="btn" id="exportCSV" aria-label="Preisgeschichte als CSV exportieren">📥 CSV Export</button>
+    </div>
+
+    <div class="info">
+      <h3>📊 Prognose‑Details</h3>
+      <p>• <b>Freitagabend & Samstag</b> meist günstigster Tanktermin</p>
+      <p>• <b>Dienstag bis Donnerstag</b> oft +3–5 ct teurer</p>
+      <p>• Mindestpreise stabilisieren bei ca. 1,65 €/L für Diesel</p>
+      <p>• Ölabhängige Volatilität bleibt bis Mitte April hoch</p>
+      <p style="color:var(--muted);font-size:.85rem;margin-top:10px">⚠️ Live‑Daten via Tankerkoenig — keine Garantie.</p>
+      <div class="last-update" id="lastUpdate">Stand: –</div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ——— Konfiguration ———
+const ALARM_THRESHOLD_KEY = 'spritpreis_alarm_threshold';
+const DEFAULT_THRESHOLD = 1.62;
+
+// ——— Zustand ———
+let userLat = null, userLng = null;
+let stationsData = [];
+let priceThreshold = parseFloat(localStorage.getItem(ALARM_THRESHOLD_KEY)) || DEFAULT_THRESHOLD;
+document.getElementById('alarmThreshold').value = priceThreshold;
+
+// ——— Chart-Daten: letzte 14 Tage (bis heute, 17.03.2026) ———
+function getLast14Days() {
+  const labels = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    labels.push(`${dd}.${mm}`);
+  }
+  return labels;
+}
+const historyLabels = getLast14Days();
+
+// Historische Werte (aus ursprünglicher Tabelle, Daten für 04.03.–17.03. = 14 Tage)
+const e5History = [1.895,1.902,1.888,1.875,1.883,1.891,1.878,1.885,1.892,1.879,1.866,1.859,1.868,1.879];
+const dieselHistory = [1.662,1.669,1.655,1.642,1.651,1.658,1.645,1.652,1.659,1.646,1.633,1.627,1.636,1.645];
+const e10History = [1.839,1.846,1.832,1.819,1.828,1.835,1.822,1.829,1.836,1.823,1.811,1.804,1.813,1.822];
+
+// ——— Rechner ———
+const fuelSelect = document.getElementById('fuelType');
+const litersInput = document.getElementById('liters');
+const priceInput = document.getElementById('price');
+const totalDisplay = document.getElementById('total');
+let currentPrices = { diesel: 1.645, e5: 1.879, e10: 1.822 }; // Fallback‑Durchschnitte
+
+function calc() {
+  const liters = parseFloat(litersInput.value) || 0;
+  const price = parseFloat(priceInput.value) || 0;
+  const total = liters * price;
+  totalDisplay.textContent = total.toFixed(2) + ' €';
+}
+
+fuelSelect.addEventListener('change', () => {
+  priceInput.value = currentPrices[fuelSelect.value];
+  calc();
+});
+litersInput.addEventListener('input', calc);
+priceInput.addEventListener('input', calc);
+document.getElementById('alarmThreshold').addEventListener('change', (e) => {
+  priceThreshold = parseFloat(e.target.value);
+  localStorage.setItem(ALARM_THRESHOLD_KEY, priceThreshold);
+});
+
+// ——— Toast‑Benachrichtigungen ———
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
+
+// ——— Lade‑Spinner ———
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  const span = btn.querySelector('.btn-text');
+  if (loading) {
+    span.innerHTML = '<span class="spinner"></span> Lädt...';
+    btn.disabled = true;
+  } else {
+    span.textContent = btn.id === 'fetchPrices' ? '🔄 Preise laden' : btn.id === 'syncNotion' ? '📋 Nach Notion' : '📍 Meine Position';
+    btn.disabled = false;
+  }
+}
+
+// ——— Position ———
+document.getElementById('getLocation').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    showToast('Geolocation wird nicht unterstützt.', 'error');
+    return;
+  }
+  setLoading('getLocation', true);
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      userLat = pos.coords.latitude;
+      userLng = pos.coords.longitude;
+      showToast(`Position: ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`, 'info');
+      document.getElementById('fetchPrices').click();
+    },
+    err => {
+      showToast('Position konnte nicht abgerufen werden: ' + err.message, 'error');
+      setLoading('getLocation', false);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+});
+
+// ——— Preise laden ———
+document.getElementById('fetchPrices').addEventListener('click', async () => {
+  if (userLat === null || userLng === null) {
+    showToast('Bitte zuerst Position ermitteln.', 'info');
+    return;
+  }
+  setLoading('fetchPrices', true);
+  try {
+    const resp = await fetch('/.netlify/functions/fetch-prices', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lat: userLat, lng: userLng, radius: 10 })
+    });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    stationsData = data.stations || [];
+    if (!stationsData.length) throw new Error('Keine Tankstellen gefunden.');
+    processStations(stationsData);
+    showToast(`Preise geladen: ${stationsData.length} Tankstellen`, 'success');
+    setLastUpdate();
+  } catch (err) {
+    console.error(err);
+    showToast('Live‑Daten nicht verfügbar – zeige Demo‑Daten', 'error');
+    // Fallback Demo‑Daten (Umgebung Berlin)
+    stationsData = getDemoStations();
+    processStations(stationsData);
+  } finally {
+    setLoading('fetchPrices', false);
+  }
+});
+
+// ——— Verarbeitung der Stationen ———
+function processStations(stations) {
+  // Sortieren: günstigste zuerst
+  stations.sort((a, b) => a.price - b.price);
+
+  // Durchschnitte pro Kraftstoff berechnen
+  const sums = { diesel: 0, e5: 0, e10: 0 };
+  const counts = { diesel: 0, e5: 0, e10: 0 };
+  stations.forEach(s => {
+    if (s.diesel) { sums.diesel += s.diesel; counts.diesel++; }
+    if (s.e5) { sums.e5 += s.e5; counts.e5++; }
+    if (s.e10) { sums.e10 += s.e10; counts.e10++; }
+  });
+  const avgDiesel = counts.diesel ? sums.diesel / counts.diesel : null;
+  const avgE5 = counts.e5 ? sums.e5 / counts.e5 : null;
+  const avgE10 = counts.e10 ? sums.e10 / counts.e10 : null;
+
+  // Preise im Header aktualisieren
+  if (avgDiesel) document.getElementById('avgDiesel').textContent = avgDiesel.toFixed(3) + ' €';
+  if (avgE5) document.getElementById('avgE5').textContent = avgE5.toFixed(3) + ' €';
+  if (avgE10) document.getElementById('avgE10').textContent = avgE10.toFixed(3) + ' €';
+
+  // Günstigster overall
+  const allPrices = stations.flatMap(s => [s.diesel, s.e5, s.e10].filter(p => p));
+  const minPrice = allPrices.length ? Math.min(...allPrices) : null;
+  if (minPrice !== null) {
+    document.getElementById('minPrice').textContent = minPrice.toFixed(3) + ' €';
+    document.getElementById('minPriceLabel').textContent = 'Günstigster in 10 km';
+  }
+
+  // Rechner‑Preise setzen
+  currentPrices.diesel = avgDiesel !== null ? avgDiesel : 1.645;
+  currentPrices.e5 = avgE5 !== null ? avgE5 : 1.879;
+  currentPrices.e10 = avgE10 !== null ? avgE10 : 1.822;
+  priceInput.value = currentPrices[fuelSelect.value];
+  calc();
+
+  // Liste rendern
+  renderStations(stations);
+
+  // Alarm prüfen
+  if (minPrice !== null && minPrice < priceThreshold) {
+    const cheapestStation = stations.find(s => {
+      return (s.diesel && s.diesel === minPrice) ||
+             (s.e5 && s.e5 === minPrice) ||
+             (s.e10 && s.e10 === minPrice);
+    });
+    if (cheapestStation) {
+      document.getElementById('alertPrice').textContent = minPrice.toFixed(3);
+      document.getElementById('alertStationName').textContent = cheapestStation.name;
+      const dist = haversine(userLat, userLng, cheapestStation.lat, cheapestStation.lng).toFixed(1);
+      document.getElementById('alertDistance').textContent = dist;
+      document.getElementById('alertBox').classList.add('show');
+    }
+  } else {
+    document.getElementById('alertBox').classList.remove('show');
+  }
+}
+
+// ——— Stationsliste rendern ———
+function renderStations(stations) {
+  const list = document.getElementById('stationsList');
+  if (!stations.length) {
+    list.innerHTML = '<div style="text-align:center;color:#a9b7d9;padding:20px">Keine Tankstellen gefunden.</div>';
+    return;
+  }
+  list.innerHTML = stations.map(s => {
+    const cheapest = s.price <= 1.65 ? 'cheap' : '';
+    const expensive = s.price >= 1.75 ? 'expensive' : '';
+    const dist = haversine(userLat, userLng, s.lat, s.lng).toFixed(1);
+    return `<div class="station">
+      <div class="station-info">
+        <div class="station-name">${s.name} <span style="color:#6ea8ff">(${s.brand})</span></div>
+        <div class="station-brand">Distanz: ${dist} km</div>
+      </div>
+      <div class="station-prices">
+        ${s.diesel ? `<div class="${cheapest}">${s.diesel.toFixed(3)} €</div>` : ''}
+        ${s.e5 ? `<div class="${cheapest}">${s.e5.toFixed(3)} €</div>` : ''}
+        ${s.e10 ? `<div class="${cheapest}">${s.e10.toFixed(3)} €</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ——— Letzte Aktualisierung ———
+function setLastUpdate() {
+  const now = new Date();
+  const formatted = now.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  document.getElementById('lastUpdate').textContent = `Stand: ${formatted} | Quelle: Tankerkoenig (Live)`;
+}
+
+// ——— Haversine ———
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const φ1 = lat1 * Math.PI / 180, φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180, Δλ = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c / 1000;
+}
+
+// ——— Demo‑Stationen (Berlin) ———
+function getDemoStations() {
+  return [
+    { name: "Aral Tankstelle", brand: "Aral", price: 1.639, diesel: 1.639, e5: 1.799, e10: 1.742, lat: 52.5200, lng: 13.4050 },
+    { name: "Shell Berlin Mitte", brand: "Shell", price: 1.652, diesel: 1.652, e5: 1.812, e10: 1.755, lat: 52.5150, lng: 13.4150 },
+    { name: "Esso Express", brand: "Esso", price: 1.625, diesel: 1.625, e5: 1.785, e10: 1.728, lat: 52.5250, lng: 13.3950 },
+    { name: "TotalEnergies", brand: "Total", price: 1.645, diesel: 1.645, e5: 1.805, e10: 1.748, lat: 52.5300, lng: 13.4250 },
+    { name: "JET Berlin", brand: "JET", price: 1.618, diesel: 1.618, e5: 1.778, e10: 1.721, lat: 52.5100, lng: 13.3900 }
+  ];
+}
+
+// ——— Chart ———
+const ctx = document.getElementById('historyChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: historyLabels,
+    datasets: [
+      { label: 'E5', data: e5History, borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,.1)', fill: false, tension: 0.3 },
+      { label: 'Diesel', data: dieselHistory, borderColor: '#51cf66', backgroundColor: 'rgba(81,207,102,.1)', fill: false, tension: 0.3 },
+      { label: 'E10', data: e10History, borderColor: '#6ea8ff', backgroundColor: 'rgba(110,168,255,.1)', fill: false, tension: 0.3 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#eaf0ff' } },
+      tooltip: {
+        callbacks: {
+          label: c => `${c.dataset.label}: ${c.raw.toFixed(3)} €`
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#a9b7d9' }, grid: { color: 'rgba(255,255,255,.08)' } },
+      y: { ticks: { color: '#a9b7d9', callback: v => v.toFixed(2) + ' €' }, grid: { color: 'rgba(255,255,255,.08)' } }
+    }
+  }
+});
+
+// ——— Notion Sync ———
+document.getElementById('syncNotion').addEventListener('click', async () => {
+  if (!stationsData.length) {
+    showToast('Keine Daten zum Sync vorhanden. Bitte Preise laden.', 'error');
+    return;
+  }
+  setLoading('syncNotion', true);
+  try {
+    const snapshot = {
+      timestamp: new Date().toISOString(),
+      location: { lat: userLat, lng: userLng },
+      stats: {
+        min: Math.min(...stationsData.map(s => s.price)),
+        avg: stationsData.reduce((a, b) => a + b.price, 0) / stationsData.length
+      },
+      stations: stationsData.slice(0, 5).map(s => ({
+        name: s.name,
+        brand: s.brand,
+        price: s.price,
+        diesel: s.diesel,
+        e5: s.e5,
+        e10: s.e10
+      }))
+    };
+    const resp = await fetch('/.netlify/functions/sync-notion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(snapshot)
+    });
+    const res = await resp.json();
+    if (resp.ok) {
+      showToast('Notion Sync erledigt ✅', 'success');
+    } else {
+      throw new Error(res.error || res.message || 'Unbekannter Fehler');
+    }
+  } catch (e) {
+    showToast('Sync fehlgeschlagen: ' + e.message, 'error');
+  } finally {
+    setLoading('syncNotion', false);
+  }
+});
+
+// ——— CSV Export ———
+document.getElementById('exportCSV').addEventListener('click', () => {
+  let csv = 'Datum,E5,Diesel,E10\n';
+  historyLabels.forEach((d, i) => {
+    csv += `${d},${e5History[i]},${dieselHistory[i]},${e10History[i]}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'spritpreise-export.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('CSV exportiert', 'success');
+});
+</script>
+</body>
+</html>

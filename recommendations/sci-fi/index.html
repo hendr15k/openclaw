@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sci‑Fi Empfehlungen für Hendrik</title>
+  <meta name="description" content="Kuratiere Sci‑Fi-Empfehlungen mit Klassikern, modernen Highlights und preisnahen Neuerscheinungen." />
+  <style>
+    :root {
+      --bg: #08111f;
+      --bg-2: #0e1a2e;
+      --card: rgba(18, 28, 49, 0.92);
+      --text: #edf4ff;
+      --muted: #afc0df;
+      --line: rgba(255,255,255,.11);
+      --accent: #7cc4ff;
+      --accent-2: #89f0d3;
+      --gold: #f2cf70;
+      --shadow: 0 20px 60px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(124,196,255,.16), transparent 28%),
+        radial-gradient(circle at left center, rgba(137,240,211,.10), transparent 24%),
+        linear-gradient(180deg, var(--bg), #0a1525 42%, #0d1830 100%);
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 28px; }
+    .hero {
+      padding: 26px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,196,255,.25), transparent 65%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #d4e6ff;
+      background: rgba(255,255,255,.04);
+      font-size: .9rem;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 1.05;
+      max-width: 850px;
+    }
+    .lead {
+      color: var(--muted);
+      max-width: 900px;
+      line-height: 1.6;
+      margin: 16px 0 0;
+      font-size: 1.02rem;
+    }
+    .topline {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .mini-panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,.03);
+    }
+    .mini-panel h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+    .mini-panel p, .mini-panel li {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+    .mini-panel ul { padding-left: 18px; margin: 0; }
+    .toolbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      margin: 18px 0 10px;
+      display: grid;
+      grid-template-columns: 1.4fr .9fr .9fr;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(8,17,31,.78);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
+    }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #101d34;
+      color: var(--text);
+      padding: 11px 13px;
+      font: inherit;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 0;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #162542;
+      color: #dce9ff;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .chip:hover { transform: translateY(-1px); }
+    .chip.active { border-color: var(--accent); background: #1e3157; }
+    .section {
+      margin-top: 28px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.55;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      gap: 0;
+    }
+    .cover-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: linear-gradient(135deg, rgba(124,196,255,.18), rgba(137,240,211,.10));
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .cover-wrap::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -30px auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.12), transparent 70%);
+    }
+    .cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cover-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: end;
+      padding: 16px;
+      color: #eaf3ff;
+      font-weight: 700;
+      letter-spacing: .02em;
+      background: linear-gradient(180deg, rgba(8,17,31,.05), rgba(8,17,31,.72));
+    }
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .rank {
+      min-width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(124,196,255,.25), rgba(137,240,211,.16));
+      border: 1px solid rgba(255,255,255,.12);
+      color: white;
+      font-weight: 800;
+    }
+    .title {
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.25;
+    }
+    .author {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: .78rem;
+      color: #d8e6ff;
+      background: rgba(255,255,255,.03);
+    }
+    .badge.award { border-color: rgba(242,207,112,.45); color: #ffe7a7; }
+    .desc, .why, .vibe {
+      margin: 0;
+      line-height: 1.58;
+      color: #dfe9fb;
+    }
+    .why strong, .vibe strong { color: white; }
+    .meta {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+    .meta-row {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+    .footer {
+      margin: 28px 0 12px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+      line-height: 1.6;
+    }
+    .empty {
+      display: none;
+      margin-top: 14px;
+      padding: 22px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      text-align: center;
+      border-radius: 16px;
+    }
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .source-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,.025);
+      color: #d7e5fb;
+    }
+    @media (max-width: 900px) {
+      .topline { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">🦞 Webpage · Sci‑Fi Empfehlungen · Stand: März 2026</div>
+      <h1>Sci‑Fi Empfehlungen für Hendrik</h1>
+      <p class="lead">
+        Eine kuratierte Empfehlungsseite mit Klassikern, modernen Highlights, preisnahen Neuerscheinungen und ein paar bewusst ausgewählten Wildcards.
+        Die Liste kombiniert Kanon, aktuelle Award-Signale und Leser-/Redaktionsresonanz — damit nicht nur dieselben fünf Standardtitel wiederholt werden.
+      </p>
+      <div class="topline">
+        <div class="mini-panel">
+          <h2>Priorisierte Lesepfade</h2>
+          <ul>
+            <li><strong>Modern & zugänglich:</strong> <em>Project Hail Mary</em> → <em>The Ministry of Time</em> → <em>System Collapse</em></li>
+            <li><strong>Große Ideen / Hard SF:</strong> <em>Children of Time</em> → <em>Blindsight</em> → <em>Alien Clay</em></li>
+            <li><strong>Politisch / literarisch:</strong> <em>Translation State</em> → <em>The Saint of Bright Doors</em> → <em>The Dispossessed</em></li>
+            <li><strong>Episch / Space Opera:</strong> <em>House of Suns</em> → <em>These Burning Stars</em> → <em>Lords of Uncreation</em></li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h2>Wie diese Seite aufgebaut ist</h2>
+          <p>
+            Filtere nach Kategorie, Stil und Zugänglichkeit. Jede Karte hat eine Kurzbeschreibung, den Hauptgrund für die Empfehlung und einen kleinen Hinweis,
+            wann das Buch besonders gut passt.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Filterleiste">
+      <input id="search" type="search" placeholder="Suche nach Titel, Autor, Vibe oder Stichwort …" />
+      <select id="category">
+        <option value="all">Alle Kategorien</option>
+        <option value="modern">Modern / aktuell</option>
+        <option value="classic">Klassiker</option>
+        <option value="hard-sf">Hard Sci‑Fi</option>
+        <option value="space-opera">Space Opera</option>
+        <option value="literarisch">Literarisch / philosophisch</option>
+      </select>
+      <select id="sort">
+        <option value="priority">Sortierung: Priorität</option>
+        <option value="title">Titel A–Z</option>
+        <option value="year">Jahr aufsteigend</option>
+      </select>
+    </section>
+
+    <div class="chips" id="chips">
+      <button class="chip active" data-tag="all">Alle</button>
+      <button class="chip" data-tag="award">Award-Nähe</button>
+      <button class="chip" data-tag="accessible">Zugänglich</button>
+      <button class="chip" data-tag="mindfuck">Mindfuck</button>
+      <button class="chip" data-tag="politisch">Politisch</button>
+      <button class="chip" data-tag="ai">KI</button>
+      <button class="chip" data-tag="new">Neuere Bücher</button>
+      <button class="chip" data-tag="epic">Episch</button>
+    </div>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Empfehlungen</h2>
+          <p>Die obersten Plätze sind bewusst die stärksten Kombinationen aus Qualität, Relevanz und Passung für ambitionierte Sci‑Fi-Laune.</p>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty">Keine Treffer — probier einen anderen Filter oder Suchbegriff.</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Quellenbasis</h2>
+          <p>Die Liste wurde aus Award-Seiten, Community-Votes und großen Empfehlungslisten verdichtet.</p>
+        </div>
+      </div>
+      <div class="source-list">
+        <div class="source-item"><strong>Hugo Awards</strong><br/>Finalisten/Winner 2023, 2024, 2025</div>
+        <div class="source-item"><strong>Nebula Awards</strong><br/>Best Novel Felder 2022, 2023, 2024</div>
+        <div class="source-item"><strong>Locus Awards</strong><br/>Science Fiction Novel 2024</div>
+        <div class="source-item"><strong>Goodreads Choice Awards</strong><br/>Science Fiction 2023, 2024, 2025</div>
+        <div class="source-item"><strong>Redaktionslisten</strong><br/>WIRED, Esquire, Book Riot</div>
+        <div class="source-item"><strong>Ergänzender Trend-Check</strong><br/>Aktuelle Web-/Jahreslisten und Suchtreffer</div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <strong>Notiz:</strong> Diese Seite ist eine kuratierte Auswahl, keine vollständige Datenbank. Wenn du willst, kann daraus im nächsten Schritt noch eine richtige kleine App werden —
+      mit Cover-Bildern, Lesestatus, deutscher Verfügbarkeitsanzeige, Prioritäts-Scores, Export nach Markdown/CSV oder direktem Deploy.
+    </section>
+  </div>
+
+  <script>
+    const books = [
+      {
+        rank: 1,
+        title: 'Children of Time',
+        author: 'Adrian Tchaikovsky',
+        year: 2015,
+        cover: 'https://covers.openlibrary.org/b/title/Children%20of%20Time-L.jpg',
+        category: ['hard-sf','modern'],
+        tags: ['mindfuck','epic'],
+        awards: ['Award-nah'],
+        desc: 'Große Evolutions- und Zivilisations-Sci‑Fi über Terraforming, nichtmenschliche Intelligenz und lange Zeiträume.',
+        why: 'Wenn du <strong>große Ideen</strong> willst, aber trotzdem ein lesbares, erzählerisches Buch suchst.',
+        vibe: '<strong>Vibe:</strong> episch, klug, fremdartig.'
+      },
+      {
+        rank: 2,
+        title: 'Project Hail Mary',
+        author: 'Andy Weir',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/Project%20Hail%20Mary-L.jpg',
+        category: ['hard-sf','modern'],
+        tags: ['accessible'],
+        awards: ['Mainstream-Favorit'],
+        desc: 'Ingenieurige Problemlöse-Sci‑Fi mit Wissenschaft, Tempo und viel Charme.',
+        why: 'Sehr gut, wenn du <strong>etwas sofort Wegsuchtbares</strong> willst, das trotzdem clever bleibt.',
+        vibe: '<strong>Vibe:</strong> zugänglich, nerdig, warm.'
+      },
+      {
+        rank: 3,
+        title: 'Blindsight',
+        author: 'Peter Watts',
+        year: 2006,
+        cover: 'https://covers.openlibrary.org/b/title/Blindsight-L.jpg',
+        category: ['hard-sf','literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Erstkontakt-Roman, der Bewusstsein, Wahrnehmung und Intelligenz auf unangenehm kluge Weise auseinandernimmt.',
+        why: 'Perfekt, wenn du <strong>richtig dunkle Denksport-Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> hart, kühl, philosophisch.'
+      },
+      {
+        rank: 4,
+        title: 'Translation State',
+        author: 'Ann Leckie',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Translation%20State-L.jpg',
+        category: ['modern','space-opera','literarisch'],
+        tags: ['award','politisch'],
+        awards: ['Hugo 2024 Finalist', 'Nebula 2023 Finalist', 'Locus 2024 List'],
+        desc: 'Politische, intelligente Space-SF mit Alien-Perspektiven, Identität und Diplomatie.',
+        why: 'Sehr stark, wenn du <strong>intelligente moderne Space Opera</strong> willst, nicht bloß Laserschlachten.',
+        vibe: '<strong>Vibe:</strong> elegant, politisch, präzise.'
+      },
+      {
+        rank: 5,
+        title: 'Some Desperate Glory',
+        author: 'Emily Tesh',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Some%20Desperate%20Glory-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['award','politisch','new'],
+        awards: ['Hugo 2024 Best Novel'],
+        desc: 'Militärisch geprägte Zukunfts-Sci‑Fi über Ideologie, Indoktrination und Selbstbild.',
+        why: 'Empfehlenswert, wenn du <strong>intensive, moderne Sci‑Fi</strong> mit klarer Haltung willst.',
+        vibe: '<strong>Vibe:</strong> scharf, emotional, ideologisch.'
+      },
+      {
+        rank: 6,
+        title: 'System Collapse',
+        author: 'Martha Wells',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/System%20Collapse-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','accessible','ai','new'],
+        awards: ['Locus 2024 Winner'],
+        desc: 'Ein schneller, moderner KI-Roman mit klarer Stimme und hohem Unterhaltungswert.',
+        why: 'Ideal, wenn du <strong>KI-Themen</strong> magst und nicht gleich 800 Seiten Commitment willst.',
+        vibe: '<strong>Vibe:</strong> flott, ironisch, modern.'
+      },
+      {
+        rank: 7,
+        title: 'The Saint of Bright Doors',
+        author: 'Vajra Chandrasekera',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Saint%20of%20Bright%20Doors-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new','politisch'],
+        awards: ['Nebula 2023 Winner', 'Locus First Novel Winner'],
+        desc: 'Seltsam, literarisch, politisch und sehr eigen — eher etwas für Lust auf Neues als auf Komfort.',
+        why: 'Super, wenn du <strong>etwas wirklich Originelles</strong> lesen willst.',
+        vibe: '<strong>Vibe:</strong> weird, literarisch, ungewöhnlich.'
+      },
+      {
+        rank: 8,
+        title: 'The Ministry of Time',
+        author: 'Kaliane Bradley',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Ministry%20of%20Time-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','accessible','new'],
+        awards: ['Goodreads 2024 Winner'],
+        desc: 'Zeitreise, literarische Stimme und Mainstream-Buzz in einem sehr lesbaren Paket.',
+        why: 'Passt, wenn du <strong>etwas moderneres und zugängliches</strong> willst, ohne platt zu werden.',
+        vibe: '<strong>Vibe:</strong> frisch, stilvoll, emotional.'
+      },
+      {
+        rank: 9,
+        title: 'Alien Clay',
+        author: 'Adrian Tchaikovsky',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Alien%20Clay-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','new'],
+        awards: ['Hugo 2025 Finalist'],
+        desc: 'Neuere Tchaikovsky-Sci‑Fi mit fremder Biologie, Härte und intellektuellem Druck.',
+        why: 'Gute Wahl, wenn du <strong>aktuelle Ideen-Sci‑Fi</strong> mit Biss suchst.',
+        vibe: '<strong>Vibe:</strong> fremd, gespannt, biologisch.'
+      },
+      {
+        rank: 10,
+        title: 'Service Model',
+        author: 'Adrian Tchaikovsky',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Service%20Model-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','ai','new'],
+        awards: ['Hugo 2025 Finalist', 'Goodreads 2024 Nominee'],
+        desc: 'Robotik, Systemlogik und satirischer Ton in einer deutlich moderneren SF-Variante.',
+        why: 'Wenn du <strong>Maschinenlogik und Gesellschaftssatire</strong> kombinieren willst.',
+        vibe: '<strong>Vibe:</strong> trocken, präzise, maschinell.'
+      },
+      {
+        rank: 11,
+        title: 'The Mercy of Gods',
+        author: 'James S. A. Corey',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Mercy%20of%20Gods-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['award','new','epic'],
+        awards: ['Goodreads 2024 Nominee'],
+        desc: 'Groß angelegte neue SF von den Expanse-Autoren mit entsprechendem Sog.',
+        why: 'Naheliegend, wenn du <strong>größere Reihen und Expanse-Vibes</strong> magst.',
+        vibe: '<strong>Vibe:</strong> episch, breit, dramatisch.'
+      },
+      {
+        rank: 12,
+        title: 'House of Suns',
+        author: 'Alastair Reynolds',
+        year: 2008,
+        cover: 'https://covers.openlibrary.org/b/title/House%20of%20Suns-L.jpg',
+        category: ['space-opera','hard-sf'],
+        tags: ['epic'],
+        awards: ['Fanfavorit'],
+        desc: 'Gigantische Zeitskalen, Melancholie und klassisches Sense of Wonder in moderner Form.',
+        why: 'Wenn du <strong>Weite und Atmosphäre</strong> suchst statt enger Plot-Maschine.',
+        vibe: '<strong>Vibe:</strong> weit, melancholisch, erhaben.'
+      },
+      {
+        rank: 13,
+        title: 'A Memory Called Empire',
+        author: 'Arkady Martine',
+        year: 2019,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Memory%20Called%20Empire-L.jpg',
+        category: ['space-opera','literarisch'],
+        tags: ['politisch'],
+        awards: ['Preiswürdig rezipiert'],
+        desc: 'Diplomatie, Reichspolitik und kultureller Druck — mehr Hofintrige als Dogfight.',
+        why: 'Sehr gut für <strong>politische Sci‑Fi</strong> mit echter Stilnote.',
+        vibe: '<strong>Vibe:</strong> kultiviert, intrigenreich, elegant.'
+      },
+      {
+        rank: 14,
+        title: 'The Dispossessed',
+        author: 'Ursula K. Le Guin',
+        year: 1974,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Dispossessed-L.jpg',
+        category: ['classic','literarisch'],
+        tags: ['politisch'],
+        awards: ['Klassiker'],
+        desc: 'Eine der großen politischen Sci‑Fi-Erzählungen über Gesellschaftsformen, Freiheit und Entfremdung.',
+        why: 'Pflicht, wenn du <strong>denkende Sci‑Fi</strong> willst, nicht nur Plot.',
+        vibe: '<strong>Vibe:</strong> ruhig, klug, gesellschaftlich.'
+      },
+      {
+        rank: 15,
+        title: 'The Left Hand of Darkness',
+        author: 'Ursula K. Le Guin',
+        year: 1969,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Left%20Hand%20of%20Darkness-L.jpg',
+        category: ['classic','literarisch'],
+        tags: ['politisch'],
+        awards: ['Hugo/Nebula Klassiker'],
+        desc: 'Kontakt, Kultur und Identität in einem der wichtigsten Sci‑Fi-Romane überhaupt.',
+        why: 'Wenn du <strong>Genre-Grundlagen</strong> willst, die heute noch frisch wirken.',
+        vibe: '<strong>Vibe:</strong> kalt, still, tief.'
+      },
+      {
+        rank: 16,
+        title: 'Solaris',
+        author: 'Stanisław Lem',
+        year: 1961,
+        cover: 'https://covers.openlibrary.org/b/title/Solaris-L.jpg',
+        category: ['classic','literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kanon'],
+        desc: 'Ein radikal fremdes Gegenüber und die Erkenntnis, dass Menschen vielleicht nicht alles verstehen können.',
+        why: 'Perfekt, wenn du <strong>philosophische Fremdheits-Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> ruhig, unheimlich, erkenntniskritisch.'
+      },
+      {
+        rank: 17,
+        title: 'Neuromancer',
+        author: 'William Gibson',
+        year: 1984,
+        cover: 'https://covers.openlibrary.org/b/title/Neuromancer-L.jpg',
+        category: ['classic'],
+        tags: ['ai'],
+        awards: ['Kanon'],
+        desc: 'Cyberpunk-Urtext mit Datendiebstahl, KI und kapitalistisch verseuchten Megastrukturen.',
+        why: 'Sinnvoll, wenn du <strong>Genregeschichte</strong> plus Stil willst.',
+        vibe: '<strong>Vibe:</strong> neon, kühl, verdichtet.'
+      },
+      {
+        rank: 18,
+        title: 'The Stars My Destination',
+        author: 'Alfred Bester',
+        year: 1957,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Stars%20My%20Destination-L.jpg',
+        category: ['classic'],
+        tags: ['mindfuck'],
+        awards: ['Klassiker'],
+        desc: 'Rachegeschichte im All, sehr direkt, aggressiv, stilprägend.',
+        why: 'Gut, wenn du <strong>ältere Sci‑Fi mit Wucht</strong> suchst, nicht bloß musealen Staub.',
+        vibe: '<strong>Vibe:</strong> wild, schnell, wütend.'
+      },
+      {
+        rank: 19,
+        title: 'The Terraformers',
+        author: 'Annalee Newitz',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Terraformers-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','new','politisch'],
+        awards: ['Nebula 2023 Finalist', 'Locus 2024 List'],
+        desc: 'Ökologie, Stadtplanung, Kapitalismus und Zukunftsgesellschaft in ziemlich origineller Kombination.',
+        why: 'Empfehlenswert, wenn du <strong>Weltbau mit Systemfragen</strong> magst.',
+        vibe: '<strong>Vibe:</strong> verspielt, kritisch, zukunftsgebaut.'
+      },
+      {
+        rank: 20,
+        title: 'These Burning Stars',
+        author: 'Bethany Jacobs',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/These%20Burning%20Stars-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['new','epic'],
+        awards: ['Locus First Novel List'],
+        desc: 'Reihenstart mit Intrigen, Imperium, Gewalt und viel Energie.',
+        why: 'Wenn du <strong>neue Space-Opera-Reihen</strong> antesten willst.',
+        vibe: '<strong>Vibe:</strong> scharf, groß, dramatisch.'
+      },
+      {
+        rank: 21,
+        title: 'Beautyland',
+        author: 'Marie-Helene Bertino',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Beautyland-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['accessible','new'],
+        awards: ['Esquire List', 'Goodreads 2024 Nominee'],
+        desc: 'Literarische, emotionale Sci‑Fi über Anderssein, Beobachtung und Menschlichkeit.',
+        why: 'Passt, wenn du <strong>weichere, emotionalere SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> zart, schräg, menschlich.'
+      },
+      {
+        rank: 22,
+        title: 'Annie Bot',
+        author: 'Sierra Greer',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Annie%20Bot-L.jpg',
+        category: ['modern'],
+        tags: ['ai','new'],
+        awards: ['Goodreads 2024 Nominee'],
+        desc: 'KI, Beziehung, Machtgefälle und Objektifizierung in einer klar modernen Ausprägung.',
+        why: 'Gut, wenn dich <strong>KI + Gesellschaft + Beziehungsdynamik</strong> reizt.',
+        vibe: '<strong>Vibe:</strong> modern, nah, unangenehm spannend.'
+      },
+      {
+        rank: 23,
+        title: 'The Compound',
+        author: 'Aisling Rawle',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Compound-L.jpg',
+        category: ['modern'],
+        tags: ['award','new'],
+        awards: ['Goodreads 2025 Winner'],
+        desc: 'Einer der auffälligen neueren SF-Buzz-Titel aus der Goodreads-Richtung.',
+        why: 'Wenn du <strong>sehr aktuelle Trend-Sci‑Fi</strong> mitnehmen willst.',
+        vibe: '<strong>Vibe:</strong> frisch, neu, hypegeladen.'
+      },
+      {
+        rank: 24,
+        title: 'Death of the Author',
+        author: 'Nnedi Okorafor',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/Death%20of%20the%20Author-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new'],
+        awards: ['Goodreads 2025 Nominee'],
+        desc: 'Einer der spannendsten neueren Kandidaten aus dem 2025er Empfehlungsumfeld.',
+        why: 'Wenn du <strong>ganz aktuelle Stimmen</strong> im Genre sehen willst.',
+        vibe: '<strong>Vibe:</strong> neu, markant, neugierig machend.'
+      },
+      {
+        rank: 25,
+        title: 'Someone You Can Build a Nest In',
+        author: 'John Wiswell',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Someone%20You%20Can%20Build%20a%20Nest%20In-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new'],
+        awards: ['Nebula 2024 Winner', 'Hugo 2025 Finalist'],
+        desc: 'Ein ungewöhnlicher, sehr gelobter neuer Titel aus dem Award-Feld 2024/25, eher schräg als konventionell.',
+        why: 'Wenn du <strong>frische, eigenwillige neue Stimmen</strong> statt 08/15-Space-Opera willst.',
+        vibe: '<strong>Vibe:</strong> odd, verspielt, originell.'
+      },
+      {
+        rank: 26,
+        title: 'The Tainted Cup',
+        author: 'Robert Jackson Bennett',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Tainted%20Cup-L.jpg',
+        category: ['modern'],
+        tags: ['award','new'],
+        awards: ['Hugo 2025 Finalist'],
+        desc: 'Zwar an der Grenze zwischen SF/Fantastik und Mystery, aber aktuell einer der meistgenannten neuen Spec-Fic-Titel.',
+        why: 'Gut, wenn du <strong>etwas Aktuelles mit viel Momentum</strong> lesen willst.',
+        vibe: '<strong>Vibe:</strong> dicht, stylisch, rätselhaft.'
+      },
+      {
+        rank: 27,
+        title: 'Automatic Noodle',
+        author: 'Annalee Newitz',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/Automatic%20Noodle-L.jpg',
+        category: ['modern'],
+        tags: ['award','new','ai'],
+        awards: ['Goodreads 2025 Nominee', '2025 Jahreslisten'],
+        desc: 'Taucht sowohl in Goodreads 2025 als auch in Jahreslisten prominenter Genre-Stimmen auf.',
+        why: 'Wenn du <strong>ganz frische Sci‑Fi mit Gegenwartsgefühl</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> aktuell, eigensinnig, technologisch.'
+      },
+      {
+        rank: 28,
+        title: 'The Book of Lost Hours',
+        author: 'Hayley Gelfuso',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Book%20of%20Lost%20Hours-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new'],
+        awards: ['Goodreads 2025 Finalfeld'],
+        desc: 'Einer der auffälligsten 2025er Publikumstitel direkt hinter dem Goodreads-Sieger.',
+        why: 'Wenn du <strong>neue buzzy Titel</strong> früh abgreifen willst.',
+        vibe: '<strong>Vibe:</strong> atmosphärisch, trendig, literarisch.'
+      },
+      {
+        rank: 29,
+        title: 'The Dream Hotel',
+        author: 'Laila Lalami',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Dream%20Hotel-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new','politisch'],
+        awards: ['Goodreads 2025 Nominee'],
+        desc: 'Aktuelle Zukunfts-/Gesellschafts-SF mit deutlicher Relevanz im 2025er Empfehlungsumfeld.',
+        why: 'Für <strong>gesellschaftlichere, modernere Sci‑Fi</strong> mit literarischem Einschlag.',
+        vibe: '<strong>Vibe:</strong> gegenwartsnah, kritisch, elegant.'
+      },
+      {
+        rank: 30,
+        title: 'Orbital',
+        author: 'Samantha Harvey',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Orbital-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new'],
+        awards: ['Goodreads 2024 Nominee'],
+        desc: 'Ruhige, beobachtende, fast kontemplative Weltraum-Sci‑Fi statt Action und Bombast.',
+        why: 'Wenn du <strong>atmosphärische Raumfahrt-SF</strong> willst, die mehr schwebt als schießt.',
+        vibe: '<strong>Vibe:</strong> still, orbital, meditativ.'
+      },
+      {
+        rank: 31,
+        title: 'The Stardust Grail',
+        author: 'Yume Kitasei',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Stardust%20Grail-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['award','new','epic'],
+        awards: ['Goodreads 2024 Nominee'],
+        desc: 'Abenteuerliche moderne Space-Sci‑Fi mit Artefakt-/Heist-Energie und viel Tempo.',
+        why: 'Wenn du <strong>mehr Abenteuer als Theorie</strong> willst, aber modern bleiben möchtest.',
+        vibe: '<strong>Vibe:</strong> flott, galaktisch, abenteuerlich.'
+      },
+      {
+        rank: 32,
+        title: 'Shroud',
+        author: 'Adrian Tchaikovsky',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/Shroud-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','new','mindfuck'],
+        awards: ['Goodreads 2025 Nominee'],
+        desc: 'Noch ein aktueller Tchaikovsky-Titel, der im 2025er Publikumssignal stark auffällt.',
+        why: 'Sehr naheliegend, wenn du von <strong>Tchaikovsky mehr</strong> willst.',
+        vibe: '<strong>Vibe:</strong> dunkel, fremd, ideengetrieben.'
+      },
+      {
+        rank: 33,
+        title: 'Of Monsters and Mainframes',
+        author: 'Barbara Truelove',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/Of%20Monsters%20and%20Mainframes-L.jpg',
+        category: ['modern'],
+        tags: ['award','new','ai'],
+        awards: ['Goodreads 2025 Nominee'],
+        desc: 'Einer der markantesten Titel im 2025er Goodreads-Feld — schon allein wegen Name und Position.',
+        why: 'Wenn du <strong>seltsamere, mutigere Neuerscheinungen</strong> mitnehmen willst.',
+        vibe: '<strong>Vibe:</strong> schräg, verspielt, technoid.'
+      },
+      {{
+        rank: 34,
+        title: 'Ender’s Game',
+        author: 'Orson Scott Card',
+        year: 1985,
+        cover: 'https://covers.openlibrary.org/b/title/Ender%E2%80%99s%20Game-L.jpg',
+        category: ['classic'],
+        tags: ['accessible', 'epic'],
+        awards: ['Goodreads Top List'],
+        desc: 'Militärische Ausbildungs-SF, die gleichzeitig Strategie, Isolation und Manipulation verhandelt.',
+        why: 'Wenn du <strong>zugängliche, ikonische Einstiegs-Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> schnell, clever, prägend.'
+      }},
+      {{
+        rank: 35,
+        title: 'The Hitchhiker’s Guide to the Galaxy',
+        author: 'Douglas Adams',
+        year: 1979,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Hitchhiker%E2%80%99s%20Guide%20to%20the%20Galaxy-L.jpg',
+        category: ['classic'],
+        tags: ['accessible'],
+        awards: ['Goodreads Top List'],
+        desc: 'Der große anarchische Comedy-Klassiker des Genres: absurd, britisch, erstaunlich zitierbar.',
+        why: 'Pflicht, wenn du <strong>Sci‑Fi mit Humor</strong> willst.',
+        vibe: '<strong>Vibe:</strong> albern, kosmisch, kultig.'
+      }},
+      {{
+        rank: 36,
+        title: '1984',
+        author: 'George Orwell',
+        year: 1949,
+        cover: 'https://covers.openlibrary.org/b/title/1984-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Goodreads Top List'],
+        desc: 'Dystopischer Dauerbrenner über Überwachung, Sprache und Macht.',
+        why: 'Wenn du <strong>politische Grundlagentexte</strong> des Genres willst.',
+        vibe: '<strong>Vibe:</strong> kalt, bedrückend, klar.'
+      }},
+      {{
+        rank: 37,
+        title: 'Fahrenheit 451',
+        author: 'Ray Bradbury',
+        year: 1953,
+        cover: 'https://covers.openlibrary.org/b/title/Fahrenheit%20451-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Goodreads Top List'],
+        desc: 'Bücherverbrennung, Medienbetäubung und kulturelle Verarmung in eleganter Prosa.',
+        why: 'Gut für <strong>kurze, klassische Dystopie</strong> mit Wirkung.',
+        vibe: '<strong>Vibe:</strong> poetisch, warnend, hell brennend.'
+      }},
+      {{
+        rank: 38,
+        title: 'Foundation',
+        author: 'Isaac Asimov',
+        year: 1951,
+        cover: 'https://covers.openlibrary.org/b/title/Foundation-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['epic'],
+        awards: ['WIRED / Goodreads'],
+        desc: 'Imperienfall, Psychohistorie und die mathematische Vermessung von Geschichte.',
+        why: 'Wenn du <strong>ganz große Genre-Architektur</strong> willst.',
+        vibe: '<strong>Vibe:</strong> ideenreich, groß, historisch.'
+      }},
+      {{
+        rank: 39,
+        title: 'Brave New World',
+        author: 'Aldous Huxley',
+        year: 1932,
+        cover: 'https://covers.openlibrary.org/b/title/Brave%20New%20World-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Goodreads Top List'],
+        desc: 'Eine sanfte, hedonistische Dystopie statt bloßer Gewalt — genau deshalb so stark.',
+        why: 'Wenn dich <strong>Gesellschaftskontrolle durch Komfort</strong> reizt.',
+        vibe: '<strong>Vibe:</strong> elegant, bitter, hell.'
+      }},
+      {{
+        rank: 40,
+        title: 'Do Androids Dream of Electric Sheep?',
+        author: 'Philip K. Dick',
+        year: 1968,
+        cover: 'https://covers.openlibrary.org/b/title/Do%20Androids%20Dream%20of%20Electric%20Sheep%3F-L.jpg',
+        category: ['classic'],
+        tags: ['ai', 'mindfuck'],
+        awards: ['Kanon'],
+        desc: 'Identität, Empathie und künstliche Menschen in konzentrierter Philip-K.-Dick-Form.',
+        why: 'Für <strong>kurze, dichte KI- und Realitäts-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> paranoid, trocken, schräg.'
+      }},
+      {{
+        rank: 41,
+        title: 'Snow Crash',
+        author: 'Neal Stephenson',
+        year: 1992,
+        cover: 'https://covers.openlibrary.org/b/title/Snow%20Crash-L.jpg',
+        category: ['classic'],
+        tags: ['ai', 'accessible'],
+        awards: ['Cyberpunk Klassiker'],
+        desc: 'Hyperaktive Cyberpunk-Satire mit Avataren, Konzernen und memetischem Overload.',
+        why: 'Wenn du <strong>Tempo und Ideenfeuerwerk</strong> willst.',
+        vibe: '<strong>Vibe:</strong> wild, neon, irre schnell.'
+      }},
+      {{
+        rank: 42,
+        title: 'The Moon is a Harsh Mistress',
+        author: 'Robert A. Heinlein',
+        year: 1966,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Moon%20is%20a%20Harsh%20Mistress-L.jpg',
+        category: ['classic'],
+        tags: ['politisch'],
+        awards: ['WIRED List'],
+        desc: 'Mondkolonie, Rebellion und technische Improvisation in klassischer Heinlein-Form.',
+        why: 'Wenn du <strong>politisch-technische Klassiker</strong> magst.',
+        vibe: '<strong>Vibe:</strong> aufmüpfig, nüchtern, orbital.'
+      }},
+      {{
+        rank: 43,
+        title: 'The Calculating Stars',
+        author: 'Mary Robinette Kowal',
+        year: 2018,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Calculating%20Stars-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['accessible'],
+        awards: ['Esquire List'],
+        desc: 'Alternative Raumfahrtgeschichte mit viel Wissenschaft, Diskriminierungskritik und Drive.',
+        why: 'Gut, wenn du <strong>moderne, lesbare Hard SF</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> klug, zugänglich, hoffnungsvoll.'
+      }},
+      {{
+        rank: 44,
+        title: 'Redshirts',
+        author: 'John Scalzi',
+        year: 2012,
+        cover: 'https://covers.openlibrary.org/b/title/Redshirts-L.jpg',
+        category: ['modern'],
+        tags: ['accessible'],
+        awards: ['Esquire List'],
+        desc: 'Meta-Sci‑Fi-Komödie über austauschbare Crewmitglieder und die Gewalt schlechter Narrative.',
+        why: 'Wenn du <strong>leichtere, clevere Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> witzig, meta, flott.'
+      }},
+      {{
+        rank: 45,
+        title: 'The Echo Wife',
+        author: 'Sarah Gailey',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Echo%20Wife-L.jpg',
+        category: ['modern'],
+        tags: ['ai', 'mindfuck'],
+        awards: ['Esquire List'],
+        desc: 'Klonen, Ehekrieg und die Frage, was Identität eigentlich bedeutet.',
+        why: 'Wenn du <strong>kompakte, moderne Konzept-SF</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> bissig, unheimlich, klar.'
+      }},
+      {{
+        rank: 46,
+        title: 'The Ten Percent Thief',
+        author: 'Lavanya Lakshminarayan',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Ten%20Percent%20Thief-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch', 'new'],
+        awards: ['Esquire List'],
+        desc: 'Mosaik-SF über algorithmische Kastensysteme und technokapitalistische Stadtgesellschaft.',
+        why: 'Für <strong>gesellschaftskritische Zukunfts-Satire</strong>.',
+        vibe: '<strong>Vibe:</strong> satirisch, scharf, urban.'
+      }},
+      {{
+        rank: 47,
+        title: 'Midnight Robber',
+        author: 'Nalo Hopkinson',
+        year: 2000,
+        cover: 'https://covers.openlibrary.org/b/title/Midnight%20Robber-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Esquire List'],
+        desc: 'Karibisch geprägte Zukunfts-SF mit AI, Exil und kultureller Kraft.',
+        why: 'Wenn du <strong>etwas anderes als Standard-Anglo-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> mythic, lebendig, anders.'
+      }},
+      {{
+        rank: 48,
+        title: 'Parable of the Sower',
+        author: 'Octavia E. Butler',
+        year: 1993,
+        cover: 'https://covers.openlibrary.org/b/title/Parable%20of%20the%20Sower-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Book Riot List'],
+        desc: 'Nahe-Zukunft-Zerfall, Klimakrise und religiös-politische Neuordnung in brutal realistischer Form.',
+        why: 'Wenn du <strong>hochrelevante Gesellschafts-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> rau, prophetisch, dringlich.'
+      }},
+      {{
+        rank: 49,
+        title: 'The Three-Body Problem',
+        author: 'Liu Cixin',
+        year: 2008,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Three-Body%20Problem-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['mindfuck', 'epic'],
+        awards: ['Hugo Winner'],
+        desc: 'Chinesische Hard-SF mit kosmischer Perspektive und massiver Ideenwucht.',
+        why: 'Wenn du <strong>große, harte Erstkontakt-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> massiv, kühl, kosmisch.'
+      }},
+      {{
+        rank: 50,
+        title: 'The Martian',
+        author: 'Andy Weir',
+        year: 2011,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Martian-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['accessible'],
+        awards: ['Book Riot List'],
+        desc: 'Ingenieur-Survival auf dem Mars mit Humor und erstaunlich gutem Problemlöse-Sog.',
+        why: 'Fast immer richtig für <strong>einen zugänglichen Einstieg</strong>.',
+        vibe: '<strong>Vibe:</strong> praktisch, witzig, optimistisch.'
+      }},
+      {{
+        rank: 51,
+        title: 'Ringworld',
+        author: 'Larry Niven',
+        year: 1970,
+        cover: 'https://covers.openlibrary.org/b/title/Ringworld-L.jpg',
+        category: ['classic', 'hard-sf'],
+        tags: ['epic'],
+        awards: ['Book Riot List'],
+        desc: 'Megastrukturen-SF und klassisches Sense of Wonder in ikonischer Form.',
+        why: 'Wenn du <strong>Big Objects und große Ideen</strong> liebst.',
+        vibe: '<strong>Vibe:</strong> groß, klassisch, staunend.'
+      }},
+      {{
+        rank: 52,
+        title: 'A Wrinkle in Time',
+        author: 'Madeleine L’Engle',
+        year: 1962,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Wrinkle%20in%20Time-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['accessible'],
+        awards: ['Book Riot List'],
+        desc: 'Jugendlicher Dimensionen- und Zeitreise-Klassiker mit enormem Einfluss.',
+        why: 'Gut für <strong>etwas Kürzeres und Klassikerhaftes</strong>.',
+        vibe: '<strong>Vibe:</strong> verspielt, zeitlos, hell.'
+      }},
+      {{
+        rank: 53,
+        title: 'Frankenstein',
+        author: 'Mary Shelley',
+        year: 1818,
+        cover: 'https://covers.openlibrary.org/b/title/Frankenstein-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Ur-Klassiker'],
+        desc: 'Der Grundstein von moderner Science Fiction: Schöpfung, Verantwortung und Hybris.',
+        why: 'Wenn du <strong>an die Wurzel des Genres</strong> willst.',
+        vibe: '<strong>Vibe:</strong> gotisch, tragisch, ursächlich.'
+      }},
+      {{
+        rank: 54,
+        title: 'The Blazing World',
+        author: 'Margaret Cavendish',
+        year: 1666,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Blazing%20World-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['WIRED List'],
+        desc: 'Frühe proto-sf voller Imagination, Utopie und bizarrer Welterschaffung.',
+        why: 'Für <strong>Genre-Archäologie</strong> und Neugier.',
+        vibe: '<strong>Vibe:</strong> barock, kühn, seltsam.'
+      }},
+      {{
+        rank: 55,
+        title: 'Ice',
+        author: 'Anna Kavan',
+        year: 1967,
+        cover: 'https://covers.openlibrary.org/b/title/Ice-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['WIRED List'],
+        desc: 'Apokalyptische Eislandschaften und halluzinatorische Bedrohung statt harter Technik.',
+        why: 'Wenn du <strong>traumartige Endzeit-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> fiebrig, eisig, surreal.'
+      }},
+      {{
+        rank: 56,
+        title: 'The Player of Games',
+        author: 'Iain M. Banks',
+        year: 1988,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Player%20of%20Games-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['accessible', 'epic'],
+        awards: ['Culture Klassiker'],
+        desc: 'Elegantester Einstieg ins Culture-Universum mit Spielen, Macht und Zivilisationsvergleich.',
+        why: 'Wenn du <strong>Banks erstmals lesen</strong> willst.',
+        vibe: '<strong>Vibe:</strong> kühl, smart, weit.'
+      }},
+      {{
+        rank: 57,
+        title: 'Consider Phlebas',
+        author: 'Iain M. Banks',
+        year: 1987,
+        cover: 'https://covers.openlibrary.org/b/title/Consider%20Phlebas-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['epic'],
+        awards: ['Culture Klassiker'],
+        desc: 'Krieg, Megastrukturen und kinetischer Startpunkt der Culture-Reihe.',
+        why: 'Für <strong>mehr Action und große Setpieces</strong>.',
+        vibe: '<strong>Vibe:</strong> rasant, groß, explosiv.'
+      }},
+      {{
+        rank: 58,
+        title: 'Excession',
+        author: 'Iain M. Banks',
+        year: 1996,
+        cover: 'https://covers.openlibrary.org/b/title/Excession-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['mindfuck', 'ai', 'epic'],
+        awards: ['Culture Klassiker'],
+        desc: 'Vielleicht die AI-lastigste und kosmischste Culture-Erzählung.',
+        why: 'Wenn du <strong>Bankssche Maschinengehirne</strong> willst.',
+        vibe: '<strong>Vibe:</strong> posthuman, spielerisch, enorm.'
+      }},
+      {{
+        rank: 59,
+        title: 'Look to Windward',
+        author: 'Iain M. Banks',
+        year: 2000,
+        cover: 'https://covers.openlibrary.org/b/title/Look%20to%20Windward-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['Culture Klassiker'],
+        desc: 'Trauer, Krieg und postscarcity-Politik in melancholischer Culture-Form.',
+        why: 'Wenn du <strong>epische SF mit Gefühl</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> traurig, schön, weit.'
+      }},
+      {{
+        rank: 60,
+        title: 'Matter',
+        author: 'Iain M. Banks',
+        year: 2008,
+        cover: 'https://covers.openlibrary.org/b/title/Matter-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['Culture Klassiker'],
+        desc: 'Schalenwelt, Intrigen und Größenwahn im vollen Culture-Modus.',
+        why: 'Gut für <strong>maximalen Banks-Bombast</strong>.',
+        vibe: '<strong>Vibe:</strong> opulent, seltsam, gigantisch.'
+      }},
+      {{
+        rank: 61,
+        title: 'Surface Detail',
+        author: 'Iain M. Banks',
+        year: 2010,
+        cover: 'https://covers.openlibrary.org/b/title/Surface%20Detail-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['ai', 'epic'],
+        awards: ['Culture Klassiker'],
+        desc: 'Virtuelle Höllen, Krieg und Identität in einer der dunkelsten Culture-Varianten.',
+        why: 'Wenn du <strong>größere moralische Fragen</strong> willst.',
+        vibe: '<strong>Vibe:</strong> dunkel, virtuell, mächtig.'
+      }},
+      {{
+        rank: 62,
+        title: 'Pandora’s Star',
+        author: 'Peter F. Hamilton',
+        year: 2004,
+        cover: 'https://covers.openlibrary.org/b/title/Pandora%E2%80%99s%20Star-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['Fanfavorit'],
+        desc: 'Gigantische Space Opera mit Wurmloch-Zivilisation, Politik und kosmischer Bedrohung.',
+        why: 'Wenn du <strong>riesige Reihen</strong> magst.',
+        vibe: '<strong>Vibe:</strong> groß, verzweigt, binge-tauglich.'
+      }},
+      {{
+        rank: 63,
+        title: 'Judas Unchained',
+        author: 'Peter F. Hamilton',
+        year: 2005,
+        cover: 'https://covers.openlibrary.org/b/title/Judas%20Unchained-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['Fanfavorit'],
+        desc: 'Die direkte Fortsetzung für alle, die bei Pandora’s Star nicht aussteigen wollen.',
+        why: 'Wenn du <strong>epische Fortsetzungen</strong> liebst.',
+        vibe: '<strong>Vibe:</strong> breit, spektakulär, eskalierend.'
+      }},
+      {{
+        rank: 64,
+        title: 'Great North Road',
+        author: 'Peter F. Hamilton',
+        year: 2012,
+        cover: 'https://covers.openlibrary.org/b/title/Great%20North%20Road-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['Fanfavorit'],
+        desc: 'Mischung aus Mordfall, Zukunftsgesellschaft und planetarer Bedrohung.',
+        why: 'Wenn du <strong>Krimi + Big SF</strong> magst.',
+        vibe: '<strong>Vibe:</strong> massiv, kriminalistisch, technoid.'
+      }},
+      {{
+        rank: 65,
+        title: 'Leviathan Wakes',
+        author: 'James S. A. Corey',
+        year: 2011,
+        cover: 'https://covers.openlibrary.org/b/title/Leviathan%20Wakes-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['accessible', 'epic'],
+        awards: ['The Expanse Start'],
+        desc: 'Der starke Reihenstart von The Expanse: Politik, Detektivplot und glaubwürdige Raumfahrt.',
+        why: 'Wenn du <strong>moderne Space Opera mit Drive</strong> willst.',
+        vibe: '<strong>Vibe:</strong> zugänglich, spannend, orbitrealistisch.'
+      }},
+      {{
+        rank: 66,
+        title: 'Caliban’s War',
+        author: 'James S. A. Corey',
+        year: 2012,
+        cover: 'https://covers.openlibrary.org/b/title/Caliban%E2%80%99s%20War-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['The Expanse'],
+        desc: 'Mehr Maßstab, mehr Fraktionen, mehr Expanse-Sog.',
+        why: 'Für <strong>nahtlosen Expanse-Nachschub</strong>.',
+        vibe: '<strong>Vibe:</strong> größer, militarisierter, schnell.'
+      }},
+      {{
+        rank: 67,
+        title: 'Abaddon’s Gate',
+        author: 'James S. A. Corey',
+        year: 2013,
+        cover: 'https://covers.openlibrary.org/b/title/Abaddon%E2%80%99s%20Gate-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['epic'],
+        awards: ['The Expanse'],
+        desc: 'Ringtor, Mysterium und Eskalation — Expanse wird hier wirklich kosmisch.',
+        why: 'Wenn du <strong>Space-Mysterium plus Politik</strong> willst.',
+        vibe: '<strong>Vibe:</strong> angespannt, weit, druckvoll.'
+      }},
+      {{
+        rank: 68,
+        title: 'Ancillary Justice',
+        author: 'Ann Leckie',
+        year: 2013,
+        cover: 'https://covers.openlibrary.org/b/title/Ancillary%20Justice-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['ai', 'politisch'],
+        awards: ['Award Winner'],
+        desc: 'KI-Perspektive, Imperium und Identität in einer der prägenden neueren Space Operas.',
+        why: 'Pflicht für <strong>intelligente, moderne Space Opera</strong>.',
+        vibe: '<strong>Vibe:</strong> kühl, elegant, bewusstseinsweit.'
+      }},
+      {{
+        rank: 69,
+        title: 'Ancillary Sword',
+        author: 'Ann Leckie',
+        year: 2014,
+        cover: 'https://covers.openlibrary.org/b/title/Ancillary%20Sword-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['ai', 'politisch'],
+        awards: ['Imperial Radch'],
+        desc: 'Mehr Hofpolitik und Zivilisationsbeobachtung im Imperial-Radch-Universum.',
+        why: 'Wenn du <strong>Leckie vertiefen</strong> willst.',
+        vibe: '<strong>Vibe:</strong> ruhig, präzise, politisch.'
+      }},
+      {{
+        rank: 70,
+        title: 'Ancillary Mercy',
+        author: 'Ann Leckie',
+        year: 2015,
+        cover: 'https://covers.openlibrary.org/b/title/Ancillary%20Mercy-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['ai', 'politisch'],
+        awards: ['Imperial Radch'],
+        desc: 'Schließt die Haupttrilogie mit denselben Stärken: KI, Macht, Identität.',
+        why: 'Für <strong>komplette Leckie-Lust</strong>.',
+        vibe: '<strong>Vibe:</strong> kontrolliert, gedanklich, würdevoll.'
+      }},
+      {{
+        rank: 71,
+        title: 'Provenance',
+        author: 'Ann Leckie',
+        year: 2017,
+        cover: 'https://covers.openlibrary.org/b/title/Provenance-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['politisch'],
+        awards: ['Imperial Radch Universe'],
+        desc: 'Eigenständiger Roman über Herkunft, Status und Politik im selben Universum.',
+        why: 'Wenn du <strong>Leckie ohne Trilogie-Commitment</strong> willst.',
+        vibe: '<strong>Vibe:</strong> schlank, elegant, kulturell.'
+      }},
+      {{
+        rank: 72,
+        title: 'The Mote in God’s Eye',
+        author: 'Larry Niven & Jerry Pournelle',
+        year: 1974,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Mote%20in%20God%E2%80%99s%20Eye-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['hard-sf', 'epic'],
+        awards: ['Klassiker'],
+        desc: 'Erstkontakt-Klassiker mit militärischer und biologischer Logik.',
+        why: 'Wenn du <strong>klassische Alien-Kontakt-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> methodisch, klassisch, groß.'
+      }},
+      {{
+        rank: 73,
+        title: 'Childhood’s End',
+        author: 'Arthur C. Clarke',
+        year: 1953,
+        cover: 'https://covers.openlibrary.org/b/title/Childhood%E2%80%99s%20End-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kanon'],
+        desc: 'Kurzer, gewaltiger Klassiker über Überwachung, Erlösung und Menschheitsende.',
+        why: 'Für <strong>konzentrierte große Ideen</strong>.',
+        vibe: '<strong>Vibe:</strong> ruhig, endgültig, staunend.'
+      }},
+      {{
+        rank: 74,
+        title: 'Rendezvous with Rama',
+        author: 'Arthur C. Clarke',
+        year: 1973,
+        cover: 'https://covers.openlibrary.org/b/title/Rendezvous%20with%20Rama-L.jpg',
+        category: ['classic', 'hard-sf'],
+        tags: ['epic'],
+        awards: ['Kanon'],
+        desc: 'Das Erkunden eines fremden Megaartefakts gehört zu den großen Motiven der SF — hier in Reinform.',
+        why: 'Wenn du <strong>Entdeckung statt Krieg</strong> willst.',
+        vibe: '<strong>Vibe:</strong> leer, groß, faszinierend.'
+      }},
+      {{
+        rank: 75,
+        title: '2001: A Space Odyssey',
+        author: 'Arthur C. Clarke',
+        year: 1968,
+        cover: 'https://covers.openlibrary.org/b/title/2001%3A%20A%20Space%20Odyssey-L.jpg',
+        category: ['classic', 'hard-sf'],
+        tags: ['mindfuck'],
+        awards: ['Kanon'],
+        desc: 'Menschheitsentwicklung, KI und kosmische Stille in ikonischer Form.',
+        why: 'Wenn du <strong>einen echten Monument-Klassiker</strong> willst.',
+        vibe: '<strong>Vibe:</strong> sauber, fremd, monumental.'
+      }},
+      {{
+        rank: 76,
+        title: 'A Canticle for Leibowitz',
+        author: 'Walter M. Miller Jr.',
+        year: 1959,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Canticle%20for%20Leibowitz-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Kanon'],
+        desc: 'Postapokalyptischer Klosterklassiker über Wissensbewahrung und Zivilisationszyklen.',
+        why: 'Wenn du <strong>ernsthafte, lange nachhallende SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> liturgisch, bitter, zeitweit.'
+      }},
+      {{
+        rank: 77,
+        title: 'Lord of Light',
+        author: 'Roger Zelazny',
+        year: 1967,
+        cover: 'https://covers.openlibrary.org/b/title/Lord%20of%20Light-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Klassiker'],
+        desc: 'Techno-mythologische SF mit Göttern, Macht und Identitätsmasken.',
+        why: 'Wenn du <strong>poetischere, ungewöhnlichere Klassiker</strong> willst.',
+        vibe: '<strong>Vibe:</strong> mythic, brillant, seltsam.'
+      }},
+      {{
+        rank: 78,
+        title: 'Gateway',
+        author: 'Frederik Pohl',
+        year: 1977,
+        cover: 'https://covers.openlibrary.org/b/title/Gateway-L.jpg',
+        category: ['classic'],
+        tags: ['mindfuck'],
+        awards: ['Klassiker'],
+        desc: 'Fremde Technologie, Risikoökonomie und psychologischer Druck in einem sehr starken Setup.',
+        why: 'Gut für <strong>ältere Ideen-SF mit Punch</strong>.',
+        vibe: '<strong>Vibe:</strong> nervös, fremd, clever.'
+      }},
+      {{
+        rank: 79,
+        title: 'A Deepness in the Sky',
+        author: 'Vernor Vinge',
+        year: 1999,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Deepness%20in%20the%20Sky-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['hard-sf', 'epic'],
+        awards: ['Klassiker'],
+        desc: 'Vinge bleibt riesig, aber fokussierter und politischer als in A Fire Upon the Deep.',
+        why: 'Für <strong>epische Erstkontakt- und Handels-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> intelligent, groß, kalt.'
+      }},
+      {{
+        rank: 80,
+        title: 'Rainbows End',
+        author: 'Vernor Vinge',
+        year: 2006,
+        cover: 'https://covers.openlibrary.org/b/title/Rainbows%20End-L.jpg',
+        category: ['modern'],
+        tags: ['ai', 'politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Near-future SF über AR, Informationskrieg und gesellschaftliche Umbrüche.',
+        why: 'Wenn dich <strong>digitale Zukunft direkt vor der Haustür</strong> interessiert.',
+        vibe: '<strong>Vibe:</strong> nah, vernetzt, unruhig.'
+      }},
+      {{
+        rank: 81,
+        title: 'Quarantine',
+        author: 'Greg Egan',
+        year: 1992,
+        cover: 'https://covers.openlibrary.org/b/title/Quarantine-L.jpg',
+        category: ['classic', 'hard-sf'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Quantum-Paranoia und Realitätstheorie in knackigerem Umfang.',
+        why: 'Gut für <strong>kompakteren Egan</strong>.',
+        vibe: '<strong>Vibe:</strong> paranoid, präzise, physikalisch.'
+      }},
+      {{
+        rank: 82,
+        title: 'The Diamond Age',
+        author: 'Neal Stephenson',
+        year: 1995,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Diamond%20Age-L.jpg',
+        category: ['classic'],
+        tags: ['ai', 'mindfuck'],
+        awards: ['Post-Cyberpunk Klassiker'],
+        desc: 'Nanotech, Bildung und soziale Schichtung in einem der besten Stephenson-Romane.',
+        why: 'Wenn du <strong>große Technologiewelten</strong> willst.',
+        vibe: '<strong>Vibe:</strong> verspielt, schlau, nanotechnisch.'
+      }},
+      {{
+        rank: 83,
+        title: 'Anathem',
+        author: 'Neal Stephenson',
+        year: 2008,
+        cover: 'https://covers.openlibrary.org/b/title/Anathem-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Monastische Denker, Kosmologie und ein langsamer, dann gewaltiger Ideenaufbau.',
+        why: 'Für <strong>Geduld + Belohnung</strong>.',
+        vibe: '<strong>Vibe:</strong> langsam, tief, explodierend.'
+      }},
+      {{
+        rank: 84,
+        title: 'Seveneves',
+        author: 'Neal Stephenson',
+        year: 2015,
+        cover: 'https://covers.openlibrary.org/b/title/Seveneves-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['epic'],
+        awards: ['Fanfavorit'],
+        desc: 'Orbitalmechanik, Zivilisationsrettung und sehr viel Ingenieurs-SF.',
+        why: 'Wenn du <strong>technische Katastrophen-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> technisch, druckvoll, lang.'
+      }},
+      {{
+        rank: 85,
+        title: 'Accelerando',
+        author: 'Charles Stross',
+        year: 2005,
+        cover: 'https://covers.openlibrary.org/b/title/Accelerando-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['ai', 'mindfuck'],
+        awards: ['Singularity Klassiker'],
+        desc: 'Beschleunigte Zukunft bis weit ins Posthumanistische hinein.',
+        why: 'Wenn du <strong>Singularitäts-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> hektisch, geistig, überfordernd gut.'
+      }},
+      {{
+        rank: 86,
+        title: 'Glasshouse',
+        author: 'Charles Stross',
+        year: 2006,
+        cover: 'https://covers.openlibrary.org/b/title/Glasshouse-L.jpg',
+        category: ['modern'],
+        tags: ['ai', 'mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Identität, Gedächtnis und gesellschaftliche Konstruktion in einer posthumanen Zukunft.',
+        why: 'Für <strong>kluge Identitäts-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> seltsam, kontrolliert, psychologisch.'
+      }},
+      {{
+        rank: 87,
+        title: 'Saturn’s Children',
+        author: 'Charles Stross',
+        year: 2008,
+        cover: 'https://covers.openlibrary.org/b/title/Saturn%E2%80%99s%20Children-L.jpg',
+        category: ['modern'],
+        tags: ['ai'],
+        awards: ['Kultstatus'],
+        desc: 'Roboter, Arbeit, Körperpolitik — schräg und ganz anders als Menschen-SF.',
+        why: 'Wenn du <strong>mehr Maschinenperspektive</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> ironisch, metallisch, weird.'
+      }},
+      {{
+        rank: 88,
+        title: 'Neptune’s Brood',
+        author: 'Charles Stross',
+        year: 2013,
+        cover: 'https://covers.openlibrary.org/b/title/Neptune%E2%80%99s%20Brood-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['ai', 'politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Interstellare Finanzsysteme und Posthumanität — viel trockener und besser, als das klingt.',
+        why: 'Wenn du <strong>Ökonomie + Weltraum</strong> willst.',
+        vibe: '<strong>Vibe:</strong> trocken, clever, futuristisch.'
+      }},
+      {{
+        rank: 89,
+        title: 'The Sparrow',
+        author: 'Mary Doria Russell',
+        year: 1996,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Sparrow-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Klassiker'],
+        desc: 'Erstkontakt, Mission und Glaubenskrise in einem intensiven, moralischen Roman.',
+        why: 'Wenn du <strong>emotionale und ernste Erstkontakt-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> traurig, spirituell, stark.'
+      }},
+      {{
+        rank: 90,
+        title: 'The Book of the New Sun',
+        author: 'Gene Wolfe',
+        year: 1980,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Book%20of%20the%20New%20Sun-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Strenggenommen Science Fantasy, aber zu wichtig für die Liste der großen seltsamen Zukunftsbücher.',
+        why: 'Wenn du <strong>anspruchsvolle, labyrinthische Lektüre</strong> willst.',
+        vibe: '<strong>Vibe:</strong> dämmerig, schwer, literarisch.'
+      }},
+      {{
+        rank: 91,
+        title: 'The Fifth Head of Cerberus',
+        author: 'Gene Wolfe',
+        year: 1972,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Fifth%20Head%20of%20Cerberus-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Kolonialismus, Klonen und Identität auf engem Raum und mit großer Dichte.',
+        why: 'Für <strong>Wolfe ohne Mammutprojekt</strong>.',
+        vibe: '<strong>Vibe:</strong> rätselhaft, dicht, kolonialkritisch.'
+      }},
+      {{
+        rank: 92,
+        title: 'Light',
+        author: 'M. John Harrison',
+        year: 2002,
+        cover: 'https://covers.openlibrary.org/b/title/Light-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Dunkle, zersplitterte New-Space-Opera mit literarischer Härte.',
+        why: 'Wenn du <strong>ungemütliche literarische SF</strong> magst.',
+        vibe: '<strong>Vibe:</strong> schwarz, scharf, fragmentiert.'
+      }},
+      {{
+        rank: 93,
+        title: 'Nova',
+        author: 'Samuel R. Delany',
+        year: 1968,
+        cover: 'https://covers.openlibrary.org/b/title/Nova-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['literarisch'],
+        awards: ['Klassiker'],
+        desc: 'Delanys elegante, wilde Space Opera über Kunst, Energie und Klasse.',
+        why: 'Für <strong>stilistische ältere Space Opera</strong>.',
+        vibe: '<strong>Vibe:</strong> funkelnd, wild, intelligent.'
+      }},
+      {{
+        rank: 94,
+        title: 'Babel-17',
+        author: 'Samuel R. Delany',
+        year: 1966,
+        cover: 'https://covers.openlibrary.org/b/title/Babel-17-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Klassiker'],
+        desc: 'Sprache als Waffe und Wahrnehmungsmaschine — kurz, eigen, brillant.',
+        why: 'Wenn dich <strong>Lingustik-SF</strong> reizt.',
+        vibe: '<strong>Vibe:</strong> sprachlich, schnell, originell.'
+      }},
+      {{
+        rank: 95,
+        title: 'Stars in My Pocket Like Grains of Sand',
+        author: 'Samuel R. Delany',
+        year: 1984,
+        cover: 'https://covers.openlibrary.org/b/title/Stars%20in%20My%20Pocket%20Like%20Grains%20of%20Sand-L.jpg',
+        category: ['classic', 'space-opera'],
+        tags: ['literarisch', 'politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Beziehungs-, Kultur- und Zivilisationsroman in weiter, dichter Zukunft.',
+        why: 'Für <strong>anspruchsvolle, queere Space-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> opulent, dicht, kulturell.'
+      }},
+      {{
+        rank: 96,
+        title: 'The Lathe of Heaven',
+        author: 'Ursula K. Le Guin',
+        year: 1971,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Lathe%20of%20Heaven-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Klassiker'],
+        desc: 'Träume, Wirklichkeit und politische Utopien in konzentrierter Form.',
+        why: 'Wenn du <strong>kurze, geistig dichte Le Guin</strong> willst.',
+        vibe: '<strong>Vibe:</strong> schwebend, klug, seltsam.'
+      }},
+      {{
+        rank: 97,
+        title: 'Always Coming Home',
+        author: 'Ursula K. Le Guin',
+        year: 1985,
+        cover: 'https://covers.openlibrary.org/b/title/Always%20Coming%20Home-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Anthropologische Zukunfts-SF als fiktive Kultur-Edition.',
+        why: 'Für <strong>Le Guin in maximal kultureller Form</strong>.',
+        vibe: '<strong>Vibe:</strong> ruhig, ethnografisch, weit.'
+      }},
+      {{
+        rank: 98,
+        title: 'The Word for World Is Forest',
+        author: 'Ursula K. Le Guin',
+        year: 1972,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Word%20for%20World%20Is%20Forest-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Klassiker'],
+        desc: 'Kolonialismus, Gewalt und Ökologie in kurzer, präziser Form.',
+        why: 'Wenn du <strong>politische Kurzform-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> grün, bitter, knapp.'
+      }},
+      {{
+        rank: 99,
+        title: 'Binti',
+        author: 'Nnedi Okorafor',
+        year: 2015,
+        cover: 'https://covers.openlibrary.org/b/title/Binti-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['accessible'],
+        awards: ['Award Winner'],
+        desc: 'Kurze, starke Novelle über Identität, Mathematik und interstellaren Kulturkontakt.',
+        why: 'Perfekt für <strong>einen starken kurzen Einstieg</strong>.',
+        vibe: '<strong>Vibe:</strong> fokussiert, schön, beweglich.'
+      }},
+      {{
+        rank: 100,
+        title: 'Lagoon',
+        author: 'Nnedi Okorafor',
+        year: 2014,
+        cover: 'https://covers.openlibrary.org/b/title/Lagoon-L.jpg',
+        category: ['modern'],
+        tags: ['politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Alien-Ankunft in Lagos statt in New York oder London — und genau das macht es so frisch.',
+        why: 'Wenn du <strong>andere Schauplätze und Perspektiven</strong> willst.',
+        vibe: '<strong>Vibe:</strong> lebendig, urban, anders.'
+      }},
+      {{
+        rank: 101,
+        title: 'The Actual Star',
+        author: 'Monica Byrne',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Actual%20Star-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['mindfuck', 'politisch'],
+        awards: ['Kritikerlob'],
+        desc: 'Mehrsträngige Zeit-SF mit Spiritualität, Klima und gesellschaftlicher Zukunft.',
+        why: 'Für <strong>experimentellere Zukunftsliteratur</strong>.',
+        vibe: '<strong>Vibe:</strong> weit, visionär, ambitioniert.'
+      }},
+      {{
+        rank: 102,
+        title: 'A Psalm for the Wild-Built',
+        author: 'Becky Chambers',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Psalm%20for%20the%20Wild-Built-L.jpg',
+        category: ['modern'],
+        tags: ['accessible', 'ai'],
+        awards: ['Beliebt'],
+        desc: 'Cozy-SF über Sinnsuche und eine freundliche Roboterbegegnung.',
+        why: 'Wenn du <strong>sanfte, freundliche Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> weich, warm, leise.'
+      }},
+      {{
+        rank: 103,
+        title: 'A Prayer for the Crown-Shy',
+        author: 'Becky Chambers',
+        year: 2022,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Prayer%20for%20the%20Crown-Shy-L.jpg',
+        category: ['modern'],
+        tags: ['accessible', 'ai'],
+        awards: ['Beliebt'],
+        desc: 'Mehr philosophisches Wandern und ruhige Nähe im Monk-&-Robot-Universum.',
+        why: 'Gut, wenn dir <strong>cozy philosophische SF</strong> gefällt.',
+        vibe: '<strong>Vibe:</strong> leicht, freundlich, nachdenklich.'
+      }},
+      {{
+        rank: 104,
+        title: 'The Long Way to a Small, Angry Planet',
+        author: 'Becky Chambers',
+        year: 2014,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Long%20Way%20to%20a%20Small%2C%20Angry%20Planet-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['accessible'],
+        awards: ['Beliebt'],
+        desc: 'Crew-Space-Opera mit Fokus auf Charakteren und Alltagskultur statt Krieg.',
+        why: 'Wenn du <strong>Herz statt Härte</strong> willst.',
+        vibe: '<strong>Vibe:</strong> warm, ensemblehaft, liebenswert.'
+      }},
+      {{
+        rank: 105,
+        title: 'A Closed and Common Orbit',
+        author: 'Becky Chambers',
+        year: 2016,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Closed%20and%20Common%20Orbit-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['ai', 'accessible'],
+        awards: ['Beliebt'],
+        desc: 'Besonders stark auf Identität, AI und Zugehörigkeit fokussiert.',
+        why: 'Für <strong>mehr Chambers mit KI-Fokus</strong>.',
+        vibe: '<strong>Vibe:</strong> zart, intelligent, intim.'
+      }},
+      {{
+        rank: 106,
+        title: 'To Be Taught, If Fortunate',
+        author: 'Becky Chambers',
+        year: 2019,
+        cover: 'https://covers.openlibrary.org/b/title/To%20Be%20Taught%2C%20If%20Fortunate-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['accessible'],
+        awards: ['Kritikerlob'],
+        desc: 'Schöne, kleine Erkundungsnovelle mit wissenschaftlichem Blick.',
+        why: 'Wenn du <strong>kompakte Explorations-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> still, neugierig, hoffnungsvoll.'
+      }},
+      {{
+        rank: 107,
+        title: 'The Mountain in the Sea',
+        author: 'Ray Nayler',
+        year: 2022,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Mountain%20in%20the%20Sea-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['ai', 'politisch'],
+        awards: ['Kritikerlob'],
+        desc: 'Nichtmenschliche Intelligenz, Kapitalismus und Bewusstsein in brillanter moderner Form.',
+        why: 'Wenn du <strong>aktuelle intelligente Erstkontakt-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> kühl, ozeanisch, reflektiert.'
+      }},
+      {{
+        rank: 108,
+        title: 'The Tusks of Extinction',
+        author: 'Ray Nayler',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Tusks%20of%20Extinction-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['ai', 'new'],
+        awards: ['Hugo 2025 Novella'],
+        desc: 'Kurze Zukunfts-SF über Artensterben, Wiederbelebung und Ethik.',
+        why: 'Wenn du <strong>kompakte, aktuelle Nayler-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> traurig, biologisch, scharf.'
+      }},
+      {{
+        rank: 109,
+        title: 'The Practice, the Horizon, and the Chain',
+        author: 'Sofia Samatar',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Practice%2C%20the%20Horizon%2C%20and%20the%20Chain-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch', 'new'],
+        awards: ['Hugo 2025 Novella'],
+        desc: 'Sehr gelobte aktuelle Novelle über Arbeit, Hierarchie und Weite.',
+        why: 'Wenn du <strong>kurze, literarische Neu-SF</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> poetisch, kritisch, intensiv.'
+      }},
+      {{
+        rank: 110,
+        title: 'Rose/House',
+        author: 'Arkady Martine',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Rose/House-L.jpg',
+        category: ['modern'],
+        tags: ['ai', 'mindfuck'],
+        awards: ['Hugo 2024 Novella'],
+        desc: 'Haus-AI, Architektur und Ermittlungsstimmung in knapper Form.',
+        why: 'Für <strong>kompakte AI- und Raum-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> kühl, stilvoll, eingeschlossen.'
+      }},
+      {{
+        rank: 111,
+        title: 'The Mimicking of Known Successes',
+        author: 'Malka Older',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Mimicking%20of%20Known%20Successes-L.jpg',
+        category: ['modern'],
+        tags: ['accessible'],
+        awards: ['Hugo 2024 Novella'],
+        desc: 'Sherlock-in-space-Vibes mit akademischer Atmosphäre und Gasriesenmond-Setting.',
+        why: 'Wenn du <strong>etwas Leichteres, Charmantes</strong> willst.',
+        vibe: '<strong>Vibe:</strong> gemütlich, clever, luftschiffig.'
+      }},
+      {{
+        rank: 112,
+        title: 'Thornhedge',
+        author: 'T. Kingfisher',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Thornhedge-L.jpg',
+        category: ['modern'],
+        tags: ['new'],
+        awards: ['Locus 2024 Novella Winner'],
+        desc: 'Starke aktuelle Novelle aus einem sehr sichtbaren Award-Feld.',
+        why: 'Gut für <strong>kurze aktuelle Spec-Fic</strong>.',
+        vibe: '<strong>Vibe:</strong> schmal, düster, märchenhaft.'
+      }},
+      {{
+        rank: 113,
+        title: 'Starter Villain',
+        author: 'John Scalzi',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Starter%20Villain-L.jpg',
+        category: ['modern'],
+        tags: ['accessible', 'award', 'new'],
+        awards: ['Hugo 2024 Finalist'],
+        desc: 'Scalzi macht wieder das, was er gut kann: schnell lesbare, unterhaltsame, clevere Genre-Action.',
+        why: 'Wenn du <strong>etwas sehr Lesbares</strong> willst.',
+        vibe: '<strong>Vibe:</strong> locker, sarkastisch, flott.'
+      }},
+      {{
+        rank: 114,
+        title: 'The Kaiju Preservation Society',
+        author: 'John Scalzi',
+        year: 2022,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Kaiju%20Preservation%20Society-L.jpg',
+        category: ['modern'],
+        tags: ['accessible'],
+        awards: ['Goodreads 2023 Field'],
+        desc: 'Leichte, spaßige High-Concept-SF mit Monsterbiologie und Arbeitswelt-Zynismus.',
+        why: 'Für <strong>leichteren Eskapismus</strong>.',
+        vibe: '<strong>Vibe:</strong> poppig, spaßig, schnell.'
+      }},
+      {{
+        rank: 115,
+        title: 'Old Man’s War',
+        author: 'John Scalzi',
+        year: 2005,
+        cover: 'https://covers.openlibrary.org/b/title/Old%20Man%E2%80%99s%20War-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['accessible'],
+        awards: ['Beliebt'],
+        desc: 'Militär-SF-Einstieg mit sehr hohem Lesesog.',
+        why: 'Wenn du <strong>schnelles SF-Entertainment</strong> willst.',
+        vibe: '<strong>Vibe:</strong> flott, soldatisch, zugänglich.'
+      }},
+      {{
+        rank: 116,
+        title: 'The Collapsing Empire',
+        author: 'John Scalzi',
+        year: 2017,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Collapsing%20Empire-L.jpg',
+        category: ['modern', 'space-opera'],
+        tags: ['accessible', 'politisch'],
+        awards: ['Beliebt'],
+        desc: 'Interstellare Handelsrouten, Imperienlogik und Scalzi-Tempo.',
+        why: 'Gut für <strong>lesbare politische Space Opera</strong>.',
+        vibe: '<strong>Vibe:</strong> schnell, witty, imperial.'
+      }},
+      {{
+        rank: 117,
+        title: 'The Quantum Thief',
+        author: 'Hannu Rajaniemi',
+        year: 2010,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Quantum%20Thief-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Komplexe posthumane Heist-SF voller Dichte und Ideen.',
+        why: 'Wenn du <strong>harte, dichte moderne SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> kompliziert, glitzernd, anspruchsvoll.'
+      }},
+      {{
+        rank: 118,
+        title: 'The Fractal Prince',
+        author: 'Hannu Rajaniemi',
+        year: 2012,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Fractal%20Prince-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Noch dichter und fremder als der Auftakt.',
+        why: 'Für <strong>mehr posthumane Komplexität</strong>.',
+        vibe: '<strong>Vibe:</strong> exotisch, kryptisch, schnell.'
+      }},
+      {{
+        rank: 119,
+        title: 'The Causal Angel',
+        author: 'Hannu Rajaniemi',
+        year: 2014,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Causal%20Angel-L.jpg',
+        category: ['modern', 'hard-sf'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Schließt die Trilogie mit maximalem Ideenfeuerwerk.',
+        why: 'Wenn du <strong>die ganze Rajaniemi-Kur</strong> willst.',
+        vibe: '<strong>Vibe:</strong> kosmisch, technisch, glitzernd.'
+      }},
+      {{
+        rank: 120,
+        title: 'The Space Between Worlds',
+        author: 'Micaiah Johnson',
+        year: 2020,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Space%20Between%20Worlds-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch', 'accessible'],
+        awards: ['Kritikerlob'],
+        desc: 'Multiversumsroman, der Klasse, Identität und Körperpolitik ernst nimmt.',
+        why: 'Wenn du <strong>moderne Parallelwelten-SF</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> kraftvoll, klug, nah.'
+      }},
+      {{
+        rank: 121,
+        title: 'Light from Uncommon Stars',
+        author: 'Ryka Aoki',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/Light%20from%20Uncommon%20Stars-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['accessible'],
+        awards: ['Kritikerlob'],
+        desc: 'Genre-Mix mit Aliens, Musik und Trans-Themen; nicht harte SF, aber sehr gute speculative Empfehlung.',
+        why: 'Wenn du <strong>weiche, ungewöhnliche Genremischungen</strong> magst.',
+        vibe: '<strong>Vibe:</strong> warm, traurig, leuchtend.'
+      }},
+      {{
+        rank: 122,
+        title: 'Version Control',
+        author: 'Dexter Palmer',
+        year: 2016,
+        cover: 'https://covers.openlibrary.org/b/title/Version%20Control-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kritikerlob'],
+        desc: 'Near-future-Beziehungs- und Technologie-SF mit leiser, geschickter Spannung.',
+        why: 'Für <strong>ruhigere, intelligentere Gegenwarts-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> leise, unheimlich, kontrolliert.'
+      }},
+      {{
+        rank: 123,
+        title: 'The Gone World',
+        author: 'Tom Sweterlitsch',
+        year: 2018,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Gone%20World-L.jpg',
+        category: ['modern'],
+        tags: ['mindfuck', 'politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Zeitreise-Ermittlung, kosmischer Horror und Regierungsdunkelheit in einem brutalen Paket.',
+        why: 'Wenn du <strong>düstere High-Concept-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> finster, verzerrt, packend.'
+      }},
+      {{
+        rank: 124,
+        title: 'Sea of Tranquility',
+        author: 'Emily St. John Mandel',
+        year: 2022,
+        cover: 'https://covers.openlibrary.org/b/title/Sea%20of%20Tranquility-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['accessible'],
+        awards: ['Kritikerlob'],
+        desc: 'Pandemische Zeit- und Raumverknüpfung in klarer, eleganter Prosa.',
+        why: 'Gut für <strong>literarische, zugängliche SF</strong>.',
+        vibe: '<strong>Vibe:</strong> ruhig, gläsern, melancholisch.'
+      }},
+      {{
+        rank: 125,
+        title: 'Station Eleven',
+        author: 'Emily St. John Mandel',
+        year: 2014,
+        cover: 'https://covers.openlibrary.org/b/title/Station%20Eleven-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Kultstatus'],
+        desc: 'Grenzfall Richtung Post-Apokalypse, aber als Zukunftsroman mit Kulturfokus enorm stark.',
+        why: 'Wenn du <strong>sanftere Endzeitliteratur</strong> suchst.',
+        vibe: '<strong>Vibe:</strong> melancholisch, zart, menschlich.'
+      }},
+      {{
+        rank: 126,
+        title: 'Never Let Me Go',
+        author: 'Kazuo Ishiguro',
+        year: 2005,
+        cover: 'https://covers.openlibrary.org/b/title/Never%20Let%20Me%20Go-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Kanon'],
+        desc: 'Klonen, Würde und Verdrängung in extrem kontrollierter Prosa.',
+        why: 'Wenn du <strong>literarisch starke Bioethik-SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> still, schmerzhaft, präzise.'
+      }},
+      {{
+        rank: 127,
+        title: 'Klara and the Sun',
+        author: 'Kazuo Ishiguro',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/Klara%20and%20the%20Sun-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['ai', 'accessible'],
+        awards: ['Kritikerlob'],
+        desc: 'Erzählung aus der Perspektive einer künstlichen Freundin über Fürsorge und Klassengesellschaft.',
+        why: 'Gut für <strong>sanfte AI-SF</strong>.',
+        vibe: '<strong>Vibe:</strong> freundlich, traurig, beobachtend.'
+      }},
+      {{
+        rank: 128,
+        title: 'How High We Go in the Dark',
+        author: 'Sequoia Nagamatsu',
+        year: 2022,
+        cover: 'https://covers.openlibrary.org/b/title/How%20High%20We%20Go%20in%20the%20Dark-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Kritikerlob'],
+        desc: 'Verknüpfte Zukunftsgeschichten über Pandemie, Trauer und neue Rituale.',
+        why: 'Wenn du <strong>mosaikartige Zukunftsliteratur</strong> magst.',
+        vibe: '<strong>Vibe:</strong> traurig, klug, menschlich.'
+      }},
+      {{
+        rank: 129,
+        title: 'The Employees',
+        author: 'Olga Ravn',
+        year: 2018,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Employees-L.jpg',
+        category: ['modern', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Kurzer, fremdartiger Bordroman in dokumentarischer Form.',
+        why: 'Wenn du <strong>seltsame kurze Experimente</strong> willst.',
+        vibe: '<strong>Vibe:</strong> kühl, bizarr, formstreng.'
+      }},
+      {{
+        rank: 130,
+        title: 'Memoirs of a Spacewoman',
+        author: 'Naomi Mitchison',
+        year: 1962,
+        cover: 'https://covers.openlibrary.org/b/title/Memoirs%20of%20a%20Spacewoman-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Klassiker'],
+        desc: 'Kommunikation mit Fremden und weibliche Perspektive in einem unterschätzten Klassiker.',
+        why: 'Für <strong>andere klassische Stimmen</strong>.',
+        vibe: '<strong>Vibe:</strong> ruhig, neugierig, fremd.'
+      }},
+      {{
+        rank: 131,
+        title: 'Engine Summer',
+        author: 'John Crowley',
+        year: 1979,
+        cover: 'https://covers.openlibrary.org/b/title/Engine%20Summer-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Postapokalyptische, poetische Zukunftsreise mit starkem Ton.',
+        why: 'Wenn du <strong>lyrische SF</strong> möchtest.',
+        vibe: '<strong>Vibe:</strong> warm, geheimnisvoll, sanft.'
+      }},
+      {{
+        rank: 132,
+        title: 'Stand on Zanzibar',
+        author: 'John Brunner',
+        year: 1968,
+        cover: 'https://covers.openlibrary.org/b/title/Stand%20on%20Zanzibar-L.jpg',
+        category: ['classic', 'literarisch'],
+        tags: ['politisch'],
+        awards: ['Klassiker'],
+        desc: 'Überbevölkerung, Informationsflut und gesellschaftliche Fragmentierung.',
+        why: 'Wenn du <strong>mediale, politische Zukunftssatire</strong> willst.',
+        vibe: '<strong>Vibe:</strong> hektisch, prophetisch, zersplittert.'
+      }},
+      {{
+        rank: 133,
+        title: 'The Shockwave Rider',
+        author: 'John Brunner',
+        year: 1975,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Shockwave%20Rider-L.jpg',
+        category: ['classic'],
+        tags: ['ai', 'politisch'],
+        awards: ['Cyberpunk Vorläufer'],
+        desc: 'Netzwerke, Daten und Zukunftskontrolle lange vor Gibson.',
+        why: 'Wenn du <strong>Cyberpunk-Vorgeschichte</strong> lesen willst.',
+        vibe: '<strong>Vibe:</strong> prophetisch, nervös, systemisch.'
+      }}
+    ];
+
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    const searchEl = document.getElementById('search');
+    const categoryEl = document.getElementById('category');
+    const sortEl = document.getElementById('sort');
+    const chipEls = document.querySelectorAll('.chip');
+    let activeTag = 'all';
+
+    function badge(text, cls = '') {
+      return `<span class="badge ${cls}">${text}</span>`;
+    }
+
+    function renderCard(book) {
+      const badges = [
+        ...book.category.map(c => badge(c)),
+        ...book.tags.map(t => badge(t)),
+        ...book.awards.map(a => badge(a, 'award'))
+      ].join('');
+
+      return `
+        <article class="card">
+          <div class="cover-wrap">
+            <img class="cover" src="${book.cover}" alt="Cover von ${book.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="cover-fallback" style="display:none">${book.title}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <div>
+                <h3 class="title">${book.title}</h3>
+                <p class="author">${book.author} · ${book.year}</p>
+              </div>
+              <div class="rank">#${book.rank}</div>
+            </div>
+            <div class="badges">${badges}</div>
+            <p class="desc">${book.desc}</p>
+            <p class="why">${book.why}</p>
+            <div class="meta">
+              <div class="meta-row">${book.vibe}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function applyFilters() {
+      const q = searchEl.value.trim().toLowerCase();
+      const cat = categoryEl.value;
+      const sort = sortEl.value;
+
+      let result = books.filter(book => {
+        const haystack = [book.title, book.author, book.desc, book.why, book.vibe, ...book.category, ...book.tags, ...book.awards].join(' ').toLowerCase();
+        const matchesSearch = !q || haystack.includes(q);
+        const matchesCategory = cat === 'all' || book.category.includes(cat);
+        const matchesTag = activeTag === 'all' || book.tags.includes(activeTag) || (activeTag === 'award' && book.awards.length);
+        return matchesSearch && matchesCategory && matchesTag;
+      });
+
+      if (sort === 'title') result.sort((a,b) => a.title.localeCompare(b.title, 'de'));
+      if (sort === 'year') result.sort((a,b) => a.year - b.year);
+      if (sort === 'priority') result.sort((a,b) => a.rank - b.rank);
+
+      grid.innerHTML = result.map(renderCard).join('');
+      empty.style.display = result.length ? 'none' : 'block';
+    }
+
+    searchEl.addEventListener('input', applyFilters);
+    categoryEl.addEventListener('change', applyFilters);
+    sortEl.addEventListener('change', applyFilters);
+
+    chipEls.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chipEls.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeTag = chip.dataset.tag;
+        applyFilters();
+      });
+    });
+
+    applyFilters();
+  </script>
+</body>
+</html>

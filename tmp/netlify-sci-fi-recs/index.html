@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sci‑Fi Empfehlungen für Hendrik</title>
+  <meta name="description" content="Kuratiere Sci‑Fi-Empfehlungen mit Klassikern, modernen Highlights und preisnahen Neuerscheinungen." />
+  <style>
+    :root {
+      --bg: #08111f;
+      --bg-2: #0e1a2e;
+      --card: rgba(18, 28, 49, 0.92);
+      --text: #edf4ff;
+      --muted: #afc0df;
+      --line: rgba(255,255,255,.11);
+      --accent: #7cc4ff;
+      --accent-2: #89f0d3;
+      --gold: #f2cf70;
+      --shadow: 0 20px 60px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(124,196,255,.16), transparent 28%),
+        radial-gradient(circle at left center, rgba(137,240,211,.10), transparent 24%),
+        linear-gradient(180deg, var(--bg), #0a1525 42%, #0d1830 100%);
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 28px; }
+    .hero {
+      padding: 26px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,196,255,.25), transparent 65%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #d4e6ff;
+      background: rgba(255,255,255,.04);
+      font-size: .9rem;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 1.05;
+      max-width: 850px;
+    }
+    .lead {
+      color: var(--muted);
+      max-width: 900px;
+      line-height: 1.6;
+      margin: 16px 0 0;
+      font-size: 1.02rem;
+    }
+    .topline {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .mini-panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,.03);
+    }
+    .mini-panel h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+    .mini-panel p, .mini-panel li {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+    .mini-panel ul { padding-left: 18px; margin: 0; }
+    .toolbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      margin: 18px 0 10px;
+      display: grid;
+      grid-template-columns: 1.4fr .9fr .9fr;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(8,17,31,.78);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
+    }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #101d34;
+      color: var(--text);
+      padding: 11px 13px;
+      font: inherit;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 0;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #162542;
+      color: #dce9ff;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .chip:hover { transform: translateY(-1px); }
+    .chip.active { border-color: var(--accent); background: #1e3157; }
+    .section {
+      margin-top: 28px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.55;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      gap: 0;
+    }
+    .cover-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: linear-gradient(135deg, rgba(124,196,255,.18), rgba(137,240,211,.10));
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .cover-wrap::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -30px auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.12), transparent 70%);
+    }
+    .cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cover-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: end;
+      padding: 16px;
+      color: #eaf3ff;
+      font-weight: 700;
+      letter-spacing: .02em;
+      background: linear-gradient(180deg, rgba(8,17,31,.05), rgba(8,17,31,.72));
+    }
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .rank {
+      min-width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(124,196,255,.25), rgba(137,240,211,.16));
+      border: 1px solid rgba(255,255,255,.12);
+      color: white;
+      font-weight: 800;
+    }
+    .title {
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.25;
+    }
+    .author {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: .78rem;
+      color: #d8e6ff;
+      background: rgba(255,255,255,.03);
+    }
+    .badge.award { border-color: rgba(242,207,112,.45); color: #ffe7a7; }
+    .desc, .why, .vibe {
+      margin: 0;
+      line-height: 1.58;
+      color: #dfe9fb;
+    }
+    .why strong, .vibe strong { color: white; }
+    .meta {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+    .meta-row {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+    .footer {
+      margin: 28px 0 12px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+      line-height: 1.6;
+    }
+    .empty {
+      display: none;
+      margin-top: 14px;
+      padding: 22px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      text-align: center;
+      border-radius: 16px;
+    }
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .source-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,.025);
+      color: #d7e5fb;
+    }
+    @media (max-width: 900px) {
+      .topline { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">🦞 Webpage · Sci‑Fi Empfehlungen · Stand: März 2026</div>
+      <h1>Sci‑Fi Empfehlungen für Hendrik</h1>
+      <p class="lead">
+        Eine kuratierte Empfehlungsseite mit Klassikern, modernen Highlights, preisnahen Neuerscheinungen und ein paar bewusst ausgewählten Wildcards.
+        Die Liste kombiniert Kanon, aktuelle Award-Signale und Leser-/Redaktionsresonanz — damit nicht nur dieselben fünf Standardtitel wiederholt werden.
+      </p>
+      <div class="topline">
+        <div class="mini-panel">
+          <h2>Priorisierte Lesepfade</h2>
+          <ul>
+            <li><strong>Modern & zugänglich:</strong> <em>Project Hail Mary</em> → <em>The Ministry of Time</em> → <em>System Collapse</em></li>
+            <li><strong>Große Ideen / Hard SF:</strong> <em>Children of Time</em> → <em>Blindsight</em> → <em>Alien Clay</em></li>
+            <li><strong>Politisch / literarisch:</strong> <em>Translation State</em> → <em>The Saint of Bright Doors</em> → <em>The Dispossessed</em></li>
+            <li><strong>Episch / Space Opera:</strong> <em>House of Suns</em> → <em>These Burning Stars</em> → <em>Lords of Uncreation</em></li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h2>Wie diese Seite aufgebaut ist</h2>
+          <p>
+            Filtere nach Kategorie, Stil und Zugänglichkeit. Jede Karte hat eine Kurzbeschreibung, den Hauptgrund für die Empfehlung und einen kleinen Hinweis,
+            wann das Buch besonders gut passt.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Filterleiste">
+      <input id="search" type="search" placeholder="Suche nach Titel, Autor, Vibe oder Stichwort …" />
+      <select id="category">
+        <option value="all">Alle Kategorien</option>
+        <option value="modern">Modern / aktuell</option>
+        <option value="classic">Klassiker</option>
+        <option value="hard-sf">Hard Sci‑Fi</option>
+        <option value="space-opera">Space Opera</option>
+        <option value="literarisch">Literarisch / philosophisch</option>
+      </select>
+      <select id="sort">
+        <option value="priority">Sortierung: Priorität</option>
+        <option value="title">Titel A–Z</option>
+        <option value="year">Jahr aufsteigend</option>
+      </select>
+    </section>
+
+    <div class="chips" id="chips">
+      <button class="chip active" data-tag="all">Alle</button>
+      <button class="chip" data-tag="award">Award-Nähe</button>
+      <button class="chip" data-tag="accessible">Zugänglich</button>
+      <button class="chip" data-tag="mindfuck">Mindfuck</button>
+      <button class="chip" data-tag="politisch">Politisch</button>
+      <button class="chip" data-tag="ai">KI</button>
+      <button class="chip" data-tag="new">Neuere Bücher</button>
+      <button class="chip" data-tag="epic">Episch</button>
+    </div>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Empfehlungen</h2>
+          <p>Die obersten Plätze sind bewusst die stärksten Kombinationen aus Qualität, Relevanz und Passung für ambitionierte Sci‑Fi-Laune.</p>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty">Keine Treffer — probier einen anderen Filter oder Suchbegriff.</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Quellenbasis</h2>
+          <p>Die Liste wurde aus Award-Seiten, Community-Votes und großen Empfehlungslisten verdichtet.</p>
+        </div>
+      </div>
+      <div class="source-list">
+        <div class="source-item"><strong>Hugo Awards</strong><br/>Finalisten/Winner 2023, 2024, 2025</div>
+        <div class="source-item"><strong>Nebula Awards</strong><br/>Best Novel Felder 2022, 2023, 2024</div>
+        <div class="source-item"><strong>Locus Awards</strong><br/>Science Fiction Novel 2024</div>
+        <div class="source-item"><strong>Goodreads Choice Awards</strong><br/>Science Fiction 2023, 2024, 2025</div>
+        <div class="source-item"><strong>Redaktionslisten</strong><br/>WIRED, Esquire, Book Riot</div>
+        <div class="source-item"><strong>Ergänzender Trend-Check</strong><br/>Aktuelle Web-/Jahreslisten und Suchtreffer</div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <strong>Notiz:</strong> Diese Seite ist eine kuratierte Auswahl, keine vollständige Datenbank. Wenn du willst, kann daraus im nächsten Schritt noch eine richtige kleine App werden —
+      mit Cover-Bildern, Lesestatus, deutscher Verfügbarkeitsanzeige, Prioritäts-Scores, Export nach Markdown/CSV oder direktem Deploy.
+    </section>
+  </div>
+
+  <script>
+    const books = [
+      {
+        rank: 1,
+        title: 'Children of Time',
+        author: 'Adrian Tchaikovsky',
+        year: 2015,
+        cover: 'https://covers.openlibrary.org/b/title/Children%20of%20Time-L.jpg',
+        category: ['hard-sf','modern'],
+        tags: ['mindfuck','epic'],
+        awards: ['Award-nah'],
+        desc: 'Große Evolutions- und Zivilisations-Sci‑Fi über Terraforming, nichtmenschliche Intelligenz und lange Zeiträume.',
+        why: 'Wenn du <strong>große Ideen</strong> willst, aber trotzdem ein lesbares, erzählerisches Buch suchst.',
+        vibe: '<strong>Vibe:</strong> episch, klug, fremdartig.'
+      },
+      {
+        rank: 2,
+        title: 'Project Hail Mary',
+        author: 'Andy Weir',
+        year: 2021,
+        cover: 'https://covers.openlibrary.org/b/title/Project%20Hail%20Mary-L.jpg',
+        category: ['hard-sf','modern'],
+        tags: ['accessible'],
+        awards: ['Mainstream-Favorit'],
+        desc: 'Ingenieurige Problemlöse-Sci‑Fi mit Wissenschaft, Tempo und viel Charme.',
+        why: 'Sehr gut, wenn du <strong>etwas sofort Wegsuchtbares</strong> willst, das trotzdem clever bleibt.',
+        vibe: '<strong>Vibe:</strong> zugänglich, nerdig, warm.'
+      },
+      {
+        rank: 3,
+        title: 'Blindsight',
+        author: 'Peter Watts',
+        year: 2006,
+        cover: 'https://covers.openlibrary.org/b/title/Blindsight-L.jpg',
+        category: ['hard-sf','literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kultstatus'],
+        desc: 'Erstkontakt-Roman, der Bewusstsein, Wahrnehmung und Intelligenz auf unangenehm kluge Weise auseinandernimmt.',
+        why: 'Perfekt, wenn du <strong>richtig dunkle Denksport-Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> hart, kühl, philosophisch.'
+      },
+      {
+        rank: 4,
+        title: 'Translation State',
+        author: 'Ann Leckie',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Translation%20State-L.jpg',
+        category: ['modern','space-opera','literarisch'],
+        tags: ['award','politisch'],
+        awards: ['Hugo 2024 Finalist', 'Nebula 2023 Finalist', 'Locus 2024 List'],
+        desc: 'Politische, intelligente Space-SF mit Alien-Perspektiven, Identität und Diplomatie.',
+        why: 'Sehr stark, wenn du <strong>intelligente moderne Space Opera</strong> willst, nicht bloß Laserschlachten.',
+        vibe: '<strong>Vibe:</strong> elegant, politisch, präzise.'
+      },
+      {
+        rank: 5,
+        title: 'Some Desperate Glory',
+        author: 'Emily Tesh',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/Some%20Desperate%20Glory-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['award','politisch','new'],
+        awards: ['Hugo 2024 Best Novel'],
+        desc: 'Militärisch geprägte Zukunfts-Sci‑Fi über Ideologie, Indoktrination und Selbstbild.',
+        why: 'Empfehlenswert, wenn du <strong>intensive, moderne Sci‑Fi</strong> mit klarer Haltung willst.',
+        vibe: '<strong>Vibe:</strong> scharf, emotional, ideologisch.'
+      },
+      {
+        rank: 6,
+        title: 'System Collapse',
+        author: 'Martha Wells',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/System%20Collapse-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','accessible','ai','new'],
+        awards: ['Locus 2024 Winner'],
+        desc: 'Ein schneller, moderner KI-Roman mit klarer Stimme und hohem Unterhaltungswert.',
+        why: 'Ideal, wenn du <strong>KI-Themen</strong> magst und nicht gleich 800 Seiten Commitment willst.',
+        vibe: '<strong>Vibe:</strong> flott, ironisch, modern.'
+      },
+      {
+        rank: 7,
+        title: 'The Saint of Bright Doors',
+        author: 'Vajra Chandrasekera',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Saint%20of%20Bright%20Doors-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new','politisch'],
+        awards: ['Nebula 2023 Winner', 'Locus First Novel Winner'],
+        desc: 'Seltsam, literarisch, politisch und sehr eigen — eher etwas für Lust auf Neues als auf Komfort.',
+        why: 'Super, wenn du <strong>etwas wirklich Originelles</strong> lesen willst.',
+        vibe: '<strong>Vibe:</strong> weird, literarisch, ungewöhnlich.'
+      },
+      {
+        rank: 8,
+        title: 'The Ministry of Time',
+        author: 'Kaliane Bradley',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Ministry%20of%20Time-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','accessible','new'],
+        awards: ['Goodreads 2024 Winner'],
+        desc: 'Zeitreise, literarische Stimme und Mainstream-Buzz in einem sehr lesbaren Paket.',
+        why: 'Passt, wenn du <strong>etwas moderneres und zugängliches</strong> willst, ohne platt zu werden.',
+        vibe: '<strong>Vibe:</strong> frisch, stilvoll, emotional.'
+      },
+      {
+        rank: 9,
+        title: 'Alien Clay',
+        author: 'Adrian Tchaikovsky',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Alien%20Clay-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','new'],
+        awards: ['Hugo 2025 Finalist'],
+        desc: 'Neuere Tchaikovsky-Sci‑Fi mit fremder Biologie, Härte und intellektuellem Druck.',
+        why: 'Gute Wahl, wenn du <strong>aktuelle Ideen-Sci‑Fi</strong> mit Biss suchst.',
+        vibe: '<strong>Vibe:</strong> fremd, gespannt, biologisch.'
+      },
+      {
+        rank: 10,
+        title: 'Service Model',
+        author: 'Adrian Tchaikovsky',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Service%20Model-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','ai','new'],
+        awards: ['Hugo 2025 Finalist', 'Goodreads 2024 Nominee'],
+        desc: 'Robotik, Systemlogik und satirischer Ton in einer deutlich moderneren SF-Variante.',
+        why: 'Wenn du <strong>Maschinenlogik und Gesellschaftssatire</strong> kombinieren willst.',
+        vibe: '<strong>Vibe:</strong> trocken, präzise, maschinell.'
+      },
+      {
+        rank: 11,
+        title: 'The Mercy of Gods',
+        author: 'James S. A. Corey',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Mercy%20of%20Gods-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['award','new','epic'],
+        awards: ['Goodreads 2024 Nominee'],
+        desc: 'Groß angelegte neue SF von den Expanse-Autoren mit entsprechendem Sog.',
+        why: 'Naheliegend, wenn du <strong>größere Reihen und Expanse-Vibes</strong> magst.',
+        vibe: '<strong>Vibe:</strong> episch, breit, dramatisch.'
+      },
+      {
+        rank: 12,
+        title: 'House of Suns',
+        author: 'Alastair Reynolds',
+        year: 2008,
+        cover: 'https://covers.openlibrary.org/b/title/House%20of%20Suns-L.jpg',
+        category: ['space-opera','hard-sf'],
+        tags: ['epic'],
+        awards: ['Fanfavorit'],
+        desc: 'Gigantische Zeitskalen, Melancholie und klassisches Sense of Wonder in moderner Form.',
+        why: 'Wenn du <strong>Weite und Atmosphäre</strong> suchst statt enger Plot-Maschine.',
+        vibe: '<strong>Vibe:</strong> weit, melancholisch, erhaben.'
+      },
+      {
+        rank: 13,
+        title: 'A Memory Called Empire',
+        author: 'Arkady Martine',
+        year: 2019,
+        cover: 'https://covers.openlibrary.org/b/title/A%20Memory%20Called%20Empire-L.jpg',
+        category: ['space-opera','literarisch'],
+        tags: ['politisch'],
+        awards: ['Preiswürdig rezipiert'],
+        desc: 'Diplomatie, Reichspolitik und kultureller Druck — mehr Hofintrige als Dogfight.',
+        why: 'Sehr gut für <strong>politische Sci‑Fi</strong> mit echter Stilnote.',
+        vibe: '<strong>Vibe:</strong> kultiviert, intrigenreich, elegant.'
+      },
+      {
+        rank: 14,
+        title: 'The Dispossessed',
+        author: 'Ursula K. Le Guin',
+        year: 1974,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Dispossessed-L.jpg',
+        category: ['classic','literarisch'],
+        tags: ['politisch'],
+        awards: ['Klassiker'],
+        desc: 'Eine der großen politischen Sci‑Fi-Erzählungen über Gesellschaftsformen, Freiheit und Entfremdung.',
+        why: 'Pflicht, wenn du <strong>denkende Sci‑Fi</strong> willst, nicht nur Plot.',
+        vibe: '<strong>Vibe:</strong> ruhig, klug, gesellschaftlich.'
+      },
+      {
+        rank: 15,
+        title: 'The Left Hand of Darkness',
+        author: 'Ursula K. Le Guin',
+        year: 1969,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Left%20Hand%20of%20Darkness-L.jpg',
+        category: ['classic','literarisch'],
+        tags: ['politisch'],
+        awards: ['Hugo/Nebula Klassiker'],
+        desc: 'Kontakt, Kultur und Identität in einem der wichtigsten Sci‑Fi-Romane überhaupt.',
+        why: 'Wenn du <strong>Genre-Grundlagen</strong> willst, die heute noch frisch wirken.',
+        vibe: '<strong>Vibe:</strong> kalt, still, tief.'
+      },
+      {
+        rank: 16,
+        title: 'Solaris',
+        author: 'Stanisław Lem',
+        year: 1961,
+        cover: 'https://covers.openlibrary.org/b/title/Solaris-L.jpg',
+        category: ['classic','literarisch'],
+        tags: ['mindfuck'],
+        awards: ['Kanon'],
+        desc: 'Ein radikal fremdes Gegenüber und die Erkenntnis, dass Menschen vielleicht nicht alles verstehen können.',
+        why: 'Perfekt, wenn du <strong>philosophische Fremdheits-Sci‑Fi</strong> willst.',
+        vibe: '<strong>Vibe:</strong> ruhig, unheimlich, erkenntniskritisch.'
+      },
+      {
+        rank: 17,
+        title: 'Neuromancer',
+        author: 'William Gibson',
+        year: 1984,
+        cover: 'https://covers.openlibrary.org/b/title/Neuromancer-L.jpg',
+        category: ['classic'],
+        tags: ['ai'],
+        awards: ['Kanon'],
+        desc: 'Cyberpunk-Urtext mit Datendiebstahl, KI und kapitalistisch verseuchten Megastrukturen.',
+        why: 'Sinnvoll, wenn du <strong>Genregeschichte</strong> plus Stil willst.',
+        vibe: '<strong>Vibe:</strong> neon, kühl, verdichtet.'
+      },
+      {
+        rank: 18,
+        title: 'The Stars My Destination',
+        author: 'Alfred Bester',
+        year: 1957,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Stars%20My%20Destination-L.jpg',
+        category: ['classic'],
+        tags: ['mindfuck'],
+        awards: ['Klassiker'],
+        desc: 'Rachegeschichte im All, sehr direkt, aggressiv, stilprägend.',
+        why: 'Gut, wenn du <strong>ältere Sci‑Fi mit Wucht</strong> suchst, nicht bloß musealen Staub.',
+        vibe: '<strong>Vibe:</strong> wild, schnell, wütend.'
+      },
+      {
+        rank: 19,
+        title: 'The Terraformers',
+        author: 'Annalee Newitz',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Terraformers-L.jpg',
+        category: ['modern','hard-sf'],
+        tags: ['award','new','politisch'],
+        awards: ['Nebula 2023 Finalist', 'Locus 2024 List'],
+        desc: 'Ökologie, Stadtplanung, Kapitalismus und Zukunftsgesellschaft in ziemlich origineller Kombination.',
+        why: 'Empfehlenswert, wenn du <strong>Weltbau mit Systemfragen</strong> magst.',
+        vibe: '<strong>Vibe:</strong> verspielt, kritisch, zukunftsgebaut.'
+      },
+      {
+        rank: 20,
+        title: 'These Burning Stars',
+        author: 'Bethany Jacobs',
+        year: 2023,
+        cover: 'https://covers.openlibrary.org/b/title/These%20Burning%20Stars-L.jpg',
+        category: ['modern','space-opera'],
+        tags: ['new','epic'],
+        awards: ['Locus First Novel List'],
+        desc: 'Reihenstart mit Intrigen, Imperium, Gewalt und viel Energie.',
+        why: 'Wenn du <strong>neue Space-Opera-Reihen</strong> antesten willst.',
+        vibe: '<strong>Vibe:</strong> scharf, groß, dramatisch.'
+      },
+      {
+        rank: 21,
+        title: 'Beautyland',
+        author: 'Marie-Helene Bertino',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Beautyland-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['accessible','new'],
+        awards: ['Esquire List', 'Goodreads 2024 Nominee'],
+        desc: 'Literarische, emotionale Sci‑Fi über Anderssein, Beobachtung und Menschlichkeit.',
+        why: 'Passt, wenn du <strong>weichere, emotionalere SF</strong> willst.',
+        vibe: '<strong>Vibe:</strong> zart, schräg, menschlich.'
+      },
+      {
+        rank: 22,
+        title: 'Annie Bot',
+        author: 'Sierra Greer',
+        year: 2024,
+        cover: 'https://covers.openlibrary.org/b/title/Annie%20Bot-L.jpg',
+        category: ['modern'],
+        tags: ['ai','new'],
+        awards: ['Goodreads 2024 Nominee'],
+        desc: 'KI, Beziehung, Machtgefälle und Objektifizierung in einer klar modernen Ausprägung.',
+        why: 'Gut, wenn dich <strong>KI + Gesellschaft + Beziehungsdynamik</strong> reizt.',
+        vibe: '<strong>Vibe:</strong> modern, nah, unangenehm spannend.'
+      },
+      {
+        rank: 23,
+        title: 'The Compound',
+        author: 'Aisling Rawle',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/The%20Compound-L.jpg',
+        category: ['modern'],
+        tags: ['award','new'],
+        awards: ['Goodreads 2025 Winner'],
+        desc: 'Einer der auffälligen neueren SF-Buzz-Titel aus der Goodreads-Richtung.',
+        why: 'Wenn du <strong>sehr aktuelle Trend-Sci‑Fi</strong> mitnehmen willst.',
+        vibe: '<strong>Vibe:</strong> frisch, neu, hypegeladen.'
+      },
+      {
+        rank: 24,
+        title: 'Death of the Author',
+        author: 'Nnedi Okorafor',
+        year: 2025,
+        cover: 'https://covers.openlibrary.org/b/title/Death%20of%20the%20Author-L.jpg',
+        category: ['modern','literarisch'],
+        tags: ['award','new'],
+        awards: ['Goodreads 2025 Nominee'],
+        desc: 'Einer der spannendsten neueren Kandidaten aus dem 2025er Empfehlungsumfeld.',
+        why: 'Wenn du <strong>ganz aktuelle Stimmen</strong> im Genre sehen willst.',
+        vibe: '<strong>Vibe:</strong> neu, markant, neugierig machend.'
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    const searchEl = document.getElementById('search');
+    const categoryEl = document.getElementById('category');
+    const sortEl = document.getElementById('sort');
+    const chipEls = document.querySelectorAll('.chip');
+    let activeTag = 'all';
+
+    function badge(text, cls = '') {
+      return `<span class="badge ${cls}">${text}</span>`;
+    }
+
+    function renderCard(book) {
+      const badges = [
+        ...book.category.map(c => badge(c)),
+        ...book.tags.map(t => badge(t)),
+        ...book.awards.map(a => badge(a, 'award'))
+      ].join('');
+
+      return `
+        <article class="card">
+          <div class="cover-wrap">
+            <img class="cover" src="${book.cover}" alt="Cover von ${book.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="cover-fallback" style="display:none">${book.title}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <div>
+                <h3 class="title">${book.title}</h3>
+                <p class="author">${book.author} · ${book.year}</p>
+              </div>
+              <div class="rank">#${book.rank}</div>
+            </div>
+            <div class="badges">${badges}</div>
+            <p class="desc">${book.desc}</p>
+            <p class="why">${book.why}</p>
+            <div class="meta">
+              <div class="meta-row">${book.vibe}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function applyFilters() {
+      const q = searchEl.value.trim().toLowerCase();
+      const cat = categoryEl.value;
+      const sort = sortEl.value;
+
+      let result = books.filter(book => {
+        const haystack = [book.title, book.author, book.desc, book.why, book.vibe, ...book.category, ...book.tags, ...book.awards].join(' ').toLowerCase();
+        const matchesSearch = !q || haystack.includes(q);
+        const matchesCategory = cat === 'all' || book.category.includes(cat);
+        const matchesTag = activeTag === 'all' || book.tags.includes(activeTag) || (activeTag === 'award' && book.awards.length);
+        return matchesSearch && matchesCategory && matchesTag;
+      });
+
+      if (sort === 'title') result.sort((a,b) => a.title.localeCompare(b.title, 'de'));
+      if (sort === 'year') result.sort((a,b) => a.year - b.year);
+      if (sort === 'priority') result.sort((a,b) => a.rank - b.rank);
+
+      grid.innerHTML = result.map(renderCard).join('');
+      empty.style.display = result.length ? 'none' : 'block';
+    }
+
+    searchEl.addEventListener('input', applyFilters);
+    categoryEl.addEventListener('change', applyFilters);
+    sortEl.addEventListener('change', applyFilters);
+
+    chipEls.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chipEls.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeTag = chip.dataset.tag;
+        applyFilters();
+      });
+    });
+
+    applyFilters();
+  </script>
+</body>
+</html>

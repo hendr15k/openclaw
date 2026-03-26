@@ -1,0 +1,6 @@
+'Mol' object has no attribute 'HasQuery'
+Input molecules processed: 0, skipped: 0
+PDBQT files written: 0
+PDBQT files not written due to error: 1
+Input molecules with errors: 1
+No PDBQT files were written due to errors!

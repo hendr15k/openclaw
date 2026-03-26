@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spritpreise DE 🇩🇪 – Live ohne Key! V6</title>
+  <style>
+:root{--bg:#0b1020;--card:#121a30;--text:#eaf0ff;--muted:#a9b7d9;--acc:#6ea8ff;--up:#ff6b6b;--down:#51cf66;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,serif;background:linear-gradient(180deg,#0a0f1d,#111a2f);color:var(--text);line-height:1.6;padding:20px;max-width:1200px;margin:auto}h1{margin:0 0 8px}.sub{color:var(--muted);margin:0 0 20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:10px 0}.price{font-size:2rem;font-weight:700}.btn{background:#223055;border:1px solid var(--acc);border-radius:12px;padding:12px 20px;cursor:pointer;color:var(--text);font-size:1rem;transition:all .2s;margin:5px}.btn:hover{background:var(--acc);color:#000}.btn.primary{background:var(--acc);color:#000}.alert{background:rgba(81,207,102,.2);border:1px solid #51cf66;border-radius:12px;padding:16px;margin:20px 0}.last-update{color:var(--muted);font-size:.9rem}@media(max-width:768px){.grid{grid-template-columns:1fr}}</style>
+</head>
+<body>
+  <h1>🛢️ Spritpreise Live – Ohne App/Key</h1>
+  <p class="sub">DE-Durchschnitte live gescrapt + Berlin-Demo lokal. Auto-Update 5min.</p>
+
+  <div class="grid" id="national">
+    <div class="card">
+      <h3>🇩🇪 Diesel (DE-Durchschnitt)</h3>
+      <div class="price" id="natDiesel">--</div>
+      <div id="trendDiesel" class="last-update"></div>
+    </div>
+    <div class="card">
+      <h3>🇩🇪 E5 Super</h3>
+      <div class="price" id="natE5">--</div>
+      <div id="trendE5" class="last-update"></div>
+    </div>
+    <div class="card">
+      <h3>🇩🇪 E10</h3>
+      <div class="price" id="natE10">--</div>
+      <div id="trendE10" class="last-update"></div>
+    </div>
+    <div class="card">
+      <h3>📍 Günstigst lokal (Berlin)</h3>
+      <div class="price" id="localMin">--</div>
+      <div id="localDeal"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <button class="btn primary" onclick="loadLocal()">📍 Lokale Preise (10km Berlin)</button>
+    <div id="localStations" style="margin-top:20px;max-height:300px;overflow:auto"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>💰 Rechner</h3>
+      <div style="display:grid;gap:10px">
+        <select id="fuelType">
+          <option value="diesel">Diesel</option>
+          <option value="e5">E5</option>
+          <option value="e10">E10</option>
+        </select>
+        <input id="liters" type="number" value="50" min="1" placeholder="Liter">
+        <input id="pricePerL" type="number" step="0.001" placeholder="Preis/L">
+        <div id="totalCost" style="font-size:1.8rem;font-weight:700;color:var(--acc)">0 €</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📈 Chart (letzte Tage)</h3>
+      <canvas id="priceChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="alert" id="alarmBox" style="display:none">
+    <h3>🚨 DEAL gefunden!</h3>
+    <div id="dealDetails"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+let nationalPrices = {diesel:0,e5:0,e10:0}, localStations = [], prevNational = {}, chart;
+const demoBerlin = [
+  {name:'JET Berlin Nord',brand:'JET',diesel:1.618,e5:1.778,e10:1.721,lat:52.510,lng:13.390,dist:2.1},
+  {name:'Esso Express Mitte',brand:'Esso',diesel:1.625,e5:1.785,e10:1.728,lat:52.525,lng:13.395,dist:1.2},
+  {name:'Aral Puls',brand:'Aral',diesel:1.639,e5:1.799,e10:1.742,lat:52.520,lng:13.405,dist:0.8},
+  {name:'Shell City',brand:'Shell',diesel:1.652,e5:1.812,e10:1.755,lat:52.515,lng:13.415,dist:1.8},
+  {name:'Total',brand:'Total',diesel:1.645,e5:1.805,e10:1.748,lat:52.530,lng:13.425,dist:3.2}
+];
+const historyData = {
+  diesel: [1.645,1.636,1.627,1.633,1.646,1.659],
+  e5: [1.879,1.868,1.859,1.866,1.879,1.892],
+  e10: [1.822,1.813,1.804,1.811,1.823,1.836]
+};
+
+async function scrapeNational() {
+  try {
+    const res = await fetch('https://r.jina.ai/https://www.tankerkoenig.de');
+    const html = await res.text();
+    const dieselM = html.match(/Diesel[\\s\\S]*?([0-9,]+(?:\\.[0-9]+)?)/);
+    const e5M = html.match(/Super[\\s\\S]*?([0-9,]+(?:\\.[0-9]+)?)/);
+    const e10M = html.match(/Super E10[\\s\\S]*?([0-9,]+(?:\\.[0-9]+)?)/);
+    nationalPrices.diesel = parseFloat((dieselM?.[1]||'').replace(',','.')) || 0;
+    nationalPrices.e5 = parseFloat((e5M?.[1]||'').replace(',','.')) || 0;
+    nationalPrices.e10 = parseFloat((e10M?.[1]||'').replace(',','.')) || 0;
+    updateNational();
+    updateTrends();
+    updateChart();
+  } catch(e) {
+    console.error('Scrape fail:', e);
+  }
+  setTimeout(scrapeNational, 300000); // 5min
+}
+
+function updateNational() {
+  document.getElementById('natDiesel').textContent = nationalPrices.diesel.toFixed(3) + ' €';
+  document.getElementById('natE5').textContent = nationalPrices.e5.toFixed(3) + ' €';
+  document.getElementById('natE10').textContent = nationalPrices.e10.toFixed(3) + ' €';
+}
+
+function updateTrends() {
+  Object.keys(nationalPrices).forEach(type => {
+    const curr = nationalPrices[type];
+    const prev = prevNational[type] || curr;
+    const delta = curr - prev;
+    const elTrend = document.getElementById('trend' + type.charAt(0).toUpperCase() + type.slice(1));
+    if (delta !== 0) {
+      elTrend.textContent = (delta > 0 ? '↑ +' : '↓ ') + Math.abs(delta*100).toFixed(1) + 'ct';
+      elTrend.style.color = delta > 0 ? 'var(--up)' : 'var(--down)';
+    }
+  });
+  prevNational = {...nationalPrices};
+}
+
+function loadLocal() {
+  localStations = [...demoBerlin];
+  localStations.sort((a,b) => Math.min(a.diesel||99,a.e5||99,a.e10||99) - Math.min(b.diesel||99,b.e5||99,b.e10||99));
+  const html = localStations.map(s => 
+    `<div style="display:flex;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line);">
+      <div><b>${s.name}</b> <span style="color:var(--muted)">(${s.dist.toFixed(1)}km)</span></div>
+      <div>${s.diesel ? `<span class="price">${s.diesel.toFixed(3)}€</span> Diesel` : ''} ${s.e5 ? `<span>${s.e5.toFixed(3)}€ E5</span>` : ''}</div>
+    </div>`
+  ).join('');
+  document.getElementById('localStations').innerHTML = html;
+  const minLocal = Math.min(...localStations.map(s => Math.min(s.diesel||99,s.e5||99,s.e10||99)));
+  document.getElementById('localMin').textContent = minLocal.toFixed(3) + ' €';
+  if (minLocal < 1.65) {
+    const best = localStations[0];
+    document.getElementById('localDeal').innerHTML = `<span style="color:var(--down)">🚨 ${best.name}!</span>`;
+    document.getElementById('dealDetails').innerHTML = `Günstigster Diesel ${minLocal.toFixed(3)}€ bei ${best.name} (${best.dist}km)`;
+    document.getElementById('alarmBox').style.display = 'block';
+  }
+}
+
+function calcTotal() {
+  const type = document.getElementById('fuelType').value;
+  const liters = parseFloat(document.getElementById('liters').value) || 0;
+  const price = parseFloat(document.getElementById('pricePerL').value) || nationalPrices[type] || 1.65;
+  document.getElementById('totalCost').textContent = (liters * price).toFixed(2) + ' €';
+  document.getElementById('pricePerL').value = price.toFixed(3);
+}
+
+function updateChart() {
+  const ctx = document.getElementById('priceChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Heute', 'Gestern', 'Vorgestern'],
+      datasets: [
+        {label: 'Diesel', data: [nationalPrices.diesel, 1.645, 1.636], borderColor: '#51cf66', tension: 0.3},
+        {label: 'E5', data: [nationalPrices.e5, 1.879, 1.868], borderColor: '#ff6b6b', tension: 0.3}
+      ]
+    },
+    options: {responsive: true, scales: {y: {beginAtZero: false}}}
+  });
+}
+
+document.getElementById('fuelType').addEventListener('change', calcTotal);
+document.getElementById('liters').addEventListener('input', calcTotal);
+document.getElementById('pricePerL').addEventListener('input', calcTotal);
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLng/2)**2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c / 1000;
+}
+
+// Init
+scrapeNational();
+loadLocal();
+calcTotal();
+  </script>
+</body>
+</html>

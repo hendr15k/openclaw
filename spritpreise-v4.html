@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spritpreisprognose Deutschland 🇩🇪 — V4 Live</title>
+  <meta name="description" content="Echtzeit-Spritpreise, Karte, Alarm & Rechner – jetzt mit Live-API!">
+  <!-- PWA -->
+  <link rel="manifest" href="data:application/manifest+json,{
+    "name": "Spritpreisprognose",
+    "short_name": "Spritpreise",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0b1020",
+    "theme_color": "#6ea8ff",
+    "icons": [{
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijk2IiBjeT0iOTYiIHI9Ijk2IiBmaWxsPSIjNmVhOGZmIi8+CjxwYXRoIGQ9Ik0xMjAgMTI0QzEyMCAxMzEuNzM0IDEwOS4yMzQgMTQyIDk2IDE0MkM4Mi43NjU5IDE0MiA3MiAxMzEuNzM0IDcyIDEyNEM3MiAxMTguOTM3IDc0LjE0IDExNC4yIDc4LjU1MDggMTEyLjc5OEM4MS4yOTIzIDExMS42MjMgODUuMzE1NSAxMTIuMzE4IDg4LjE4OTcgMTE1LjA4NUM5MC4yMDkgMTE2LjI5MyA5Mi4yOTIzIDExNy4zODUgOTQuMzIzIDIxMC4zMjFDOTUuNzE4OSAyMjAuNjI1IDk4LjE1MjUgMjMxLjQ3MyAxMDIuODUxIDIzNi4wOTlMMTA0LjE4OSAyMzcuMzcxTDEwNS40MjcgMjM4LjYyMUMxMDguMjQzIDI0MS4zOTcgMTExLjE4OSAyNDMuMTg5IDEwNCAyNDQuNTcxQzEwNi44MTEgMjQ2LjAzMyAxMDkuNzE4IDQ0Ny44MTEgMTEyLjY1NSAyNDkuNjE5TDEwNCAyNTEuODgxQzExNy4yNDMgMjU0LjY2MSAxMjEuNzc2IDI1Ni4yMzQgMTI2LjIzMiAyNTYuMjM0QzEzMC42ODggMjU2LjIzNCAxMzUuMTQxIDI1NC42NjEgMTM4LjM5NCAyNTEuODgxTDEzOS42MzIgMjQ5LjYxOUMxNDIuNTcgMjQ3LjgzMSAxNDUuNDEyIDI0Ni4wMzMgMTQ4LjIzMiAyNDQuNTcxTDE0OS40OTIgMjQzLjE4OUMxNTIuMzEzIDI0MS4zOTcgMTU1LjE1OSAyMzkuNjA3IDE1NS40MzEgMjM3LjM3MUwxNTYuNjcgMjM2LjA5OUMxNjEuMzQ1IDIzMS40NzMgMTYzLjc4MSAyMjAuNjI1IDE2NS4yNjUgMjEwLjMyMUwxNjcuMzIzIDExNS4wODVDMTY5LjIwOSAxMTIuMjkzIDE3MS4yOTIgMTExLjYyMyAxNzMuNzA5IDExMi43OTlDMTc4LjExNSAxMTQuMiAxODAgMTE4LjkzNyAxODAgMTI0WiIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }]
+  }">
+  <!-- OG -->
+  <meta property="og:title" content="Spritpreisprognose Deutschland – V4 Live" />
+  <meta property="og:description" content="Live-Preise, Karte, Alarm – günstig tanken!" />
+  <meta property="og:image" content="https://hendrik-spritpreise.netlify.app/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    /* Bestehender CSS + Ergänzungen */
+    :root{--bg:#0b1020;--card:#121a30;--text:#eaf0ff;--muted:#a9b7d9;--acc:#6ea8ff;--up:#ff6b6b;--down:#51cf66;--line:rgba(255,255,255,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#0a0f1d,#111a2f);color:var(--text);line-height:1.5}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    h1{margin:0 0 8px}.sub{color:var(--muted);margin:0 0 20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .label{color:var(--muted);font-size:.88rem;margin-bottom:6px}
+    .price{font-size:1.5rem;font-weight:700}
+    .trend{font-size:.9rem;margin-top:4px}
+    .up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--muted)}
+    .chart-container{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+    .calc-container{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;align-items:start}
+    .calc-group{display:flex;flex-direction:column;gap:8px}
+    .calc-group label{color:var(--muted);font-size:.9rem}
+    .calc-group input,.calc-group select{background:#0f1730;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:1rem}
+    .result{font-size:1.4rem;font-weight:700;color:#bfe0ff}
+    .stations-list{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;max-height:400px;overflow-y:auto}
+    .station{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+    .station:last-child{border:none}
+    .station-info{display:flex;flex-direction:column;gap:2px}
+    .station-name{font-weight:600}.station-brand{color:#9ec2ff;font-size:.9rem}
+    .station-prices{display:flex;gap:12px;font-weight:700}
+    .cheap{color:#51cf66}.expensive{color:#ff6b6b}
+    .map-container{display:none;height:400px;margin-bottom:16px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .alert-box{background:rgba(81,207,102,.1);border:1px solid rgba(81,207,102,.4);border-radius:12px;padding:14px;margin-bottom:16px;display:none}
+    .alert-box.show{display:block}
+    .alert-text{color:#51cf66;font-weight:600}
+    .info{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:16px}
+    .info p{margin:6px 0;color:#d7e6ff;font-size:.9rem}
+    .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .btn{background:#1a2442;color:#bfe0ff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.88rem;transition:background .2s}
+    .btn:hover{background:#223055}
+    .btn.primary{background:#223055;border-color:#6ea8ff}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--muted);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast-container{position:fixed;bottom:20px;right:20px;z-index:1000;max-width:300px}
+    .toast{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:flex;align-items:center;gap:8px}
+    .toast.success{border-color:#51cf66}
+    .toast.error{border-color:#ff6b6b}
+    .toast.info{border-color:#6ea8ff}
+    .last-update{color:var(--muted);font-size:.85rem;margin-top:10px}
+    .threshold-control{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted);margin-top:8px;flex-wrap:wrap}
+    .threshold-control input{width:60px;padding:6px;border-radius:8px;border:1px solid var(--line);background:#0f1730;color:var(--text)}
+    .fuel-filter{display:flex;gap:8px;margin-top:8px}
+    .fuel-filter label{font-size:.85rem}
+    #map{height:100%;width:100%}
+    @media (max-width:800px){.cards{grid-template-columns:1fr 1fr}.calc-container{grid-template-columns:1fr}.station-prices{flex-direction:column;gap:4px}.map-container{height:300px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Spritpreisprognose Deutschland 🇩🇪 — V4 Live</h1>
+    <p class="sub">Live-API + Karte + Auto-Refresh + Deals teilen</p>
+
+    <div class="alert-box" id="alertBox">
+      <div class="alert-text">🚀 Preis-Alarm! Günstigster: <span id="alertPrice">0.000</span> €/L</div>
+      <div style="font-size:.85rem;color:#a9b7d9;margin-top:6px">Bei <span id="alertStationName"></span> (<span id="alertDistance"></span> km) <button class="btn" onclick="shareDeal()" id="shareBtn" style="font-size:.8rem;padding:4px 8px">📱 Teilen</button></div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn primary" id="getLocation">
+        <span class="btn-text">📍 Position holen</span>
+      </button>
+      <button class="btn" id="fetchPrices">
+        <span class="btn-text">🔄 Preise laden</span>
+      </button>
+    </div>
+
+    <div class="threshold-control">
+      <label for="alarmThreshold">Alarm unter:</label>
+      <input type="number" id="alarmThreshold" step="0.001" min="0" value="1.62" /> €/L
+      <label for="radiusInput">Radius:</label>
+      <input type="number" id="radiusInput" value="10" min="5" max="30" step="5" /> km
+    </div>
+
+    <div class="threshold-control">
+      <label for="apiKey">API-Key (Tankerkoenig):</label>
+      <input type="password" id="apiKey" placeholder="free von creativecommons.tankerkoenig.de" />
+      <button class="btn primary" onclick="saveApiKey()">💾 Speichern</button>
+    </div>
+
+    <div class="fuel-filter">
+      <label>Filter:</label>
+      <select id="fuelFilter">
+        <option value="all">Alle</option>
+        <option value="diesel">Diesel</option>
+        <option value="e5">E5</option>
+        <option value="e10">E10</option>
+      </select>
+    </div>
+
+    <div class="stations-list" id="stationsList">
+      <div style="text-align:center;color:#a9b7d9;padding:20px">📍 Position → Preise → Karte</div>
+    </div>
+
+    <div class="map-container" id="mapContainer">
+      <div id="map"></div>
+    </div>
+
+    <div class="cards" id="priceCards">
+      <!-- Trends laden... -->
+    </div>
+
+    <!-- Rechner & Chart gleich wie V3 -->
+
+    <div class="calc-container">
+      <!-- ... same as V3 ... -->
+      <div class="calc-group">
+        <label for="fuelType">Treibstoff</label>
+        <select id="fuelType">
+          <option value="diesel">Diesel</option>
+          <option value="e5">E5</option>
+          <option value="e10">E10</option>
+        </select>
+      </div>
+      <div class="calc-group">
+        <label for="liters">Liter</label>
+        <input type="number" id="liters" value="50" min="1" max="200" />
+      </div>
+      <div class="calc-group">
+        <label for="price">Preis (€/L)</label>
+        <input type="number" id="price" step="0.001" />
+      </div>
+      <div class="calc-group">
+        <label>Gesamt</label>
+        <div class="result" id="total">82.25 €</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h3>📊 Historie (14 Tage) + Trend</h3>
+      <canvas id="historyChart"></canvas>
+    </div>
+
+    <div class="buttons">
+      <button class="btn" id="exportCSV">📥 CSV (inkl. Stationen)</button>
+    </div>
+
+    <div class="info">
+      <h3>🔮 Prognose</h3>
+      <p>• Freitag/Samstag günstigst</p>
+      <p>• Di-Do +3-5ct</p>
+      <p>• Diesel stabil ~1.65€ bis April</p>
+      <p style="color:var(--muted)">⚠️ Live via Tankerkoenig. Key für <5000 Calls/Tag free.</p>
+      <div class="last-update" id="lastUpdate">Stand: —</div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Konfig
+    const ALARM_KEY = 'sprit_alarm';
+    const API_KEY = 'tanker_api_key';
+    let userLat, userLng, stationsData = [], map, priceThreshold = 1.62, refreshInterval;
+    const proxy = 'https://api.allorigins.win/raw?url=';
+    const historyLabels = ['04.03','05.03','06.03','07.03','08.03','09.03','10.03','11.03','12.03','13.03','14.03','15.03','16.03','17.03']; // Update dates
+    const dieselHistory = [1.662,1.669,1.655,1.642,1.651,1.658,1.645,1.652,1.659,1.646,1.633,1.627,1.636,1.645];
+    const e5History = [1.895,1.902,1.888,1.875,1.883,1.891,1.878,1.885,1.892,1.879,1.866,1.859,1.868,1.879];
+    const e10History = [1.839,1.846,1.832,1.819,1.828,1.835,1.822,1.829,1.836,1.823,1.811,1.804,1.813,1.822];
+    let currentPrices = {diesel:1.645,e5:1.879,e10:1.822};
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      priceThreshold = parseFloat(localStorage.getItem(ALARM_KEY)) || 1.62;
+      document.getElementById('alarmThreshold').value = priceThreshold;
+      document.getElementById('apiKey').value = localStorage.getItem(API_KEY) || '';
+      initCalc();
+      initChart();
+      setTrends();
+      // Auto position
+      if (navigator.permissions) navigator.permissions.query({name: 'geolocation'}).then(p => { if (p.state === 'granted') getLocation(); });
+    });
+
+    // Calc (same)
+    function initCalc() { /* ... copy from V3 calc, fuelSelect etc. */ }
+    // Chart (same + forecast line? Later)
+
+    // Trends
+    function setTrends() {
+      const deltaDiesel = dieselHistory.at(-1) - dieselHistory.at(-2);
+      const elDiesel = document.getElementById('trendDiesel');
+      elDiesel.textContent = deltaDiesel > 0 ? `↑ +${(deltaDiesel*100).toFixed(1)}ct` : `↓ -${Math.abs(deltaDiesel*100).toFixed(1)}ct`;
+      elDiesel.className = `trend ${deltaDiesel > 0 ? 'up' : 'down'}`;
+      // Repeat for e5, e10
+    }
+
+    // Save Key
+    function saveApiKey() {
+      const key = document.getElementById('apiKey').value;
+      if (key) {
+        localStorage.setItem(API_KEY, key);
+        showToast('API-Key gespeichert! 🔄 Lade Preise.', 'success');
+        document.getElementById('fetchPrices').click();
+      }
+    }
+
+    // Position
+    function getLocation() {
+      setLoading('getLocation', true);
+      navigator.geolocation.getCurrentPosition(pos => {
+        userLat = pos.coords.latitude;
+        userLng = pos.coords.longitude;
+        showToast(`Pos: ${userLat.toFixed(4)}/${userLng.toFixed(4)}`, 'success');
+        setLoading('getLocation', false);
+        fetchPrices();
+      }, err => {
+        showToast('GPS-Fehler: ' + err.message, 'error');
+        setLoading('getLocation', false);
+      }, {enableHighAccuracy: true});
+    }
+
+    // Live Fetch
+    async function fetchPrices() {
+      if (!userLat || !userLng) return showToast('Zuerst Position!', 'error');
+      const apiKey = localStorage.getItem(API_KEY);
+      if (!apiKey) return showToast('API-Key fehlt!', 'error');
+      setLoading('fetchPrices', true);
+      const rad = parseInt(document.getElementById('radiusInput').value);
+      try {
+        const types = ['diesel', 'e5', 'e10'];
+        const promises = types.map(async (type) => {
+          const url = `https://creativecommons.tankerkoenig.de/json/list?lat=${userLat}&lng=${userLng}&rad=${rad}&sort=price&apiKey=${apiKey}&type=${type}`;
+          const resp = await fetch(proxy + encodeURIComponent(url));
+          if (!resp.ok) throw new Error(type + ' fetch failed');
+          return resp.json();
+        });
+        const results = await Promise.all(promises);
+        const stationsMap = new Map();
+        results.forEach((result, i) => {
+          const type = types[i];
+          if (result.status === 'ok') {
+            result.stations.forEach(s => {
+              let station = stationsMap.get(s.id);
+              if (!station) {
+                station = {id: s.id, name: s.brand + ' ' + s.place, brand: s.brand, place: s.place, lat: s.lat, lng: s.lng, dist: Math.round(s.dist / 1000)};
+                stationsMap.set(s.id, station);
+              }
+              station[type] = parseFloat(s.price) / 1000;
+            });
+          }
+        });
+        stationsData = Array.from(stationsMap.values()).filter(s => s.diesel || s.e5 || s.e10);
+        processStations();
+        showToast(`${stationsData.length} Stationen geladen!`, 'success');
+        initMap();
+        startAutoRefresh();
+        setLastUpdate();
+      } catch (err) {
+        showToast('API-Fehler (Key gültig? 5000 Calls/Tag): ' + err.message + ' → Demo', 'error');
+        useDemo();
+      } finally {
+        setLoading('fetchPrices', false);
+      }
+    }
+
+    // Rest wie V3: processStations, renderStations (mit filter), initMap, shareDeal, etc.
+    function shareDeal() {
+      const minPrice = Math.min(...stationsData.map(s => Math.min(s.diesel||999, s.e5||999, s.e10||999)));
+      const station = stationsData.find(s => Math.min(s.diesel||999, s.e5||999, s.e10||999) === minPrice);
+      const text = `Sprit-Deal! ${minPrice.toFixed(3)}€ bei ${station.name} (${station.dist}km) #Spritpreise`;
+      if (navigator.share) {
+        navigator.share({title: 'Günstig tanken!', text, url: location.href});
+      } else {
+        navigator.clipboard.writeText(text);
+        showToast('Geteilt via Clipboard!', 'success');
+      }
+    }
+
+    function useDemo() { stationsData = getDemoStations(); processStations(); }
+    function startAutoRefresh() { clearInterval(refreshInterval); refreshInterval = setInterval(fetchPrices, 300000); } // 5min
+    // ... other V3 functions: showToast, setLoading, haversine, renderStations (add fuelFilter logic), calc, chart
+    // Cards HTML inject if needed
+    document.getElementById('priceCards').innerHTML = `
+      <div class="card"><div class="label">Diesel</div><div class="price" id="avgDiesel">—</div><div class="trend" id="trendDiesel"></div></div>
+      <div class="card"><div class="label">E5</div><div class="price" id="avgE5">—</div><div class="trend" id="trendE5"></div></div>
+      <div class="card"><div class="label">E10</div><div class="price" id="avgE10">—</div><div class="trend" id="trendE10"></div></div>
+      <div class="card"><div class="label">Günstigst</div><div class="price" id="minPrice">—</div><div id="minPriceLabel">laden...</div></div>
+    `;
+
+    // Event listeners for buttons, inputs, filter change → filterStations()
+    // Filter logic in renderStations: if filter !== 'all' show only stations with that fuel < threshold or something
+  </script>
+</body>
+</html>

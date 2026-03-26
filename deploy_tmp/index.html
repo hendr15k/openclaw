@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spritpreisprognose DE 🇩🇪 V5 – Live ohne Key!</title>
+  <style>:root{--bg:#0b1020;--card:#121a30;--text:#eaf0ff;--muted:#a9b7d9;--acc:#6ea8ff;--up:#ff6b6b;--down:#51cf66}*{box-sizing:border-box}body{margin:0;font-family:system-ui,serif;background:linear-gradient(180deg,#0a0f1d,#111a2f);color:var(--text);line-height:1.6;padding:20px;max-width:1200px;margin:auto}.card{background:var(--card);border-radius:16px;padding:20px;margin:10px 0;border:1px solid rgba(255,255,255,.1)}.price{font-size:2rem;font-weight:700}.btn{background:#223055;border:1px solid var(--acc);border-radius:12px;padding:12px 20px;cursor:pointer;color:var(--text);font-size:1rem;transition:all .2s}.btn:hover{background:var(--acc);color:#000}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}@media(max-width:768px){.grid{grid-template-columns:1fr}}</style>
+</head>
+<body>
+  <h1>🛢️ Spritpreisprognose Deutschland – V5 Live</h1>
+  <p style="color:var(--muted)">National Live-Durchschnitte + Lokale Demo + Alarm. <b>Kein API-Key nötig!</b></p>
+
+  <div class="grid" id="nationalPrices">
+    <div class="card">
+      <h3>Diesel</h3>
+      <div class="price" id="natDiesel">-- €</div>
+      <div id="trendDiesel"></div>
+    </div>
+    <div class="card">
+      <h3>E5 (Super)</h3>
+      <div class="price" id="natE5">-- €</div>
+      <div id="trendE5"></div>
+    </div>
+    <div class="card">
+      <h3>E10</h3>
+      <div class="price" id="natE10">-- €</div>
+      <div id="trendE10"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📍 Lokale Preise (Demo Berlin)</h3>
+    <button class="btn" onclick="loadLocal()">🔄 Lokale laden (10km)</button>
+    <div id="localList" style="margin-top:20px;max-height:300px;overflow:auto"></div>
+  </div>
+
+  <div class="card">
+    <h3>💰 Tank-Rechner</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <select id="fuel"><option>Diesel</option><option>E5</option><option>E10</option></select>
+      <input id="liters" type="number" value="50" placeholder="Liter">
+      <input id="price" type="number" step="0.01" placeholder="€/L">
+      <div id="total" style="font-size:1.5rem;font-weight:700">-- €</div>
+    </div>
+  </div>
+
+  <canvas id="chart" height="200" style="max-height:300px"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let national = {diesel:0,e5:0,e10:0}, stations=[], chart;
+    const demoStations=[{name:'JET Berlin',brand:'JET',diesel:1.618,e5:1.778,e10:1.721,lat:52.51,lng:13.39},
+      {name:'Esso Express',brand:'Esso',diesel:1.625,e5:1.785,e10:1.728,lat:52.525,lng:13.395},
+      {name:'Aral',brand:'Aral',diesel:1.639,e5:1.799,e10:1.742,lat:52.52,lng:13.405}];
+
+    async function loadNational(){
+      try{
+        const res=await fetch('https://r.jina.ai/https://www.tankerkoenig.de');
+        const html=await res.text();
+        const dieselMatch=html.match(/Diesel[\\s\\S]*?([0-9,]+)€/);
+        const e5Match=html.match(/Super[\\s\\S]*?([0-9,]+)€/);
+        const e10Match=html.match(/Super E10[\\s\\S]*?([0-9,]+)€/);
+        national.diesel=parseFloat(dieselMatch?.[1].replace(',','.'))||0;
+        national.e5=parseFloat(e5Match?.[1].replace(',','.'))||0;
+        national.e10=parseFloat(e10Match?.[1].replace(',','.'))||0;
+        document.getElementById('natDiesel').textContent=national.diesel.toFixed(3)+' €';
+        document.getElementById('natE5').textContent=national.e5.toFixed(3)+' €';
+        document.getElementById('natE10').textContent=national.e10.toFixed(3)+' €';
+        loadChart();
+      }catch(e){console.error(e)}
+      setTimeout(loadNational,3e5); // 5min
+    }
+
+    function loadLocal(){
+      stations=demoStations.map(s=>({...s,dist:haversine(52.52,13.405,s.lat,s.lng)}));
+      stations.sort((a,b)=>Math.min(a.diesel||99,a.e5||99,a.e10||99)-Math.min(b.diesel||99,b.e5||99,b.e10||99));
+      document.getElementById('localList').innerHTML=stations.map(s=>`
+        <div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid rgba(255,255,255,.1)">
+          <div><b>${s.name}</b> (${s.dist.toFixed(1)}km)</div>
+          <div>${s.diesel? s.diesel.toFixed(3)+'€ Diesel':''} ${s.e5? s.e5.toFixed(3)+'€ E5':''}</div>
+        </div>`).join('');
+      const minP=Math.min(...stations.map(s=>Math.min(s.diesel||99,s.e5||99,s.e10||99)));
+      if(minP<1.65) document.querySelector('.card h3').innerHTML+=` <span style="color:#51cf66">🚨 Deal: ${minP.toFixed(3)}€!</span>`;
+    }
+
+    function haversine(lat1,lng1,lat2,lng2){const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLng=(lng2-lng1)*Math.PI/180;const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));return R*c/1000;}
+
+    function calc(){const fuel=document.getElementById('fuel').value;const l=parseFloat(document.getElementById('liters').value)||0;const p=parseFloat(document.getElementById('price').value)||national[fuel]||1.65;document.getElementById('total').textContent=(l*p).toFixed(2)+' €';document.getElementById('price').value=p.toFixed(3);}
+
+    function loadChart(){
+      const ctx=document.getElementById('chart').getContext('2d');
+      if(chart) chart.destroy();
+      chart=new Chart(ctx,{type:'line',data:{labels:['Heute','Gestern'],datasets:[{label:'Diesel',data:[national.diesel,1.645],borderColor:'#51cf66'},{label:'E5',data:[national.e5,1.879],borderColor:'#ff6b6b'}]},options:{scales:{y:{beginAtZero:false}}}});
+    }
+
+    document.getElementById('fuel').onchange=calc;document.getElementById('liters').oninput=calc;document.getElementById('price').oninput=calc;
+    loadNational();loadLocal();calc();
+  </script>
+</body>
+</html>

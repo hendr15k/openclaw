@@ -1,0 +1,345 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\geometry{a4paper, left=20mm, right=20mm, top=25mm, bottom=25mm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Lineare Algebra}
+\fancyhead[C]{Übung: Geraden \& Ebenen}
+\fancyhead[R]{Seite \thepage}
+\fancyfoot[C]{}
+
+\renewcommand{\arraystretch}{1.5}
+
+\newcommand{\vek}[1]{\vec{#1}}
+
+\begin{document}
+
+\section*{Aufgaben - Geraden und Ebenen im $\mathbb{R}^3$}
+\begin{center}
+\textit{Lösungsweg und Platz für Rechnungen}
+\end{center}
+\vspace{1cm}
+
+\begin{multicols}{2}
+
+% Aufgabe 1: Parameterdarstellung Gerade durch 2 Punkte
+\textbf{Aufgabe 1:} Bestimmen Sie die Parameterdarstellung der Geraden $g$ durch die Punkte $A(2|1|3)$ und $B(5|4|9)$.
+
+\vspace{3cm}
+
+% Aufgabe 2: Parameterdarstellung Ebene durch 3 Punkte
+\textbf{Aufgabe 2:} Bestimmen Sie die Parameterdarstellung der Ebene $E$ durch die Punkte $P(1|0|2)$, $Q(3|1|4)$ und $R(2|2|1)$.
+
+\vspace{3cm}
+
+% Aufgabe 3: Schnittpunkt Gerade-Ebene
+\textbf{Aufgabe 3:} Gegeben sind die Gerade $g: \vek{x} = \begin{pmatrix}2\\1\\-1\end{pmatrix} + r \cdot \begin{pmatrix}1\\1\\2\end{pmatrix}$ und die Ebene $E: \vek{x} = \begin{pmatrix}1\\0\\1\end{pmatrix} + s \cdot \begin{pmatrix}1\\1\\0\end{pmatrix} + t \cdot \begin{pmatrix}0\\1\\1\end{pmatrix}$. Bestimmen Sie den Schnittpunkt $S$.
+
+\vspace{3cm}
+
+% Aufgabe 4: Lagenbeziehung Geraden
+\textbf{Aufgabe 4:} Prüfen Sie die Lagenbeziehung der beiden Geraden:
+\begin{align*}
+g: \vek{x} &= \begin{pmatrix}1\\0\\1\end{pmatrix} + r \cdot \begin{pmatrix}1\\2\\3\end{pmatrix} \\
+h: \vek{x} &= \begin{pmatrix}2\\1\\3\end{pmatrix} + s \cdot \begin{pmatrix}2\\4\\6\end{pmatrix}
+\end{align*}
+Sind sie parallel, windschief oder schneiden sie sich?
+
+\vspace{3cm}
+
+% Aufgabe 5: Ebene in Parameterform
+\textbf{Aufgabe 5:} Wandeln Sie die Ebenengleichung in Parameterform um: $E: 2x - y + 3z = 6$.
+
+\vspace{3cm}
+
+% Aufgabe 6: Abstand Punkt-Ebene
+\textbf{Aufgabe 6:} Berechnen Sie den Abstand des Punktes $P(3|2|-1)$ von der Ebene $E: \vek{x} = \begin{pmatrix}1\\0\\0\end{pmatrix} + s \cdot \begin{pmatrix}2\\0\\1\end{pmatrix} + t \cdot \begin{pmatrix}1\\1\\0\end{pmatrix}$.
+
+\vspace{3cm}
+
+% Aufgabe 7: Schnittpunkt zweier Ebenen
+\textbf{Aufgabe 7:} Bestimmen Sie die Schnittgerade der beiden Ebenen:
+\begin{align*}
+E_1: \vek{x} &= \begin{pmatrix}0\\1\\2\end{pmatrix} + r \cdot \begin{pmatrix}1\\0\\0\end{pmatrix} + s \cdot \begin{pmatrix}0\\1\\1\end{pmatrix} \\
+E_2: x - 2y + z &= 3
+\end{align*}
+
+\vspace{3cm}
+
+% Aufgabe 8: Winkel zwischen Gerade und Ebene
+\textbf{Aufgabe 8:} Berechnen Sie den Winkel zwischen der Geraden $g: \vek{x} = \begin{pmatrix}0\\0\\0\end{pmatrix} + r \cdot \begin{pmatrix}2\\1\\2\end{pmatrix}$ und der Ebene $E: 3x + 4y + 5z = 0$.
+
+\vspace{3cm}
+
+% Aufgabe 9: Parameterdarstellung Ebene durch Gerade und Punkt
+\textbf{Aufgabe 9:} Bestimmen Sie eine Parameterdarstellung der Ebene $E$, die die Gerade $g: \vek{x} = \begin{pmatrix}1\\2\\1\end{pmatrix} + r \cdot \begin{pmatrix}1\\1\\0\end{pmatrix}$ enthält und durch den Punkt $P(2|0|1)$ geht.
+
+\vspace{3cm}
+
+% Aufgabe 10: Abstand windschiefer Geraden
+\textbf{Aufgabe 10:} Gegeben sind zwei windschiefe Geraden:
+\begin{align*}
+g: \vek{x} &= \begin{pmatrix}0\\0\\0\end{pmatrix} + r \cdot \begin{pmatrix}1\\0\\0\end{pmatrix} \\
+h: \vek{x} &= \begin{pmatrix}0\\1\\1\end{pmatrix} + s \cdot \begin{pmatrix}0\\1\\0\end{pmatrix}
+\end{align*}
+Bestimmen Sie den kürzesten Abstand zwischen den Geraden.
+
+\vspace{3cm}
+
+% Aufgabe 11: Punkt auf Geradenminimaler Abstand
+\textbf{Aufgabe 11:} Gegeben ist die Ebene $E: x + y + z = 6$ und der Punkt $P(1|2|3)$. Bestimmen Sie den Fußpunkt des Lotes von $P$ auf die Ebene $E$.
+
+\vspace{3cm}
+
+% Aufgabe 12: Parameterdarstellung aus Koordinatengleichung
+\textbf{Aufgabe 12:} Geben Sie eine Parameterdarstellung der Ebene $E: 2x - 3y + z = 4$ an.
+
+\vspace{3cm}
+
+% Aufgabe 13: Gerade in Parameterform
+\textbf{Aufgabe 13:} Bestimmen Sie die Parameterdarstellung der Geraden $g$, die orthogonal zur Ebene $E: x - 2y + 2z = 5$ ist und durch den Punkt $P(1|0|1)$ geht.
+
+\vspace{3cm}
+
+% Aufgabe 14: Ebene mit bestimmtem Abstand
+\textbf{Aufgabe 14:} Bestimmen Sie alle Ebenen, die parallel zur Ebene $E: 2x - y + 2z = 8$ sind und den Abstand 2 zum Ursprung haben.
+
+\vspace{3cm}
+
+% Aufgabe 15: Dreiecksfläche
+\textbf{Aufgabe 15:} Gegeben sind die drei Punkte $A(1|0|0)$, $B(0|1|0)$ und $C(0|0|1)$.
+\begin{enumerate}[a)]
+\item Bestimmen Sie die Parameterdarstellung der Ebene durch $A$, $B$ und $C$.
+\item Berechnen Sie die Fläche des Dreiecks $ABC$.
+\end{enumerate}
+
+\vspace{3cm}
+
+% Aufgabe 16: Parameterbestimmung für Schnitt
+\textbf{Aufgabe 16:} Gegeben sind die Gerade $g: \vek{x} = \begin{pmatrix}2\\1\\0\end{pmatrix} + r \cdot \begin{pmatrix}1\\-1\\1\end{pmatrix}$ und die Ebene $E: \vek{x} = \begin{pmatrix}0\\0\\1\end{pmatrix} + s \cdot \begin{pmatrix}2\\0\\-1\end{pmatrix} + t \cdot \begin{pmatrix}0\\1\\1\end{pmatrix}$.
+Bestimmen Sie die Parameter $r, s, t$ im Schnittpunkt.
+
+\vspace{3cm}
+
+% Aufgabe 17: Gerade parallel zur Ebene
+\textbf{Aufgabe 17:} Bestimmen Sie die Parameterdarstellung einer Geraden $g$ durch den Punkt $P(1|2|3)$, die parallel zur Ebene $E: x + y + z = 0$ und parallel zur Geraden $h: \vek{x} = \begin{pmatrix}0\\0\\0\end{pmatrix} + r \cdot \begin{pmatrix}1\\1\\0\end{pmatrix}$ verläuft.
+
+\vspace{3cm}
+
+% Aufgabe 18: Ebene durch zwei parallele Geraden
+\textbf{Aufgabe 18:} Bestimmen Sie die Parameterdarstellung der Ebene, die die beiden parallelen Geraden enthält:
+\begin{align*}
+g: \vek{x} &= \begin{pmatrix}1\\0\\1\end{pmatrix} + r \cdot \begin{pmatrix}1\\1\\2\end{pmatrix} \\
+h: \vek{x} &= \begin{pmatrix}3\\1\\4\end{pmatrix} + s \cdot \begin{pmatrix}1\\1\\2\end{pmatrix}
+\end{align*}
+
+\vspace{3cm}
+
+% Aufgabe 19: Winkel zwischen zwei Ebenen
+\textbf{Aufgabe 19:} Berechnen Sie den Winkel zwischen den Ebenen:
+\begin{align*}
+E_1: x - y + 2z &= 4 \\
+E_2: 2x + y - z &= 1
+\end{align*}
+
+\vspace{3cm}
+
+% Aufgabe 20: Parameterdarstellung aus drei Ebenen
+\textbf{Aufgabe 20:} Bestimmen Sie die Parameterdarstellung der Schnittgeraden der drei Ebenen:
+\begin{align*}
+E_1: x + y + z &= 6 \\
+E_2: x - y + z &= 2 \\
+E_3: x + y - z &= 0
+\end{align*}
+Prüfen Sie, ob die Ebenen einen gemeinsamen Schnittpunkt haben.
+
+\end{multicols}
+
+\newpage
+
+\section*{Lösungen}
+
+% Lösung 1
+\textbf{Aufgabe 1:} \\
+Richtungsvektor: $\vek{u} = \vek{B} - \vek{A} = \begin{pmatrix}5-2\\4-1\\9-3\end{pmatrix} = \begin{pmatrix}3\\3\\6\end{pmatrix}$ \\
+Parameterdarstellung: $g: \vek{x} = \begin{pmatrix}2\\1\\3\end{pmatrix} + r \cdot \begin{pmatrix}3\\3\\6\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 2
+\textbf{Aufgabe 2:} \\
+Richtungsvektoren: $\vek{u} = \vek{Q} - \vek{P} = \begin{pmatrix}3-1\\1-0\\4-2\end{pmatrix} = \begin{pmatrix}2\\1\\2\end{pmatrix}$, $\vek{v} = \vek{R} - \vek{P} = \begin{pmatrix}2-1\\2-0\\1-2\end{pmatrix} = \begin{pmatrix}1\\2\\-1\end{pmatrix}$ \\
+Parameterdarstellung: $E: \vek{x} = \begin{pmatrix}1\\0\\2\end{pmatrix} + s \cdot \begin{pmatrix}2\\1\\2\end{pmatrix} + t \cdot \begin{pmatrix}1\\2\\-1\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 3
+\textbf{Aufgabe 3:} \\
+Gleichsetzen: $\begin{pmatrix}2+r\\1+r\\-1+2r\end{pmatrix} = \begin{pmatrix}1+s\\s+t\\1+t\end{pmatrix}$ \\
+Aus 2. Komponente: $1+r = s+t \Rightarrow t = 1+r-s$ \\
+In 3. Komponente: $-1+2r = 1+t = 1+1+r-s = 2+r-s \Rightarrow r = 3-s$ \\
+In 1. Komponente: $2+r = 1+s \Rightarrow 2+3-s = 1+s \Rightarrow 5-s = 1+s \Rightarrow 4 = 2s \Rightarrow s = 2$ \\
+Damit: $r = 3-2 = 1$, $t = 1+1-2 = 0$ \\
+Schnittpunkt: $S = \begin{pmatrix}2+1\\1+1\\-1+2\end{pmatrix} = \begin{pmatrix}3\\2\\1\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 4
+\textbf{Aufgabe 4:} \\
+Richtungsvektoren: $\vek{u}_g = \begin{pmatrix}1\\2\\3\end{pmatrix}$, $\vek{u}_h = \begin{pmatrix}2\\4\\6\end{pmatrix} = 2 \cdot \begin{pmatrix}1\\2\\3\end{pmatrix}$ \\
+$\vek{u}_h$ ist ein Vielfaches von $\vek{u}_g$, also sind $g$ und $h$ parallel. \\
+Prüfung ob identisch: $\vek{P}_h - \vek{P}_g = \begin{pmatrix}2-1\\1-0\\3-1\end{pmatrix} = \begin{pmatrix}1\\1\\2\end{pmatrix}$ \\
+$\begin{pmatrix}1\\1\\2\end{pmatrix}$ ist kein Vielfaches von $\begin{pmatrix}1\\2\\3\end{pmatrix}$, also sind $g$ und $h$ \textbf{parallel, aber nicht identisch}.
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 5
+\textbf{Aufgabe 5:} \\
+Koordinatengleichung: $2x - y + 3z = 6$ \\
+Normalenvektor: $\vek{n} = \begin{pmatrix}2\\-1\\3\end{pmatrix}$ \\
+Parameterform: $E: \vek{x} = \begin{pmatrix}3\\0\\0\end{pmatrix} + s \cdot \begin{pmatrix}1\\2\\0\end{pmatrix} + t \cdot \begin{pmatrix}0\\3\\1\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 6
+\textbf{Aufgabe 6:} \\
+Normalenvektor: $\vek{n} = \begin{pmatrix}2\\0\\1\end{pmatrix} \times \begin{pmatrix}1\\1\\0\end{pmatrix} = \begin{pmatrix}-1\\1\\2\end{pmatrix}$ |
+Koordinatengleichung: $-x + y + 2z = d$ \\
+$E$ enthält $P_E(1|0|0)$: $-1+0+0 = -1$, also $d = -1$ |
+$E: -x + y + 2z = -1$ oder $x - y - 2z = 1$ \\
+Abstand: $d = \frac{|3-2-2(-1)|}{\sqrt{1+1+4}} = \frac{|3-2+2|}{\sqrt{6}} = \frac{3}{\sqrt{6}}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 7
+\textbf{Aufgabe 7:} \\
+$E_1$ in Koordinatenform: $x + y + z = 3$ |
+Schnittgerade: Lineares System:
+$\begin{cases} x + y + z = 3 \\ x - 2y + z = 3 \end{cases}$ |
+Subtrahiere: $3y = 0 \Rightarrow y = 0$ |
+Einsetzen: $x + z = 3 \Rightarrow z = 3 - x$ |
+Parameterform: $g: \vek{x} = \begin{pmatrix}0\\0\\3\end{pmatrix} + r \cdot \begin{pmatrix}1\\0\\-1\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 8
+\textbf{Aufgabe 8:} \\
+Richtungsvektor der Geraden: $\vek{u} = \begin{pmatrix}2\\1\\2\end{pmatrix}$ |
+Normalenvektor der Ebene: $\vek{n} = \begin{pmatrix}3\\4\\5\end{pmatrix}$ |
+Winkel zwischen $\vek{u}$ und $\vek{n}$: $\cos(\alpha) = \frac{|\vek{u} \cdot \vek{n}|}{|\vek{u}| \cdot |\vek{n}|}$ \\
+$\vek{u} \cdot \vek{n} = 2\cdot3 + 1\cdot4 + 2\cdot5 = 6 + 4 + 10 = 20$ \\
+$|\vek{u}| = \sqrt{4+1+4} = 3$, $|\vek{n}| = \sqrt{9+16+25} = \sqrt{50} = 5\sqrt{2}$ |
+$\cos(\alpha) = \frac{20}{3 \cdot 5\sqrt{2}} = \frac{4}{3\sqrt{2}}$ |
+Winkel Gerade-Ebene: $\beta = 90° - \alpha$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 9
+\textbf{Aufgabe 9:} \\
+Erster Richtungsvektor: $\vek{u}_1 = \begin{pmatrix}1\\1\\0\end{pmatrix}$ (aus Gerade $g$) |
+Zweiter Richtungsvektor: $\vek{u}_2 = \vek{P} - \vek{A} = \begin{pmatrix}2-1\\0-2\\1-1\end{pmatrix} = \begin{pmatrix}1\\-2\\0\end{pmatrix}$ |
+Parameterdarstellung: $E: \vek{x} = \begin{pmatrix}1\\2\\1\end{pmatrix} + s \cdot \begin{pmatrix}1\\1\\0\end{pmatrix} + t \cdot \begin{pmatrix}1\\-2\\0\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 10
+\textbf{Aufgabe 10:} \\
+$\vek{u}_g = \begin{pmatrix}1\\0\\0\end{pmatrix}$, $\vek{u}_h = \begin{pmatrix}0\\1\\0\end{pmatrix}$ |
+$\vek{n} = \vek{u}_g \times \vek{u}_h = \begin{pmatrix}0\\0\\1\end{pmatrix}$ |
+Verbindungsvektor: $\vek{P}_h - \vek{P}_g = \begin{pmatrix}0\\1\\1\end{pmatrix}$ |
+Abstand: $d = \frac{|\vek{n} \cdot (\vek{P}_h - \vek{P}_g)|}{|\vek{n}|} = \frac{|0\cdot0+0\cdot1+1\cdot1|}{1} = 1$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 11
+\textbf{Aufgabe 11:} \\
+Normalenvektor: $\vek{n} = \begin{pmatrix}1\\1\\1\end{pmatrix}$ |
+Parameterform des Lotes: $g: \vek{x} = \begin{pmatrix}1\\2\\3\end{pmatrix} + r \cdot \begin{pmatrix}1\\1\\1\end{pmatrix}$ |
+Schnitt mit Ebene: $(1+r) + (2+r) + (3+r) = 6 \Rightarrow 6 + 3r = 6 \Rightarrow r = 0$ |
+Fußpunkt: $F = \begin{pmatrix}1\\2\\3\end{pmatrix}$ |
+(Kontrolle: $1+2+3=6$, $P$ liegt auf der Ebene!)
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 12
+\textbf{Aufgabe 12:} \\
+Koordinatengleichung: $2x - 3y + z = 4$ |
+Normalenvektor: $\vek{n} = \begin{pmatrix}2\\-3\\1\end{pmatrix}$ |
+Parameterform: $E: \vek{x} = \begin{pmatrix}2\\0\\0\end{pmatrix} + s \cdot \begin{pmatrix}3\\2\\0\end{pmatrix} + t \cdot \begin{pmatrix}0\\1\\3\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 13
+\textbf{Aufgabe 13:} \\
+Normalenvektor der Ebene: $\vek{n} = \begin{pmatrix}1\\-2\\2\end{pmatrix}$ |
+Gerade orthogonal zur Ebene $\Rightarrow$ Richtungsvektor = Normalenvektor |
+Parameterdarstellung: $g: \vek{x} = \begin{pmatrix}1\\0\\1\end{pmatrix} + r \cdot \begin{pmatrix}1\\-2\\2\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 14
+\textbf{Aufgabe 14:} |
+Ebene $E: 2x - y + 2z = 8$ hat Normalenvektor $\vek{n} = \begin{pmatrix}2\\-1\\2\end{pmatrix}$ |
+Parallele Ebenen: $2x - y + 2z = d$ |
+Abstand vom Ursprung: $|d| / \sqrt{9} = |d|/3 = 2 \Rightarrow d = \pm 6$ |
+Zwei Ebenen: $2x - y + 2z = 6$ und $2x - y + 2z = -6$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 15
+\textbf{Aufgabe 15:} \\
+\textit{a)} Richtungsvektoren: $\vek{u} = \vek{B} - \vek{A} = \begin{pmatrix}-1\\1\\0\end{pmatrix}$, $\vek{v} = \vek{C} - \vek{A} = \begin{pmatrix}-1\\0\\1\end{pmatrix}$ |
+Parameterdarstellung: $E: \vek{x} = \begin{pmatrix}1\\0\\0\end{pmatrix} + s \cdot \begin{pmatrix}-1\\1\\0\end{pmatrix} + t \cdot \begin{pmatrix}-1\\0\\1\end{pmatrix}$ \\
+\textit{b)} Fläche = $\frac{1}{2} |\vek{u} \times \vek{v}|$ |
+$\vek{u} \times \vek{v} = \begin{pmatrix}1\\1\\1\end{pmatrix}$ |
+Fläche = $\frac{1}{2} \cdot \sqrt{3} = \frac{\sqrt{3}}{2}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 16
+\textbf{Aufgabe 16:} |
+Gleichsetzen: $\begin{pmatrix}2+r\\1-r\\r\end{pmatrix} = \begin{pmatrix}2s\\t\\1-s+t\end{pmatrix}$ |
+1. Komponente: $2+r = 2s$ \\
+2. Komponente: $1-r = t$ \\
+3. Komponente: $r = 1-s+t = 1-s+(1-r) = 2-s-r$ \\
+$2r = 2-s \Rightarrow r = 1 - \frac{s}{2}$ |
+In 1. Komponente: $2+1-\frac{s}{2} = 2s \Rightarrow 3 = \frac{5s}{2} \Rightarrow s = \frac{6}{5}$ |
+$r = 1 - \frac{3}{5} = \frac{2}{5}$ |
+$t = 1 - \frac{2}{5} = \frac{3}{5}$ \\
+Schnittpunkt: $S = \begin{pmatrix}2+\frac{2}{5}\\1-\frac{2}{5}\\\frac{2}{5}\end{pmatrix} = \begin{pmatrix}\frac{12}{5}\\\frac{3}{5}\\\frac{2}{5}\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 17
+\textbf{Aufgabe 17:} |
+Parallel zur Ebene $E$ $\Rightarrow$ orthogonal zum Normalenvektor $\vek{n}_E = \begin{pmatrix}1\\1\\1\end{pmatrix}$ |
+Parallel zu Gerade $h$ $\Rightarrow$ parallel zu $\vek{u}_h = \begin{pmatrix}1\\1\\0\end{pmatrix}$ |
+Richtungsvektor der gesuchten Geraden: $\vek{u} = \vek{u}_h = \begin{pmatrix}1\\1\\0\end{pmatrix}$ (ist orthogonal zu $\vek{n}_E$ da $\vek{u} \cdot \vek{n}_E = 2 \neq 0$ - falsch!) |
+Richtiger Ansatz: Gerade muss orthogonal zu $\vek{n}_E$ UND parallel zu $\vek{u}_h$ sein |
+$\vek{u} = \vek{n}_E \times \vek{u}_h = \begin{pmatrix}1\\1\\1\end{pmatrix} \times \begin{pmatrix}1\\1\\0\end{pmatrix} = \begin{pmatrix}-1\\1\\0\end{pmatrix}$ |
+Parameterdarstellung: $g: \vek{x} = \begin{pmatrix}1\\2\\3\end{pmatrix} + r \cdot \begin{pmatrix}-1\\1\\0\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 18
+\textbf{Aufgabe 18:} |
+Beide Geraden haben gleichen Richtungsvektor $\vek{u} = \begin{pmatrix}1\\1\\2\end{pmatrix}$ \\
+Verbindungsvektor: $\vek{P}_h - \vek{P}_g = \begin{pmatrix}3-1\\1-0\\4-1\end{pmatrix} = \begin{pmatrix}2\\1\\3\end{pmatrix}$ |
+Zweiter Richtungsvektor der Ebene: $\vek{v} = \vek{P}_h - \vek{P}_g$ |
+Parameterdarstellung: $E: \vek{x} = \begin{pmatrix}1\\0\\1\end{pmatrix} + s \cdot \begin{pmatrix}1\\1\\2\end{pmatrix} + t \cdot \begin{pmatrix}2\\1\\3\end{pmatrix}$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 19
+\textbf{Aufgabe 19:} |
+Normalenvektoren: $\vek{n}_1 = \begin{pmatrix}1\\-1\\2\end{pmatrix}$, $\vek{n}_2 = \begin{pmatrix}2\\1\\-1\end{pmatrix}$ |
+$\cos(\alpha) = \frac{|\vek{n}_1 \cdot \vek{n}_2|}{|\vek{n}_1| \cdot |\vek{n}_2|}$ |
+$\vek{n}_1 \cdot \vek{n}_2 = 1\cdot2 + (-1)\cdot1 + 2\cdot(-1) = 2 - 1 - 2 = -1$ |
+$|\vek{n}_1| = \sqrt{1+1+4} = \sqrt{6}$, $|\vek{n}_2| = \sqrt{4+1+1} = \sqrt{6}$ |
+$\cos(\alpha) = \frac{1}{6} \Rightarrow \alpha = \arccos(\frac{1}{6})$
+\begin{center}\rule{0.8\linewidth}{0.4pt}\end{center}
+
+% Lösung 20
+\textbf{Aufgabe 20:} |
+Lineares System lösen:
+$\begin{cases} x + y + z = 6 \\ x - y + z = 2 \\ x + y - z = 0 \end{cases}$ |
+$E_1 - E_2: 2y = 4 \Rightarrow y = 2$ |
+$E_1 - E_3: 2z = 6 \Rightarrow z = 3$ |
+Aus $E_3: x + 2 - 3 = 0 \Rightarrow x = 1$ |
+Schnittpunkt: $S(1|2|3)$ |
+Prüfung: $1+2+3=6 \checkmark$, $1-2+3=2 \checkmark$, $1+2-3=0 \checkmark$ |
+Die drei Ebenen schneiden sich im Punkt $S(1|2|3)$, nicht in einer Geraden.
+
+\end{document}

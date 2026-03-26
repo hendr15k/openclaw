@@ -1,0 +1,39 @@
+{
+ "Application_Version": "Nebo/7.2.1.17464 (branch nebo-7.2.x; Android VANILLA_ICE_CREAM(35); arm64-v8a) iink_sdk/f6df6974963543453434484bf89e6cc10c7be045 (version 4.2.1) core_sdk/b87b55c8335803efd6220c47eefb900172045a54 (version 8.13.0-2025-10-21-1527; branch iink-4.2.x)",
+ "automaticPageTitle": "",
+ "OS": "Android",
+ "language": "de_DE",
+ "pageHasContent": true,
+ "pageValid": true,
+ "pageTitle": "",
+ "backgroundPattern": "grid",
+ "Type": "Raw Content",
+ "uuid": "c21e4da4-345e-47d6-a1bc-7bb341e28480",
+ "Document_Version": "1.11",
+ "pageExtent": [ 0, 0, 210, 297 ],
+ "Scroll": {
+  "PreviousViewportXmin": 32.9422722,
+  "PreviousViewportYmin": -30.0515099,
+  "PreviousViewportXmax": 96.2392044,
+  "PreviousViewportYmax": 86.1244354,
+  "PreviousViewportZoom": 2.04600143,
+  "ViewportXmin": 28.4597988,
+  "ViewportYmin": -19.331646,
+  "ViewportXmax": 100.738647,
+  "ViewportYmax": 86.1342316,
+  "ViewportZoom": 2.25377321,
+  "Timestamp": 1774276907440455
+ },
+ "creationDate": "2026-03-23 12:34:50.340659",
+ "lastModificationDate": "2026-03-23 12:40:38.495130",
+ "thumbnailGenerationDate": "2026-03-23 12:40:30.495758",
+ "Diagram_Version": [ 1, 6 ],
+ "childPageCount": 0,
+ "mathVariableManagerState": {
+  "version": 1,
+  "variables": { }
+ },
+ "raw-content": {
+  "page-size": [ 0, 0, 210, 297 ]
+ }
+}
