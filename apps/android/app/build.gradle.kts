@@ -40,7 +40,7 @@ plugins {
 }
 
 android {
-    namespace = "ai.openclaw.hendr15k.app"
+    namespace = "ai.openclaw.app"
     compileSdk = 36
 
     // Release signing is local-only; keep the keystore path and passwords out of the repo.
@@ -62,9 +62,10 @@ android {
     }
 
     defaultConfig {
-        applicationId = "ai.openclaw.hendr15k.app"
+        applicationId = "ai.openclaw.app"
         minSdk = 31
         targetSdk = 36
+        applicationIdSuffix ".hendr15k"
         versionCode = 2026040201
         versionName = "2026.4.2-beta.1"
         ndk {
