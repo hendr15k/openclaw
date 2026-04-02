@@ -62,11 +62,10 @@ android {
     }
 
     defaultConfig {
-        applicationId = "ai.openclaw.app"
+        applicationId = "ai.openclaw.app.hendr15k"
         minSdk = 31
         targetSdk = 36
-        applicationIdSuffix ".hendr15k"
-        versionCode = 2026040201
+        versionCode = 2026040202
         versionName = "2026.4.2-beta.1"
         ndk {
             // Support all major ABIs — native libs are tiny (~47 KB per ABI)
