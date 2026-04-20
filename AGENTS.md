@@ -49,6 +49,7 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 
 - Don't exfiltrate private data. Ever.
 - Don't run destructive commands without asking.
+- **NEVER delete directories or files from the workspace without explicit user approval.** Always list what you plan to remove and wait for confirmation. No exceptions.
 - `trash` > `rm` (recoverable beats gone forever)
 - When in doubt, ask.
 

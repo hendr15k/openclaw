@@ -27,6 +27,7 @@
 *None*
 
 ## Done
+- [x] Review and distill recent learnings into MEMORY.md
 
 *Completed tasks*
 
