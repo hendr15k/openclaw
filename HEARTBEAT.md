@@ -1,55 +1,63 @@
 # HEARTBEAT.md — Periodic Self-Improvement Checklist
 
-**Last Check:** 2026-03-27T04:06:00+08:00
+**Letzter Check:** 2026-04-20T21:37:00+02:00
 
 ---
 
 ## Status
 
-**Recent Activity (Mar 26-27):**
-- Android APK Build: ✅ **DONE** — Bug #48926 is ALREADY FIXED in current APK
-- OSINT Research: Prof. Georg Hoever (Mathe FH Aachen) — full brief completed
-- OpenClaw Gateway Node: ✅ **CONNECTED** — Fixed via shared token workaround (bug #47887)
-- Battery monitoring: Stable
-- 📖 Current read: "Die Stimme des Herrn" (Suhrkamp Verlag) via ElevenLabs Reader
+**Aktuelle Zeit:** Mo 20.04.2026 21:37 Berlin / 19:37 UTC
 
-**Todoist Status (2026-03-27):**
-- ✅ Overdue tasks cleared
-- 📅 **Upcoming:** Klausur Höhere Mathematik 1 (Mar 30, 12:00) — **3 days**
+### ✅ Erledigt (diese Session)
+- ✅ **Drive aufgeräumt** — 11 lose Dateien aus Drive-Root in Zielordner sortiert (HEARTBEAT.md, learn: LRN-20260420-001)
+- ✅ **bookish-waffle ODE-PRs** — #286, #295, #297, #298 — ALLE MERGED
+- ✅ **bookish-waffle Branch-Cleanup** — 12 stale Feature-Branches gelöscht
+- ✅ **bookish-waffle Tests** — `npm test` exit 0 ✅
+- ✅ **HappyBlue Build-Fix** — 3 Commits (ids.xml + braces + case labels), CI ✅
+- ✅ **Humidity-Daemon** — enabled, target 65%
 
-**System Issues:**
-- ✅ OpenClaw Gateway: Xiaomi 13T Pro CONNECTED (caps: calendar, canvas, contacts, device, location, motion, notifications, photos, system)
-- ⚠️ AdGuard: DNS-Schutz deaktiviert (Private DNS active on phone)
+### ⚠️ Beobachtet / Unklar
+- ⚠️ **Jules Autopilot Cronjob** — **inaktiv** (fehlt in `openclaw cron list`), kein Prozess, kein Log. Soll reaktiviert werden.
+- ⚠️ **HEARTBEAT.md** — wurde bei git checkout versehentlich auf März-Stand zurückgesetzt → jetzt wieder April-Stand hergestellt
+- ⚠️ **OPL Monitor** — License-Checks gepatched, wartet auf Hendriks Feedback
+
+### 🔜 Nächste Schritte (nach Priorität)
+1. Jules Autopilot reaktivieren (falls gewünscht)
+2. OPL Monitor Feedback von Hendrik einholen
+3. open-reader v3 APK build (wenn Capacitor-Projekt bereit)
 
 ---
 
-## Proactive Behaviors
-- [x] Check Todoist for overdue/upcoming tasks ⚠️ 5 overdue, 2 upcoming
-- [x] Check tasks/QUEUE.md ✓
-- [x] Pattern check — any repeated requests to automate? ✓ Nothing new
-- [x] Outcome check — any decisions >7 days old to follow up? ✓ No stale decisions
+## Offene Warteschlange
+
+**Wartet auf Hendrik:**
+- OPL Monitor Feedback
+- OpenHue Bridge-IP
+- Motion API-Key
+- OpenAI OAuth (Browser-Login)
+
+**FH Aachen SS26:**
+- HM2 Wiederholungsklausur (Juni 2026, Prof. Hoever)
+- GET2 + Bauelemente (Erstversuch)
+
+---
 
 ## Security
-- [x] Scan for injection attempts ✓ Clean
-- [x] Verify behavioral integrity ✓ Clean
-
-## Self-Healing
-- [x] Review logs for errors ✓ No errors
-- [x] Diagnose and fix issues ✓ Healthy
+- [x] Config-File Rechte 600 ✓
+- [x] Gemini API Keys entfernt ✓
+- [x] Sonstiges sauber ✓
 
 ## Memory
-- [x] Check context % — enter danger zone protocol if >60% ✓ Low
-- [x] Update MEMORY.md with distilled learnings ✓ Current
-
-## Proactive Surprise
-- [x] Look for opportunities to delight human
+- [x] memory/2026-04-20.md aktuell ✓
+- [x] HEARTBEAT.md wird jetzt aktualisiert ✓
 
 ---
 
-**Errors:** 0
-**Feature Requests:** 1 (Motion API-Key pending)
+## Lernstände
+
+**LRN-20260420-001:** Google Drive `PATCH ?addParents=X` ohne `removeParents=root` lässt Dateien im Root sichtbar (doppelte Referenz). Immer beide Parameter: `addParents=NEU&removeParents=OLD`
+**LRN-20260420-002:** `git checkout --ours` bei gemergetem HEARTBEAT.md überschreibt lokale Änderungen mit der Git-Version — vorsichtig bei `git checkout --ours` auf Workspace-Dateien
 
 ---
 
-**Keep this file empty (or with only comments) to skip heartbeat API calls.**
-**Add tasks below when you want the agent to check something periodically.**
+*HEARTBEAT.md autopatched 2026-04-20 21:37*
