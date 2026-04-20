@@ -539,3 +539,26 @@ When pairing Android devices:
 - **Resolved**: 2026-03-27T00:45:00+08:00
 - **Promoted**: TOOLS.md
 - **Notes**: Added "OpenClaw Android Pairing (Bug #47887 Workaround)" section with setup code generation instructions.
+
+## [LRN-20260420-001] Google Drive File Move API
+
+**Logged**: 2026-04-20T21:30:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Google Drive API `PATCH /files/{id}?addParents=FOLDER_ID` für Datei-Verschieben ohne removeParents funktioniert (Dateien behalten alte Parent-Verzeichnisse). Für echtes Verschieben: `removeParents=oldParent` zusätzlich angeben.
+
+### Details
+Beim Verschieben von 11 lose liegenden Dateien im Drive-Root in Zielordner: PATCH ohne removeParents führt dazu dass Dateien in NEUEM Ordner landen ABER noch im Root erscheinen (doppelte Sichtbarkeit). Lösung: `addParents=NEU` + `removeParents=root` oder erst alle root-parent-Einträge entfernen.
+
+### Suggested Action
+Bei Drive-Verschieben IMMER beide Parameter nutzen: `addParents=NEU&removeParents=OLD` — oder Dateien haben danach mehrfache Parent-Referenzen.
+
+### Metadata
+- Source: own experimentation
+- Related Files: TOOLS.md (Google Drive section)
+- Tags: google-drive, api, maton
+
+---
