@@ -1,12 +1,37 @@
 # HEARTBEAT.md — Periodic Self-Improvement Checklist
 
-**Letzter Check:** 2026-04-20T23:04:00+02:00
+**Letzter Check:** 2026-04-21T00:01:00+02:00
 
 ---
 
 ## Status
 
-**Aktuelle Zeit:** Mo 20.04.2026 23:04 Berlin / 21:04 UTC
+**Aktuelle Zeit:** Di 21.04.2026 00:01 Berlin / 22:01 UTC
+
+### ✅ Erledigt (2026-04-20 Session-Ende)
+- ✅ **Drive aufgeräumt** — 11 lose Dateien aus Drive-Root sortiert
+- ✅ **bookish-waffle ODE-PRs** — #286, #295, #297, #298 — ALLE MERGED
+- ✅ **bookish-waffle Branch-Cleanup**
+- ✅ **bookish-waffle Tests** — `npm test` exit 0 ✅
+- ✅ **HappyBlue Build-Fix** — 3 Commits, CI ✅
+- ✅ **open-reader CI-Fix** — mock import entfernt, alle 3 CI-Jobs ✅
+- ✅ **MEMORY.md aktualisiert** — Learnings 26.03.–20.04.
+- ✅ **AGENTS.md** — Delete-Safety-Regel ergänzt
+- ✅ **.learnings/** — ERR-20260420-002 geloggt
+- ✅ **Humidity-Daemon** — DEAKTIVIERT (user request "disable")
+
+### 🔄 Aktiv (Background)
+- 🔄 **GitHub Full Repo Development** — Batch 1 läuft (10 Repos: bookish-waffle, happyblue, open-reader*, sci-fi-*, spritpreise, hendr15k.github.io)
+- 🔄 **GitHub Batch 2** — wartet auf Batch 1 (40 Repos)
+
+### ⚠️ Beobachtet / Unklar
+- ⚠️ **Jules Autopilot Cronjob** — Beide deaktiviert (Timeout-Probleme)
+- ⚠️ **OPL Monitor** — License-Checks gepatched, wartet auf Hendriks Feedback
+
+### 🔜 Nächste Schritte
+1. Auf Batch 1 Ergebnis warten → Batch 2 spawnen
+2. Jules Autopilot mit kleinerem Scope reaktivieren
+3. OPL Monitor Feedback von Hendrik einholen
 
 ### ✅ Erledigt (diese Session)
 - ✅ **Drive aufgeräumt** — 11 lose Dateien aus Drive-Root in Zielordner sortiert (LRN-20260420-001)

@@ -193,11 +193,15 @@ Always use single provider prefix: `provider/model-id`.
 
 **Logged**: 2026-03-24T00:27:00+08:00
 **Priority**: high
-**Status**: pending
+**Status**: promoted
 **Area**: infra
 
 ### Summary
 Before updating OpenClaw, determine the real install method first; for global npm installs, direct npm update is more reliable than the wrapper when the wrapper stalls.
+
+### Resolution
+- **Promoted**: TOOLS.md (2026-04-21)
+- **Notes**: Rule already in TOOLS.md: `npm update -g openclaw` preferred over `openclaw update` wrapper
 
 ### Details
 This machine uses a global npm install at `/opt/openclaw/npm-global`. The wrapper command `openclaw update` stalled in doctor/package-manager handling, while `npm update -g openclaw` successfully updated the package from `2026.3.13` to `2026.3.22`.
@@ -219,11 +223,15 @@ For future OpenClaw update incidents:
 
 **Logged**: 2026-03-24T00:50:00+08:00
 **Priority**: high
-**Status**: pending
+**Status**: resolved
 **Area**: frontend
 
 ### Summary
 If OpenClaw Web Control fails with `Control UI assets not found`, verify whether `dist/control-ui/index.html` exists inside the installed package before attempting a full rebuild.
+
+### Resolution
+- **Resolved**: 2026-04-21
+- **Notes**: Fixed at the time by copying prebuilt assets. Subsequent OpenClaw updates included the assets properly.
 
 ### Details
 The installed package at `/opt/openclaw/npm-global/lib/node_modules/openclaw` contained control-ui helper JS files but lacked the static bundle directory `dist/control-ui/`. A full `ui:build` from source attempted to pull large workspace dependencies and then failed on a git-hosted dependency, so the fastest successful recovery was: locate an existing prebuilt `dist/control-ui/`, copy it into the installed package, then restart `openclaw-gateway`.
@@ -245,12 +253,16 @@ Debug order for future incidents:
 ## [LRN-20260325-001] correction
 
 **Logged**: 2026-03-24T17:33:00Z
-**Priority**: high
-**Status**: pending
+**Priority**: medium
+**Status**: resolved
 **Area**: docs
 
 ### Summary
 When hunting FH Aachen Math 1 exams, do not count files from the wrong Fachbereich/professor as valid matches.
+
+### Resolution
+- **Resolved**: 2026-04-21
+- **Notes**: Lesson internalized. FH Aachen exam matching now always cross-checks professor name.
 
 ### Details
 During a Drive-vs-web comparison, I included Uniturm files from FH Aachen Mathe pages that belonged to a different Fachbereich/professor than the target course collection. Hendrik corrected that these are not valid for this task. Future comparisons must verify course ownership/professor context, not just institution name + "Mathe".
@@ -266,12 +278,16 @@ For FH Aachen exam hunts, require at least one of: matching professor/course pag
 ## [LRN-20260325-002] best_practice
 
 **Logged**: 2026-03-24T18:47:00Z
-**Priority**: high
-**Status**: pending
+**Priority**: medium
+**Status**: resolved
 **Area**: docs
 
 ### Summary
 When importing archived FH Aachen exam PDFs into Drive, verify byte-identity against existing files before upload and use the exam date read from the PDF itself instead of trusting filenames.
+
+### Resolution
+- **Resolved**: 2026-04-21
+- **Notes**: Workflow established. PDF content verification before Drive upload is now standard.
 
 ### Details
 During a Wayback-based recovery of FH Aachen Math 1 exams, some archived files turned out to be byte-identical to files already present in Drive under different names (`klausur15-1` = `klausur_WS1415`, `klausur16-1` = `klausur_WS1516`, etc.). Uploading first and cleaning up later created avoidable duplicate noise. Also, Hendrik explicitly wanted the real exam date read from the PDF because filenames can be misleading.
@@ -330,11 +346,15 @@ Beim Aufruf von `sessions_spawn`:
 
 **Logged**: 2026-03-26T06:05:00+08:00
 **Priority**: high
-**Status**: pending
+**Status**: resolved
 **Area**: tool_usage
 
 ### Summary
 Jules CLI requires repos to be registered as Sources in the Jules web UI before use. REST API needs OAuth, not just API key. Sources cannot be added via CLI/API.
+
+### Resolution
+- **Resolved**: 2026-04-21
+- **Notes**: Confirmed multiple times since. Jules API key works for session creation but sources must be registered in UI first. Jules autopilot cronjobs had consistent timeout issues and are currently disabled.
 
 ### Details
 Der User wollte Jules für die APK-Kompilierung nutzen. Versuche schlugen fehl:
