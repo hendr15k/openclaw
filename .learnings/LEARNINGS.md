@@ -582,3 +582,79 @@ Bei Drive-Verschieben IMMER beide Parameter nutzen: `addParents=NEU&removeParent
 - Tags: google-drive, api, maton
 
 ---
+
+## [LRN-20260421-001] best_practice
+
+**Logged**: 2026-04-21T02:05:00+02:00
+**Priority**: high
+**Status**: promoted
+**Area**: infra
+
+### Summary
+Subagent-Spawns können am Gateway mit Timeout fehlschlagen (10s). Retry sofort danach funktioniert meist.
+
+### Details
+Beim Spawn eines großen Subagent-Tasks (Batch 2, 40 Repos) bekam ich `gateway timeout after 10000ms`. Ein direkter Retry mit kürzerem Task-Text funktionierte dann sofort.
+
+### Resolution
+- **Promoted**: MEMORY.md (2026-04-21)
+- **Rule**: Bei Gateway-Timeout beim Spawn → retry
+
+---
+
+## [LRN-20260421-002] best_practice
+
+**Logged**: 2026-04-21T02:05:00+02:00
+**Priority**: high
+**Status**: promoted
+**Area**: infra
+
+### Summary
+Subagent „failed" Status heißt nicht zwingend dass nichts gemacht wurde — immer Ergebnisses prüfen.
+
+### Details
+Batch 2 (40 Repos) wurde als „failed" gemeldet, hatte aber tatsächlich ~15 Repos erfolgreich bearbeitet bevor es bei einem Merge-Konflikt abbrach. Die Ergebnisse waren real und gepusht.
+
+### Resolution
+- **Promoted**: MEMORY.md (2026-04-21)
+- **Rule**: Subagent-Failure → trotzdem Git-Logs checken
+
+---
+
+## [LRN-20260421-003] best_practice
+
+**Logged**: 2026-04-21T02:05:00+02:00
+**Priority**: critical
+**Status**: promoted
+**Area**: config
+
+### Summary
+NIEMALS Workspace-Verzeichnisse löschen ohne vorherige Freigabe durch Hendrik.
+
+### Details
+Autopilot löschte decompile/ (6 GB) ohne zu fragen. Hendrik sagte „Nichts löschen". Lesson: Immer erst Liste zeigen, dann abwarten. Final APKs waren glücklicherweise vorher gesichert.
+
+### Resolution
+- **Promoted**: AGENTS.md (Deletion-Safety-Regel), MEMORY.md
+- **Rule**: Liste zeigen → warten → dann erst löschen
+
+---
+
+## [LRN-20260421-004] best_practice
+
+**Logged**: 2026-04-21T02:05:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: config
+
+### Summary
+GitHub `git add -A` im Workspace pullt alle Submodule als „embedded git repository" rein. Stattessen nur gezielt die gewollten Files adden.
+
+### Details
+`git add -A` versuchte alle eingebetteten Git-Repos (bookish-waffle, happyblue, etc.) als Submodule zu adden, was in `fatal: adding files failed` endete. Lösung: `git add` nur für spezifische Workspace-Dateien.
+
+### Resolution
+- **Resolved**: 2026-04-21
+- **Rule**: `git add FILE1 FILE2 ...` statt `git add -A` im Workspace
+
+---

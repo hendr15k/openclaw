@@ -1,6 +1,6 @@
 # MEMORY.md — Long-term Memory
 
-**Last Updated:** 2026-04-20T23:46:00+02:00
+**Last Updated:** 2026-04-21T02:05:00+02:00
 **Purpose:** Curated long-term wisdom distilled from daily logs
 
 ---
@@ -256,6 +256,12 @@ git clone https://github.com/username/skill-repo.git ~/.openclaw/workspace/skill
 - Humidity-Daemon jetzt aktiv als systemd user service (PID 73775)
 - Target: 65%
 - AC wird ausgeschaltet wenn >66%, sonst an
+- **Deaktiviert auf Hendriks Wunsch (2026-04-21)**
+
+#### Subagent Reliability (2026-04-21)
+- Gateway-Spawns können mit 10s Timeout fehlschlagen → retry hilft
+- Subagent „failed" Status ≠ nichts gemacht → immer Git-Logs prüfen
+- `git add -A` im Workspace zieht alle Submodule rein → nur gezielt adden
 
 ## Critical Rules (HARD-WON)
 
