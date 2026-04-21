@@ -658,3 +658,32 @@ GitHub `git add -A` im Workspace pullt alle Submodule als „embedded git reposi
 - **Rule**: `git add FILE1 FILE2 ...` statt `git add -A` im Workspace
 
 ---
+
+## [LRN-20260421-005] best_practice
+
+**Logged**: 2026-04-21T10:45:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: frontend
+
+### Summary
+open-reader: UX-Persistenz-Pattern — Dark Mode, Reader-Einstellungen und Reading Progress in localStorage speichern und beim Laden wiederherstellen.
+
+### Details
+Vier separate Persistenz-Features für open-reader in einer Session:
+1. Dark Mode Toggle → localStorage
+2. Font Size, Sleep Mode, Immersive Mode → localStorage
+3. Reading Progress (currentSentence) → localStorage mit Key pro Artikel
+
+Pattern: `localStorage.getItem()` im `useState`-Initializer, `localStorage.setItem()` in `useEffect` oder beim Toggle-Callback.
+
+### Suggested Action
+Bei jeder neuen React-App von Anfang an Persistenz-Keys mitdenken statt nachträglich.
+
+### Metadata
+- Source: session
+- Related Files: open-reader/src/App.tsx, open-reader/src/components/ArticleView.tsx, open-reader/src/hooks/useTTS.ts
+- Commits: f37967c, d04714a, 4a24fdb
+- See Also: LRN-20260421-004
+
+---

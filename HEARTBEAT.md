@@ -1,23 +1,20 @@
 # HEARTBEAT.md — Periodic Self-Improvement Checklist
 
-**Letzter Check:** 2026-04-21T11:41:00+02:00
+**Letzter Check:** 2026-04-21T12:50:00+02:00
 
 ---
 
 ## Status
 
-**Aktuelle Zeit:** Di 21.04.2026 11:41 Berlin / 09:41 UTC
+**Aktuelle Zeit:** Di 21.04.2026 12:50 Berlin / 10:50 UTC
 
-### ✅ Erledigt (2026-04-21 Nachtsession — alles komplett)
-- ✅ GitHub Full Repo Dev (50 Repos, 3 Batches)
-- ✅ imp OSINT (2 Reports)
-- ✅ Self-Improvement (4 Learnings, 0 pending)
-- ✅ MEMORY.md + AGENTS.md + Workspace-.gitignore
-- ✅ OSINT-Template (memory/OSINT-TEMPLATE.md)
-- ✅ FH-Lernplan (27 Tasks + 27 Events, 1 Korrektur)
-- ✅ Spritpreise (API-Key ent-hardcoded, Orts-Presets)
-- ✅ OpenReader (APK-Workflow dokumentiert)
-- ✅ Humidity-Daemon deaktiviert
+### ✅ Erledigt (2026-04-21 Tagsession — open-reader + Repo-Arbeit)
+- ✅ open-reader: 3 echte UX-Features (Dark Mode + Reader Prefs + Reading Progress Persistenz)
+- ✅ Syncer: README + SEO meta verbessert
+- ✅ bookish-waffle: SEO meta + package.json keywords
+- ✅ happyblue-elm327: workspace artifacts cleanup
+- ✅ openclaw-appstore: README + SEO meta
+- ✅ Self-Improvement Logs: LRN-20260421-005, ERR-20260421-002, FEAT-20260421-001
 
 ### ⚠️ Beobachtet / Unklar
 - ⚠️ Jules Autopilot Cronjob — Beide deaktiviert (Timeout-Probleme)
@@ -25,10 +22,10 @@
 - ⚠️ Spritpreise — Tankerkoenig API-Key tot
 
 ### 🔜 Nächste Schritte
-1. Spritpreise API-Key: Hendrik über 🔑 Button in der App setzen
-2. Jules Autopilot reaktivieren (kleinerer Scope)
-3. OPL Monitor Feedback einholen
-4. FH-Lernplan kompakt nutzen
+1. FEAT-20260421-001 (open-reader Voice+Speed Persistenz) —点小
+2. Spritpreise API-Key: Hendrik über 🔑 Button in der App setzen
+3. Jules Autopilot reaktivieren (kleinerer Scope)
+4. OPL Monitor Feedback einholen
 
 ## Offene Warteschlange
 
@@ -63,6 +60,7 @@
 - LRN-20260421-003: NIEMALS löschen ohne Freigabe (critical)
 - LRN-20260421-004: `git add -A` zieht Submodule rein → gezielt adden
 - LRN-20260421-005: API-Key NICHT hardcoded → localStorage/URL-Param
+- LRN-20260421-006: React localStorage Persistenz → useState-Initializer + useEffect
 
 ## Security
 - [x] Config-File Rechte 600
@@ -75,4 +73,4 @@
 
 ---
 
-*HEARTBEAT.md aktualisiert 2026-04-21 11:41*
+*HEARTBEAT.md aktualisiert 2026-04-21 12:50*

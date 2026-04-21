@@ -363,3 +363,29 @@ JDK 25 is too new for Android Gradle Plugin 8.2.2.
 - **Do not fix locally**: CI is fine with JDK 17
 - **Note**: If Hendrik wants to build locally, use JDK 17 or 21
 - **Consider**: Upgrading AGP to 8.7+ for JDK 25 compatibility (future)
+
+## [ERR-20260421-002] typescript
+
+**Logged**: 2026-04-21T10:45:00+02:00
+**Priority**: low
+**Status**: resolved
+**Area**: frontend
+
+### Summary
+TypeScript error: useTTS-Hook Aufruf mit object statt number als erstes Argument.
+
+### Error
+```
+src/components/ArticleView.tsx(37,142): error TS2345: Argument of type '{ initialSentence: number; }' 
+is not assignable to parameter of type 'number'.
+```
+
+### Context
+Beim Hinzufügen von Reading-Progress-Restoration wollte ich `useTTS({ initialSentence: savedIndex })` aufrufen. Der Hook erwartet aber `useTTS(savedIndex)` als number.
+
+Fix: `useTTS(parseInt(localStorage.getItem(...) || '0', 10))`
+
+### Resolution
+- **Resolved**: 2026-04-21
+- **Commit**: 4a24fdb
+
