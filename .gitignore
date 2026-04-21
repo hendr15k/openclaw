@@ -1,0 +1,52 @@
+# Prevent accidental staging of embedded git repositories
+# These are standalone repos cloned into the workspace - never stage them as submodules
+
+# Embedded standalone repos (cloned independently)
+*/.git
+!/.gitignore
+
+# Node modules (project-local, not workspace-level)
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS and editor artifacts
+.DS_Store
+*.swp
+*.swo
+*~
+Thumbs.db
+
+# Temporary directories
+tmp/
+tmp_*/
+.trash/
+.trash-staging/
+trash/
+state/
+logs/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+.next/
+.nuxt/
+.cache/
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Large binary dirs (never stage)
+*.apk
+*.aab
+*.ipa
+/decompile/
+/openclaw-fork/
+/openclaw-2026.4.15-src/
+/openclaw-android-app/
