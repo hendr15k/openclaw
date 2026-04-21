@@ -341,3 +341,25 @@ NEVER delete workspace directories without explicit user approval. Always list c
 - **Promoted**: AGENTS.md (deletion policy), MEMORY.md
 
 ---
+
+## [ERR-20260421-001] android
+
+**Logged**: 2026-04-21T10:09:00+02:00
+**Priority**: medium
+**Area**: infra
+
+### Summary
+canop-obd build fails locally due to JDK 25 (OpenJDK 25.0.2) incompatibility with AGP 8.2.2. AGP 8.2.2 requires JDK 17 or JDK 21. CI uses JDK 17 which works fine.
+
+### Details
+```
+FAILURE: Build failed with an exception.
+* What went wrong:
+25.0.2
+```
+JDK 25 is too new for Android Gradle Plugin 8.2.2.
+
+### Resolution
+- **Do not fix locally**: CI is fine with JDK 17
+- **Note**: If Hendrik wants to build locally, use JDK 17 or 21
+- **Consider**: Upgrading AGP to 8.7+ for JDK 25 compatibility (future)
