@@ -233,6 +233,16 @@ curl -s -H "Authorization: Bearer $MATON_API_KEY" \
 **Known folders:**
 - Export (Eventuell unvollständig): `1sVCjmblECiVxWgo9VjjJFqAEpj_obuxR`
 
+## Dekompilierte Android-APKs
+
+**Hardcoded Resource-IDs sind nach Rebuild instabil.**
+JADX belässt originale Resource-IDs als Literalzahlen (z.B. `2130837661`). Nach Gradle-Rebuild mappen diese auf andere Resources → `Resources$NotFoundException`.
+**Fix:** IMMER nach `2130xxxxxx` / `0x7f0x...` suchen und durch `R.xxx.yyy` Referenzen ersetzen. Scanner: `tools/hardcoded-id-scanner.sh`
+
+**`<include android:id=...>` überschreibt die Root-ID des included Layouts.**
+`findViewById(R.id.toolbar)` returned null wenn das `<include>`-Tag eine eigene `android:id` hat (z.B. `@id/include`).
+**Fix:** Fallback auf Include-ID: `findViewById(R.id.include) != null ? findViewById(R.id.include) : findViewById(R.id.toolbar)`
+
 ## Nebo — PDF vs. Backup
 
 **PDF-Export (bevorzugen):** Enthält erkannten Text via `page.get_text()` (PyMuPDF). Quelle: Google Drive Export-Ordner oder manueller Export.
