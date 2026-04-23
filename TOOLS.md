@@ -243,6 +243,10 @@ JADX belässt originale Resource-IDs als Literalzahlen (z.B. `2130837661`). Nach
 `findViewById(R.id.toolbar)` returned null wenn das `<include>`-Tag eine eigene `android:id` hat (z.B. `@id/include`).
 **Fix:** Fallback auf Include-ID: `findViewById(R.id.include) != null ? findViewById(R.id.include) : findViewById(R.id.toolbar)`
 
+**Dekompilierte Layouts können den falschen Custom-View-Typ bei korrekter ID tragen.**
+Beispiel: `cockpit_page_4_clip_*` IDs sahen korrekt aus, aber die XML-Tags waren `HappyTachoLayout` statt `HappyClipLayout` → `ClassCastException` im Java-Code trotz formal gültigem Layout.
+**Fix:** Bei `ClassCastException` immer Java-Cast UND XML-Tag des betroffenen `@id/...` gegeneinander prüfen.
+
 ## Nebo — PDF vs. Backup
 
 **PDF-Export (bevorzugen):** Enthält erkannten Text via `page.get_text()` (PyMuPDF). Quelle: Google Drive Export-Ordner oder manueller Export.

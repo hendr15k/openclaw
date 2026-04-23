@@ -1096,3 +1096,32 @@ Subagents nur für Tasks nutzen die >5 Min dauern UND unabhängig laufen können
 - Source: error
 - Tags: subagent, gateway-timeout, tooling, reliability
 - Pattern-Key: harden.subagent_timeout
+
+## [LRN-20260424-001] best_practice
+
+**Logged**: 2026-04-24T00:08:00+02:00
+**Priority**: high
+**Status**: promoted
+**Area**: frontend
+**Promoted**: TOOLS.md
+
+### Summary
+Dekompilierte Android-Layouts können semantisch falsche Custom-Views mit korrekten IDs enthalten
+
+### Details
+Bei HappyBlue war `cockpit_page_4.xml` formal valide und nutzte die erwarteten IDs `cockpit_page_4_clip_1..9`, aber die XML-Tags waren fälschlich `HappyTachoLayout` statt `HappyClipLayout`. Dadurch schlug kein Ressourcen-Compile fehl, aber `CockpitPagerAdapter` crashte beim Start mit `ClassCastException`, weil der Code korrekt auf `HappyClipLayout` castete.
+
+Das ist eine typische Dekompilierungs-/Rekonstruktionsfalle: IDs und Dateinamen sehen plausibel aus, aber der konkrete View-Typ ist semantisch falsch. Solche Fehler erkennt man erst durch Gegenprüfung mit dem Java-Code (`findViewById` + Cast) oder Runtime-Crashes.
+
+### Suggested Action
+Bei Android-Crashes mit `ClassCastException` IMMER beide Seiten prüfen:
+1. Java/Kotlin-Cast (`(HappyClipLayout) findViewById(...)`)
+2. XML-Tag des betroffenen `@id/...`
+
+Nicht nur auf IDs und Layoutnamen vertrauen — auch den konkreten View-Klassentyp verifizieren.
+
+### Metadata
+- Source: error
+- Related Files: repos/hendr15k/happyblue-elm327/app/src/main/java/com/happyblue/cockpit/CockpitPagerAdapter.java, repos/hendr15k/happyblue-elm327/app/src/main/res/layout/cockpit_page_4.xml
+- Tags: android, decompile, layout, custom-view, classcastexception, crash
+- Pattern-Key: harden.android_custom_view_type_mismatch
