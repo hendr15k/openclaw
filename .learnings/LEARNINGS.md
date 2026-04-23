@@ -1125,3 +1125,30 @@ Nicht nur auf IDs und Layoutnamen vertrauen — auch den konkreten View-Klassent
 - Related Files: repos/hendr15k/happyblue-elm327/app/src/main/java/com/happyblue/cockpit/CockpitPagerAdapter.java, repos/hendr15k/happyblue-elm327/app/src/main/res/layout/cockpit_page_4.xml
 - Tags: android, decompile, layout, custom-view, classcastexception, crash
 - Pattern-Key: harden.android_custom_view_type_mismatch
+
+## [LRN-20260424-002] correction
+
+**Logged**: 2026-04-24T00:13:00+02:00
+**Priority**: high
+**Status**: promoted
+**Area**: infra
+**Promoted**: TOOLS.md
+
+### Summary
+"Automatisch Release" kann zwei verschiedene Bedeutungen haben: bestehendes Release aktualisieren vs. pro Build neuen Release erzeugen
+
+### Details
+Bei HappyBlue war GitHub Release-Automation bereits aktiv, aber nur als Update der bestehenden `latest`-Release. Hendriks Erwartung bei "Release fehlt soll doch immer automatisch" und später "Pro Bild ein Release" war nicht "eine feste latest-Release aktuell halten", sondern "pro Build einen eigenen sichtbaren Release-Eintrag erzeugen".
+
+Die erste Implementierung war technisch korrekt, aber semantisch an Hendriks Erwartung vorbei. Für Release-Automation muss explizit geklärt werden:
+- ein einziges Rolling Release (`latest`)
+- oder versionierte/per-build Releases
+
+### Suggested Action
+Bei Anforderungen wie "automatisch als Release freigeben" immer sofort den Release-Modus explizit klären oder standardmäßig beide Varianten kurz anbieten (`latest` vs. `pro Build eigener Release`).
+
+### Metadata
+- Source: user_feedback
+- Related Files: repos/hendr15k/happyblue-elm327/.github/workflows/build.yml
+- Tags: github, releases, ci, expectation-management
+- Pattern-Key: clarify.release_mode_expectation

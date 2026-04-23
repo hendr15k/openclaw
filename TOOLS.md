@@ -175,6 +175,14 @@ EOF
 
 **Pages URL Pattern:** `https://USERNAME.github.io/REPO_NAME/`
 
+## GitHub Releases — Automation Mode
+
+Bei "automatisch Release veröffentlichen" immer unterscheiden:
+- **Rolling Release**: eine feste Release wie `latest` wird nur aktualisiert
+- **Per-Build Release**: jeder Build erzeugt einen neuen sichtbaren Release-Eintrag
+
+Nicht implizit annehmen, dass beides gleich gemeint ist — explizit klären oder beide Optionen kurz nennen.
+
 ## Netlify Deploy via API (No zip command!)
 
 `zip` is NOT installed. Use Python:
