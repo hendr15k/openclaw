@@ -6,6 +6,60 @@
 
 ---
 
+## [LRN-20260423-006] correction
+
+**Logged**: 2026-04-23T15:43:00+02:00
+**Priority**: high
+**Status**: promoted
+**Area**: config
+
+### Summary
+FH Aachen-Ordner nicht ungefragt verschieben — Nutzer will ihn im Drive-Root behalten.
+
+### Details
+Beim Sortieren der Drive-Root-Dateien wurde der Ordner `FH AACHEN` eigenmächtig nach `01_Studium` verschoben. Hendrik korrigierte sofort: "FH Aachen Ordner in Ruhe lassen." Der Ordner wurde zurück ins Root verschoben.
+
+### Suggested Action
+Vor dem Verschieben von Ordnern immer kurz bestätigen — besonders bei benannten Ordnern die bereits im Root liegen und nicht den Nummerierungs-Schema (01_, 02_, ...) folgen.
+
+### Metadata
+- Source: user_feedback
+- Related Files: Google Drive root
+- Tags: google-drive, sorting, user-correction
+
+---
+
+## [LRN-20260423-005] best_practice
+
+**Logged**: 2026-04-23T15:32:00+02:00
+**Priority**: high
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Google Home OAuth-Token läuft ab → Luftfeuchte-Daemon kann nicht mehr lesen/steuern, AC bleibt im falschen Zustand
+
+### Details
+Google Home OAuth refresh token lief am 22.04.2026 um ~20:41 ab (`invalid_grant: Token has been expired or revoked`). Danach konnte der humidity daemon keine Luftfeuchtigkeit mehr auslesen und keine AC-Befehle senden. Die AC blieb aus, obwohl die Luftfeuchtigkeit bei 72% lag (Ziel: 65%).
+
+Fix: `google-oauthlib-tool --headless` mit neuem Autorisierungscode (via Telegram von Hendrik).
+
+### Suggested Action
+- Regelmäßig prüfen ob Google Home OAuth noch funktioniert (z.B. im Heartbeat)
+- Bei `invalid_grant` Fehler automatisch OAuth-Flow starten und Hendrik um Code bitten
+- Token-Ablauf könnte auch in maintain_humidity.py als Auto-Recovery integriert werden
+
+### Metadata
+- Source: error
+- Related Files: maintain_humidity.py, google-home-control/scripts/control.py
+- Tags: oauth, google-home, humidity-daemon, token-expiry
+- Pattern-Key: harden.oauth_token_expiry
+- Recurrence-Count: 1
+- First-Seen: 2026-04-22
+- Last-Seen: 2026-04-23
+
+---
+
 ## [LRN-20260326-001] best_practice
 
 **Logged**: 2026-03-26T06:19:00+08:00
@@ -685,5 +739,220 @@ Bei jeder neuen React-App von Anfang an Persistenz-Keys mitdenken statt nachträ
 - Related Files: open-reader/src/App.tsx, open-reader/src/components/ArticleView.tsx, open-reader/src/hooks/useTTS.ts
 - Commits: f37967c, d04714a, 4a24fdb
 - See Also: LRN-20260421-004
+
+---
+
+## [LRN-20260421-007] best_practice
+
+**Logged**: 2026-04-21T11:20:00+02:00
+**Priority**: medium
+**Status**: promoted
+**Area**: infra
+
+### Summary
+scripts/ humidity_hysteresis_control.py is in skills/humidity-hysteresis-control/scripts/, NOT in workspace/scripts/. Skill path overrides workspace.
+
+### Details
+When running humidity control commands, the script is at:
+`~/.openclaw/workspace/skills/humidity-hysteresis-control/scripts/humidity_hysteresis_control.py`
+NOT at `~/.openclaw/workspace/scripts/humidity_hysteresis_control.py`.
+
+### Suggested Action
+Always use the full path from the skill directory, not workspace/scripts/.
+
+### Metadata
+- Source: session
+- Related Files: skills/humidity-hysteresis-control/scripts/humidity_hysteresis_control.py
+- See Also: LRN-20260421-004 (paths)
+
+---
+
+## [LRN-20260421-008] best_practice
+
+**Logged**: 2026-04-21T20:33:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: infra
+
+### Summary
+Vor Idea-Generierung /autopilot ideas: IMMER erst prüfen ob das Feature bereits existiert. Doppelte Arbeit vermeiden.
+
+### Details
+Idee #1 (Lernzeit-Tracker Fach-Tracking) und Idee #3 (bookish-waffle LaTeX + Plots) wurden als "neu" vorgeschlagen, obwohl beide Features bereits vollständig implementiert waren (Lernzeit-Tracker hatte HM2/GET2/Bauelemente Defaults, bookish-waffle hatte MathJax LaTeX-Rendering + 2D/3D/Implicit/Vector Plotting).
+
+Zeitverschwendung: Subagent-Spawns wurden versucht (Gateway-Timeout), dann manuelle Code-Analyse die zeigte dass alles schon da war.
+
+### Suggested Action
+Vor `/autopilot ideas`: Quick `grep` auf key features der vorgeschlagenen Repos. 30 Sekunden Check spart 10 Minuten implementierungs-Versuch.
+
+### Metadata
+- Source: self_observation
+- Related Files: Lernzeit-Tracker/js/store.js, bookish-waffle/index.html
+- Tags: idea-validation, duplicate-work
+- Pattern-Key: validate_before_proposing
+- Recurrence-Count: 1
+- First-Seen: 2026-04-21
+- Last-Seen: 2026-04-21
+
+---
+
+## [LRN-20260421-009] best_practice
+
+**Logged**: 2026-04-21T23:54:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: config
+
+### Summary
+Google Home Skill: Script in `scripts/` und MUSS mit venv-Python gestartet werden
+
+### Details
+SKILL.md beschreibt Aufruf mit bloßem `python control.py`, aber:
+1. Script liegt unter `scripts/control.py`, nicht im Root
+2. System-Python hat die google-assistant SDK Dependencies nicht
+3. Korrekter Aufruf: `~/.openclaw/workspace/skills/google-home-control/google_home_env/bin/python scripts/control.py "command"`
+
+### Suggested Action
+In TOOLS.md aufnehmen als korrekten Aufruf-Pfad.
+
+### Metadata
+- Source: error
+- Related Files: skills/google-home-control/scripts/control.py
+- Tags: google-home, venv, path
+- See Also: ERR-20260421-003, LRN-20260421-004
+
+---
+
+## [LRN-20260422-001] best_practice
+
+**Logged**: 2026-04-22T00:09:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: infra
+
+### Summary
+Parallele Subagents auf dieselben Files = letzter gewinnt, andere Änderungen gehen verloren
+
+### Details
+5 Subagents arbeiteten parallel an Lernzeit-Tracker (index.html + app.js). 
+- 3 Subagents committed erfolgreich (notes, ring, weekly-comparison)
+- Pomodoro-Agent gab vollen File-Inhalt als Result zurück statt Commit zu machen
+- Topic-Tags-Agent noch nicht abgeschlossen
+- Ergebnis: Pomodoro-Änderungen NICHT in den Files, obwohl Task als "completed" gemeldet
+
+### Suggested Action
+1. Bei parallelen Subagents auf gleiche Files: NUR EINEN Agent gleichzeitig, oder Dateien strikt trennen
+2. Subagent-Result IMMER verifizieren: `git log` + `grep` im File, nicht nur Status vertrauen
+3. Pomodoro und Topics müssen nachträglich einzeln nacheinander ausgeführt werden
+
+### Metadata
+- Source: self_observation
+- Related Files: Lernzeit-Tracker/js/app.js, Lernzeit-Tracker/index.html
+- Tags: subagent, parallel, conflict, merge
+- Pattern-Key: sequential_same_file_edits
+- Recurrence-Count: 1
+- First-Seen: 2026-04-22
+- Last-Seen: 2026-04-22
+
+---
+
+## [LRN-20260422-002] best_practice
+
+**Logged**: 2026-04-22T00:30:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: infra
+
+### Summary
+Bei GitHub Pages/Vite-Apps reicht Source-Commit nicht als Live-Verifikation — immer deployed Bundle oder Actions-Status prüfen
+
+### Details
+Bei `open-reader` wurde zunächst fälschlich vermutet, die Keyboard-Shortcut-Änderung sei live nicht vorhanden, weil `dist/` lokal älter war und im Repo gitignored ist. Tatsächlich baut GitHub Actions das Projekt bei Push auf `main` neu und deployt `dist` als Artifact. Der Workflow war bereits erfolgreich abgeschlossen, die Änderung war live.
+
+Lokaler `dist/`-Timestamp oder gitignored `dist/` sagt bei workflow-basierten Pages-Repos NICHTS über den Live-Stand aus.
+
+### Suggested Action
+Bei workflow-basierten GitHub Pages Repos immer diese Reihenfolge:
+1. `gh run list` / Workflow-Status prüfen
+2. Live-Bundle oder live HTML/JS prüfen
+3. Erst dann von fehlendem Deploy ausgehen
+
+Nicht aus lokalem `dist/` oder `.gitignore` ableiten, dass die Live-Seite veraltet ist.
+
+### Metadata
+- Source: self_observation
+- Related Files: open-reader/.github/workflows/deploy.yml
+- Tags: github-pages, vite, dist, deploy, verification
+- Pattern-Key: verify_live_not_local_dist
+- Recurrence-Count: 1
+- First-Seen: 2026-04-22
+- Last-Seen: 2026-04-22
+
+---
+
+## [LRN-20260422-003] best_practice
+
+**Logged**: 2026-04-22T00:33:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: infra
+
+### Summary
+Subagent liefert File-Dump statt Commit = kein Feature implementiert. Immer Verifizierung via git log + grep im File
+
+### Details
+Der "bw-named-sessions" Subagent beendete mit "completed successfully" aber:
+- 0 Tokens In/Out → Subagent hat nichts实质liches gemacht
+- Kein Commit in git log
+- Stattdessen kompletter File-Content als "Result" zurückgegeben (voller HTML-Dump)
+- Gleiches Muster wie Pomodoro-v1 earlier
+
+Korrelation: Subagents mit sehr hoher Token-Zahl (große Files gelesen) und gleichzeitig 0 Output =，它们返回的只是输入的镜像而非实际工作成果。
+
+### Suggested Action
+1. Immer NACH Subagent-Fertigstellung: `git log --oneline` + `grep nach Feature-Code` prüfen
+2. Wenn kein Commit und grep nichts findet → selbst machen
+3. Subagents mit sehr großen Contexts ( > 100k tokens gelesen) neigen dazu, nur noch Status "done" zu melden ohne wirklich zu ändern
+
+### Metadata
+- Source: self_observation
+- Related Files: bookish-waffle/index.html
+- Tags: subagent, verification, commit, file-dump
+- Pattern-Key: verify_after_subagent
+- Recurrence-Count: 2
+- First-Seen: 2026-04-22
+- Last-Seen: 2026-04-22
+
+---
+
+## [LRN-20260422-004] correction
+
+**Logged**: 2026-04-22T21:55:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: docs
+
+### Summary
+HM2/GET2 Lernplan enthielt falsche Themen (Reihen & Folgen, Potenzreihen, Taylorreihen) die nicht im HM2-Syllabus stehen.
+
+### Details
+Der Lernplan in HEARTBEAT.md basierte auf geratenen HM1-Themen statt auf den echten Arbeitsblättern aus dem Google Drive Ordner. Die echten HM2-Themen (Prof. Hoever SS2024) sind:
+- Blatt 1-5: Mehrdimensionale Funktionen, partielle Ableitungen, Gradient, Extremstellen, Jacobi-Matrix, Kurven, Mehrfachintegrale, Vektoranalysis
+- Blatt 6: Divergenz, Rotation, Gauß'scher Satz
+- Blatt 7-8: Lineare DGL, Schwingungen, Schwingkreis
+- Blatt 9-10: Fourier-Reihen, Fourier-Transformation
+- Blatt 11: Laplace-Transformation
+- Blatt 12-14: Wahrscheinlichkeitsrechnung, Exponential-/Normalverteilung, Statistik
+
+GET2 (SS2025) hat 15 Wochen / 10 Übungsblätter: E-Feld → Potential/Kondensator → Dielektrika → Strom/Ohm → Magnetfeld → Induktion/Transformator.
+
+### Suggested Action
+Immer echte Kursmaterialien lesen bevor Lernpläne erstellt werden. Niemals Themen raten.
+
+### Metadata
+- Source: user_feedback
+- Related Files: HEARTBEAT.md
+- Tags: learning-plan, hm2, get2, fh-aachen
+- Pattern-Key: planning.guess_vs_verify
 
 ---

@@ -213,6 +213,8 @@ Add whatever helps you do your job. This is your cheat sheet.
 
 ## Google Drive (via Maton)
 
+**Wichtig:** Benannte Root-Ordner nicht ungefragt verschieben. Speziell `FH AACHEN` im Drive-Root in Ruhe lassen, außer Hendrik sagt explizit, dass er umsortiert werden soll.
+
 **Endpoint Pattern:** `https://gateway.maton.ai/google-drive/drive/v3/{rest-of-path}`
 **Note:** Requires `drive/v3/` prefix after app name (native Google Drive API path)
 
@@ -334,3 +336,22 @@ echo -n "{\"url\":\"ws://8.209.235.235:18789\",\"token\":\"$SHARED_TOKEN\"}" | b
 // acp runtime — streamTo allowed
 {"runtime": "acp", "agentId": "...", "task": "...", "streamTo": "parent"}
 ```
+
+## Skill-Script-Pfade
+
+Skill-Scripts liegen IMMER in `skills/NAME/scripts/`, **nicht** in `workspace/scripts/`.
+Beispiel: `~/.openclaw/workspace/skills/humidity-hysteresis-control/scripts/humidity_hysteresis_control.py`
+
+Immer vollen Pfad vom Skill-Verzeichnis nutzen.
+
+## Google Home Control
+
+**Script:** `~/.openclaw/workspace/skills/google-home-control/scripts/control.py`
+**WICHTIG:** MUSS mit der venv-Python gestartet werden — System-Python fehlen die Dependencies!
+
+```bash
+~/.openclaw/workspace/skills/google-home-control/google_home_env/bin/python \
+  ~/.openclaw/workspace/skills/google-home-control/scripts/control.py "Turn off the lights"
+```
+
+Antwort kommt als Text in stdout. Keine Ausgabe = Befehl ausgeführt (stiller Erfolg).
