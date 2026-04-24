@@ -1676,3 +1676,26 @@ Bei jeder öffentlichen Gateway-Expose-Umstellung Checkliste nutzen:
 - Tags: openclaw, gateway, wss, tls, caddy, cors, control-ui
 
 ---
+
+## [LRN-20260425-002] best_practice
+
+**Logged**: 2026-04-25T00:28:01+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: openclaw-nodes
+
+### Summary
+`gateway.nodes.allowCommands` allein garantiert nicht, dass ein Node-Kommando auf Android verfügbar ist; `openclaw nodes camera snap` kann trotz freigeschaltetem `camera.snap` mit `the node (platform: android) does not support "camera.snap"` scheitern.
+
+### Details
+Beim Testen des frisch gepairten Xiaomi-13T-Pro-Nodes war `camera.snap` gatewayseitig explizit erlaubt. Der direkte CLI-Test `openclaw nodes camera snap --node 'Xiaomi 13T Pro' --facing front` schlug dennoch fehl, weil die Android-Node-Plattform das Kommando selbst nicht unterstützt. Dagegen funktionierten `openclaw nodes location get` und `openclaw nodes notify` erfolgreich. Die erlaubte Gateway-Command-Liste ist also nur die obere Schranke; tatsächliche Nutzbarkeit hängt zusätzlich von Node-Plattform und implementierten Capabilities ab.
+
+### Suggested Action
+Bei neuen Node-Setups zuerst harmlose Capability-Checks durchführen (z. B. `nodes status`, `location get`, `notify`) und Kamera-/High-Impact-Kommandos erst nach Plattform-Support-Verifikation bewerben.
+
+### Metadata
+- Source: conversation
+- Related Files: /home/openclaw/.openclaw/openclaw.json
+- Tags: openclaw, android, node, camera, capabilities
+
+---
