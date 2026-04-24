@@ -1726,3 +1726,26 @@ Vor Node-Tests immer:
 - Tags: openclaw, android, node, ambiguity, device-pairing
 
 ---
+
+## [LRN-20260425-004] best_practice
+
+**Logged**: 2026-04-25T00:40:18+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: openclaw-canvas
+
+### Summary
+Android-Canvas-Demos lassen sich schnell und zuverlässig über `openclaw nodes canvas present --target data:text/html,...` ausrollen; `canvas snapshot` ist danach ein guter Verifikationsschritt.
+
+### Details
+Für das Xiaomi-13T-Pro wurde ein kleines Cyberdeck-Demo ohne lokale Hosting-Infrastruktur direkt als `data:text/html;charset=utf-8,...` an `openclaw nodes canvas present` übergeben. Anschließend lieferte `openclaw nodes canvas snapshot` erfolgreich einen JPG-Snapshot zurück. Das ist ein schneller Weg, um spontane UI-Ideen auf verbundenen Android-Nodes zu testen, ohne vorher Dateien deployen oder einen Webserver bereitstellen zu müssen.
+
+### Suggested Action
+Für schnelle Canvas-Prototypen zuerst `data:`-URLs nutzen; nach erfolgreichem Rendern sofort `canvas snapshot` ziehen, um die tatsächliche Darstellung zu verifizieren.
+
+### Metadata
+- Source: conversation
+- Related Files: none
+- Tags: openclaw, canvas, android, data-url, prototyping
+
+---
