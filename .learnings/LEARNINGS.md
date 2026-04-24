@@ -6,6 +6,53 @@
 
 ---
 
+## [LRN-20260424-002] correction
+
+**Logged**: 2026-04-24T00:38:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: docs
+
+### Summary
+Bei Git-Push-Status in Repo-Kontext immer explizit sagen, auf **welchen Branch** gepusht wurde; „ist gepusht“ reicht nicht, wenn der Nutzer auf `main` schaut.
+
+### Details
+Ich hatte korrekt verifiziert, dass `feat/obd-pids-cockpit` auf GitHub den Commit `6ad24a7` enthält, aber Hendrik erwartete den Fix auf HappyBlue-`main`. Meine Aussage „Push ist drauf“ war aus Git-Sicht richtig, aus Nutzer-Sicht aber irreführend. Dadurch musste Hendrik nachhaken („Nein definitiv nicht, mache es (Happy...)"). Erst danach wurde klar auf `main` gemergt und `main` gepusht.
+
+### Suggested Action
+Bei Push-Bestätigungen immer Format verwenden:
+- „Auf Branch X gepusht“
+- „Noch nicht auf main“ oder „jetzt auf main“
+- Falls relevant direkt Branch-/PR-/Commit-Link nennen
+
+### Metadata
+- Source: user_feedback
+- Related Files: repos/hendr15k/happyblue-elm327
+- Tags: git, github, branch, communication, verification
+- See Also: LRN-20260424-001
+
+---
+
+## [LRN-20260424-001] best_practice
+
+**Logged**: 2026-04-24T00:21:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: config
+
+### Summary
+Bei HappyBlue-Crashes mit `Resources$NotFoundException` auf `0x7f...` zuerst hartcodierte Resource-IDs im App-Code auf symbolische `R.*`-Referenzen zurückführen.
+
+### Details
+Ein gemeldeter Crash zeigte `android.content.res.Resources$NotFoundException: Resource ID #0x7f0d014b` aus `com.happyblue.views.HappyTachoLayout.init(HappyTachoLayout.java:89)`. Die betroffene Zeile verwendet `getResources().getColor(2131558731)`. Mapping über `com.cantronix.happyblue.common.R.java` zeigte: `0x7f0d014b` entspricht `R.color.textHint`. Ursache ist sehr wahrscheinlich eine hartcodierte Resource-ID, die nach Rebuild oder Variantenwechsel nicht mehr stabil ist.
+
+### Suggested Action
+Hardcodierte Resource-IDs systematisch durch symbolische `R.color.*`, `R.id.*`, `R.layout.*` etc. ersetzen. Für diesen konkreten Fall `getResources().getColor(2131558731)` → `getResources().getColor(R.color.textHint)`.
+
+### Outcome
+Fix erfolgreich bestätigt: Nach Patch aller gefundenen `getColor(2131...)`-Stellen in `happyblue-elm327` meldete Hendrik: „Hat sehr gut funktioniert“.
+
+
 ## [LRN-20260423-006] correction
 
 **Logged**: 2026-04-23T15:43:00+02:00
@@ -1152,3 +1199,406 @@ Bei Anforderungen wie "automatisch als Release freigeben" immer sofort den Relea
 - Related Files: repos/hendr15k/happyblue-elm327/.github/workflows/build.yml
 - Tags: github, releases, ci, expectation-management
 - Pattern-Key: clarify.release_mode_expectation
+
+## [LRN-20260424-001] best_practice
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: infra
+
+### Summary
+`gh pr merge --auto` requires auto-merge enabled on the repo
+
+### Details
+When trying `gh pr merge PR --squash --auto` on bookish-waffle, got "Auto merge is not allowed for this repository". Need to run `gh repo edit OWNER/REPO --enable-auto-merge` first.
+
+### Suggested Action
+Always enable auto-merge on repos before setting up Dependabot auto-merge workflows.
+
+### Resolution
+- **Resolved**: 2026-04-24T02:25:00+02:00
+- **Notes**: Ran `gh repo edit` for all 4 repos with Dependabot
+
+### Metadata
+- Source: conversation
+- Tags: github, dependabot, pr-merge
+- Pattern-Key: github.auto_merge_requires_repo_setting
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-002] best_practice
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: medium
+**Status**: promoted
+**Area**: infra
+
+### Summary
+Capacitor 8.3+ requires Node ≥22; many CI workflows still default to Node 20
+
+### Details
+openclaw-appstore CI failed with `npm warn EBADENGINE` because `@capacitor/core@8.3.0` requires Node >=22. The workflow used `node-version: '20'`. Fix: bump to `'22'`.
+
+### Suggested Action
+When adding Capacitor to any project, always set CI Node version to ≥22.
+
+### Resolution
+- **Resolved**: 2026-04-24T01:50:00+02:00
+- **Commit**: 2d279cd on hendr15k/openclaw-appstore
+- **Promoted**: TOOLS.md
+
+### Metadata
+- Source: conversation
+- Related Files: .github/workflows/deploy.yml
+- Tags: capacitor, node, ci, github-actions
+- Pattern-Key: ci.capacitor_node_version
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-003] best_practice
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: infra
+
+### Summary
+`peaceiris/actions-gh-pages@v3` needs `contents: write` permission, not just `read`
+
+### Details
+Browserbetriebssystem deploy failed with 403. Workflow had `permissions: contents: read`. The gh-pages action pushes to the `gh-pages` branch, which requires write access.
+
+### Suggested Action
+Always use `contents: write` when using peaceiris/actions-gh-pages or any action that pushes to branches.
+
+### Resolution
+- **Resolved**: 2026-04-24T01:45:00+02:00
+- **Commit**: 589cc50 on hendr15k/Browserbetriebssystem
+
+### Metadata
+- Source: conversation
+- Tags: github-actions, gh-pages, permissions
+- Pattern-Key: ci.gh_pages_needs_write_permission
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-004] best_practice
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: infra
+
+### Summary
+`npx cap add android` must run before `npx cap sync android` if `android/` isn't committed
+
+### Details
+openclaw-appstore CI failed on `npx cap sync android` because the `android/` platform directory was gitignored and never created. Need to run `cap add android` first to bootstrap the platform.
+
+### Suggested Action
+In CI workflows for Capacitor apps, always run `cap add` before `cap sync` when the native platform directory isn't committed to the repo.
+
+### Resolution
+- **Resolved**: 2026-04-24T01:55:00+02:00
+- **Commit**: 2d85cad on hendr15k/openclaw-appstore
+
+### Metadata
+- Source: conversation
+- Tags: capacitor, android, ci
+- Pattern-Key: ci.capacitor_add_before_sync
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-005] insight
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: low
+**Status**: resolved
+**Area**: infra
+
+### Summary
+GitHub API `repos/contents/PUT` for workflow files requires Base64-encoded content
+
+### Details
+When updating workflow files via `gh api repos/OWNER/REPO/contents/PATH -X PUT`, the `content` field must be base64-encoded. Also need the current file SHA for updates (get via GET first).
+
+### Suggested Action
+Use `base64 -w0` for content encoding. Always GET the file SHA before PUTting updates.
+
+### Metadata
+- Source: conversation
+- Tags: github-api, workflow-files
+- Pattern-Key: github.api_contents_requires_base64
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-006] insight
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: infra
+
+### Summary
+Dependabot PRs with major version bumps should NOT be auto-merged
+
+### Details
+Dependabot created PRs for major bumps: typescript 5→6, vite 6→8, pdfjs-dist 3→5, jsdom 27→29. These can introduce breaking changes and should be reviewed individually. Only patch/minor bumps are safe for auto-merge.
+
+### Suggested Action
+Configure Dependabot auto-merge workflows to only merge patch and minor bumps. Skip major bumps for manual review.
+
+### Metadata
+- Source: conversation
+- Tags: dependabot, versioning, best-practice
+- Pattern-Key: dependabot.skip_major_bumps
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-007] best_practice
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: low
+**Status**: pending
+**Area**: infra
+
+### Summary
+YAML `run: |` blocks need correct indentation (2 spaces under `- run:`)
+
+### Details
+Einkaufsliste validate.yml had 4 spaces of indentation under a `run: |` block where 2 were expected, causing YAML parse errors in GitHub Actions.
+
+### Suggested Action
+Always validate YAML indentation for `run: |` blocks in GitHub Actions workflows. Use 2-space indent for content under `- run: |`.
+
+### Resolution
+- **Resolved**: 2026-04-24T02:10:00+02:00
+- **Commit**: 1719558 on hendr15k/Einkaufsliste
+
+### Metadata
+- Source: conversation
+- Tags: yaml, github-actions, indentation
+- Pattern-Key: ci.yaml_run_block_indentation
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-008] insight
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: config
+
+### Summary
+Branch Protection on free GitHub plan only prevents force-push and deletion, not direct pushes
+
+### Details
+Setting `required_pull_request_reviews: null` and `required_status_checks: null` in branch protection allows direct pushes to main but still prevents force-pushes and branch deletion. This is the appropriate setting for personal repos where the owner pushes directly.
+
+### Suggested Action
+Use minimal branch protection (force-push/deletion prevention) for personal repos. Add PR reviews only for team repos.
+
+### Metadata
+- Source: conversation
+- Tags: github, branch-protection
+- Pattern-Key: github.minimal_branch_protection
+- Recurrence-Count: 1
+
+---
+
+## [LRN-20260424-005] best_practice
+
+**Logged**: 2026-04-24T12:55:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Mobile tool navigation needs horizontal scrollable bar for quick switching between tools.
+
+### Details
+On mobile, users had to go back to the app grid to switch between tools. This added extra taps and friction. Adding a horizontal scrollable tool navigation bar at the top of each tool view allows instant switching.
+
+### Suggested Action
+Add a sticky horizontal scroll bar with tool buttons at the top of each tool view. Use `overflow-x: auto` with `white-space: nowrap` for smooth scrolling.
+
+### Metadata
+- Source: conversation
+- Related Files: /tmp/bookish-waffle/index.html
+- Tags: mobile, ux, navigation, touch
+- Pattern-Key: mobile.tool_navigation
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
+
+## [LRN-20260424-006] best_practice
+
+**Logged**: 2026-04-24T12:55:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Mobile bottom toolbar improves thumb-reachable navigation.
+
+### Details
+Bottom toolbar with Home, Calc, Algebra, Plot, History provides quick access to most-used tools. Position is thumb-friendly for one-handed use. Fixed position with safe-area-inset support for notched phones.
+
+### Suggested Action
+Add fixed bottom toolbar with 5 most-used actions. Use `env(safe-area-inset-bottom)` for notched phones. Hide on desktop with `@media (max-width: 768px)`.
+
+### Metadata
+- Source: conversation
+- Related Files: /tmp/bookish-waffle/index.html
+- Tags: mobile, ux, navigation, bottom-toolbar
+- Pattern-Key: mobile.bottom_toolbar
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
+
+## [LRN-20260424-007] insight
+
+**Logged**: 2026-04-24T12:55:00+02:00
+**Priority**: low
+**Status**: pending
+**Area**: frontend
+
+### Summary
+App category filters reduce cognitive load on mobile.
+
+### Details
+With 17+ tools in the app grid, finding the right one on mobile was overwhelming. Adding category filter chips (Math, Science, Tools) helps users narrow down options quickly.
+
+### Suggested Action
+Add filter chips above app grid. Use simple category mapping. Update active state on filter change.
+
+### Metadata
+- Source: conversation
+- Related Files: /tmp/bookish-waffle/index.html
+- Tags: mobile, ux, filtering, categories
+- Pattern-Key: mobile.category_filters
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
+
+
+## [LRN-20260424-009] knowledge_gap
+
+**Logged**: 2026-04-24T13:00:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Service Worker caches old version — new HTML elements not visible after deploy.
+
+### Details
+After deploying new mobile features (bottom toolbar, tool navigation bar), the elements were in the HTML source but not rendered in the DOM. The service worker was caching the old version. Unregistering the service worker and reloading fixed the issue.
+
+### Suggested Action
+When deploying PWA features, always update the service worker version or unregister it. Consider adding a version check to force updates.
+
+### Metadata
+- Source: conversation
+- Related Files: /tmp/bookish-waffle/sw.js
+- Tags: pwa, service-worker, caching, deploy
+- Pattern-Key: pwa.service_worker_cache
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
+
+## [LRN-20260424-010] correction
+
+**Logged**: 2026-04-24T13:20:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Fancy mobile UX additions can introduce more bugs than value; prefer focused bug-fixing over speculative features.
+
+### Details
+The added mobile tool navigation bar created layout/placement bugs and had to be removed. Hendrik's feedback was clear: the app was still "extrem buggy" despite partial improvements. The right move was to remove unstable UX additions and focus on real mobile defects instead of piling on more interface features.
+
+### Suggested Action
+For mobile optimization rounds, first do a bug-hunt on actual issues (overflow, focus, clipped content, broken tool views, touch target size). Only add new UX features if they solve a verified user pain point and can be tested end-to-end.
+
+### Metadata
+- Source: user_feedback
+- Related Files: /tmp/bookish-waffle/index.html
+- Tags: mobile, ux, regression, prioritization
+- Pattern-Key: mobile.fix_real_bugs_first
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
+
+## [LRN-20260424-011] best_practice
+
+**Logged**: 2026-04-24T13:20:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Validate structural DOM placement, not just presence checks, when injecting repeated UI blocks.
+
+### Details
+The mobile tool nav existed in the HTML source, but was inserted as a sibling outside tool views instead of inside them. Presence checks alone gave false confidence. The correct validation is structural: verify `.mobile-tool-nav` is a descendant of `#tool-*`, not merely present somewhere in the DOM.
+
+### Suggested Action
+When modifying generated HTML repeatedly, test DOM relationships explicitly (e.g. `#tool-calculator .mobile-tool-nav`) and inspect one concrete snippet after every transformation.
+
+### Metadata
+- Source: conversation
+- Related Files: /tmp/bookish-waffle/index.html
+- Tags: dom, validation, mobile, html-injection
+- Pattern-Key: frontend.validate_dom_structure
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
+## [LRN-20260424-003] best_practice
+
+**Logged**: 2026-04-24T21:11:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: docs
+
+### Summary
+README-Angaben nach einem CSV-Umbau immer gegen die echte Datenquelle prüfen statt alte Zahlen oder Projektzustände zu übernehmen.
+
+### Details
+Beim Überarbeiten von `/home/openclaw/.openclaw/workspace/hendrik-sci-fi-recommendations/README.md` war der frühere README-Stand inhaltlich veraltet (`~70 Science-Fiction-Titeln`, ältere Architektur-Beschreibung). Vor dem Update wurde die tatsächliche Datenquelle `books.csv` gezählt und ergab 150 Einträge. Daraus folgt als wiederkehrende Regel: README und ähnliche Doku nach Daten-/Architektur-Umbauten immer erst gegen reale Dateien validieren, damit keine alten Bestände oder Features weitergeschleppt werden.
+
+### Suggested Action
+Vor Doku-Updates kurz die relevante Quelle live prüfen (z. B. `books.csv` zählen, Felder inspizieren, Repo-Status ansehen) und dann erst Fakten im README formulieren.
+
+### Metadata
+- Source: conversation
+- Related Files: /home/openclaw/.openclaw/workspace/hendrik-sci-fi-recommendations/README.md, /home/openclaw/.openclaw/workspace/hendrik-sci-fi-recommendations/books.csv
+- Tags: docs, readme, csv, verification
+- Pattern-Key: verify.docs_against_source
+- Recurrence-Count: 1
+- First-Seen: 2026-04-24
+- Last-Seen: 2026-04-24
+
+---
