@@ -1625,3 +1625,26 @@ If Hendrik replies with `Alles`, `mach alles`, or equivalent immediately after a
 - Tags: approval, autopilot, workflow, direct-chat
 
 ---
+
+## [LRN-20260424-005] best_practice
+
+**Logged**: 2026-04-24T23:23:57+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: workflow
+
+### Summary
+Wenn ein Nutzer um eine Kündigungserinnerung „bis Datum X" bittet, standardmäßig eine Erinnerung vor dem Stichtag anlegen statt genau am letzten möglichen Tag.
+
+### Details
+Hendrik bat um eine Erinnerung, BookBeat bis zum 08.05.2026 zu kündigen. Statt auf den Stichtag selbst wurde die Erinnerung auf den Vorabend gelegt (07.05.2026, 18:00), um Handlungsspielraum zu lassen. Das ist in solchen Fällen meist die hilfreichere Standardwahl, solange kein exakter Zeitpunkt genannt ist.
+
+### Suggested Action
+Bei Fristen ohne exakte Uhrzeit standardmäßig eine erste Erinnerung am Vortag zu einer vernünftigen Uhrzeit anlegen und optional eine zweite Erinnerung am Stichtag anbieten.
+
+### Metadata
+- Source: conversation
+- Related Files: .learnings/LEARNINGS.md
+- Tags: reminders, calendar, defaults, deadlines
+
+---
