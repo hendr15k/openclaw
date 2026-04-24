@@ -1,3 +1,37 @@
+## [ERR-20260423-001] google-home-oauth-token-expired
+
+**Logged**: 2026-04-23T15:32:00+02:00
+**Priority**: high
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Google Home OAuth refresh token expired → humidity daemon unable to read humidity or control AC
+
+### Error
+```
+google.auth.exceptions.RefreshError: ('invalid_grant: Token has been expired or revoked.', {'error': 'invalid_grant', 'error_description': 'Token has been expired or revoked.'})
+```
+
+### Context
+- Daemon: `maintain_humidity.py` (PID 130085)
+- Last successful read: 2026-04-22 20:41
+- Symptom: "Google humidity lookup failed; skipping cycle" repeating indefinitely
+- AC stuck OFF despite 72% humidity (target 65%)
+- Fix: Re-authorized via `google-oauthlib-tool --headless`, user provided auth code via Telegram
+
+### Resolution
+- **Resolved**: 2026-04-23T15:31:00+02:00
+- **Method**: `google-oauthlib-tool --headless` with new authorization code from user
+- **Notes**: After re-auth, daemon immediately read 72% humidity and turned AC on
+
+### Metadata
+- Reproducible: no (one-time token expiry)
+- Related Files: `google-home-control/scripts/control.py`, `maintain_humidity.py`
+- See Also: LRN-20260423-005
+
+---
+
 ## [ERR-20260314-001] agent-autonomy-kit install
 
 **Logged**: 2026-03-14T06:40:00Z
@@ -389,3 +423,169 @@ Fix: `useTTS(parseInt(localStorage.getItem(...) || '0', 10))`
 - **Resolved**: 2026-04-21
 - **Commit**: 4a24fdb
 
+---
+
+## [ERR-20260421-003] google-home-control
+
+**Logged**: 2026-04-21T23:52:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: config
+
+### Summary
+Google Home control.py Pfad falsch in SKILL.md — Script liegt unter scripts/control.py, nicht im Skill-Root
+
+### Error
+```
+python3: can't open file '.../google-home-control/control.py': [Errno 2] No such file or directory
+```
+Danach: `ModuleNotFoundError: No module named 'google.assistant.embedded.v1alpha2'` weil system-Python statt venv-Python genutzt.
+
+### Context
+- SKILL.md referenziert `control.py` im Skill-Root
+- Tatsächlicher Pfad: `skills/google-home-control/scripts/control.py`
+- Script MUSS mit der venv-Python ausgeführt werden: `google_home_env/bin/python scripts/control.py`
+- System-Python hat die google-assistant Dependencies nicht
+
+### Suggested Fix
+1. SKILL.md Pfad-Korrektur: `scripts/control.py` statt `control.py`
+2. In TOOLS.md Hinweis ergänzen: google-home immer mit venv-Python aufrufen
+
+### Metadata
+- Reproducible: yes
+- Related Files: skills/google-home-control/SKILL.md, skills/google-home-control/scripts/control.py
+- See Also: LRN-20260421-004 (skill script paths)
+
+
+
+## [ERR-20260424-001] cap_sync_android
+
+**Logged**: 2026-04-24T01:55:00+02:00
+**Priority**: high
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Capacitor `cap sync android` failed in CI because `android/` platform was missing
+
+### Error
+```
+[error] android platform has not been added!
+```
+
+### Context
+- Repo: hendr15k/openclaw-appstore
+- The `android/` directory was gitignored and never committed
+- CI tried `npx cap sync android` without first running `npx cap add android`
+
+### Suggested Fix
+Always run `npx cap add android` before `npx cap sync android` in CI when native platform isn't committed.
+
+### Resolution
+- **Resolved**: 2026-04-24T01:55:00+02:00
+- **Commit**: 2d85cad on hendr15k/openclaw-appstore
+- **Notes**: Added `npx cap add android` step before sync
+
+### Metadata
+- Reproducible: yes
+- Related Files: .github/workflows/deploy.yml
+
+---
+
+## [ERR-20260424-002] playwright_fixture_missing
+
+**Logged**: 2026-04-24T02:30:00+02:00
+**Priority**: low
+**Status**: resolved
+**Area**: tests
+
+### Summary
+Playwright tests failed because `pytest-playwright` package wasn't installed
+
+### Error
+```
+fixture 'page' not found
+```
+
+### Context
+- Repo: hendr15k/Browserbetriebssystem
+- Tests use Playwright's `page` fixture from `pytest-playwright`
+- First attempt only installed `playwright` + `pytest`, not `pytest-playwright`
+
+### Suggested Fix
+When running Playwright tests, always install `pytest-playwright` alongside `playwright` and `pytest`.
+
+### Resolution
+- **Resolved**: 2026-04-24T02:35:00+02:00
+- **Notes**: `pip install pytest-playwright` fixed it. 25/26 tests passed.
+
+### Metadata
+- Reproducible: yes
+- Related Files: verification/test_features.py
+
+---
+
+## [ERR-20260424-003] github_auto_merge_disabled
+
+**Logged**: 2026-04-24T02:20:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: infra
+
+### Summary
+`gh pr merge --auto` failed because auto-merge wasn't enabled on the repository
+
+### Error
+```
+GraphQL: Auto merge is not allowed for this repository (enablePullRequestAutoMerge)
+```
+
+### Context
+- Repo: hendr15k/bookish-waffle
+- Tried `gh pr merge 302 --squash --auto`
+- Repository setting `allow_auto_merge` was disabled
+
+### Suggested Fix
+Before setting up Dependabot auto-merge, enable the feature: `gh repo edit OWNER/REPO --enable-auto-merge`
+
+### Resolution
+- **Resolved**: 2026-04-24T02:22:00+02:00
+- **Notes**: Ran `gh repo edit` for all 4 affected repos
+
+### Metadata
+- Reproducible: yes
+- Related Files: .github/workflows/dependabot-auto-merge.yml
+
+---
+
+## [ERR-20260424-001] subagent_git_push
+
+**Logged**: 2026-04-24T12:55:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Subagent parallel commits to same repo cause push failures.
+
+### Error
+```
+! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'github.com:hendr15k/bookish-waffle.git'
+```
+
+### Context
+- 3 subagents working on same repo simultaneously
+- Each cloned, modified, and pushed
+- Only first push succeeded; others got non-fast-forward errors
+- Required rebasing and retry
+
+### Suggested Fix
+Assign each subagent a different file/directory, or run them sequentially. Never let multiple subagents modify the same file.
+
+### Metadata
+- Reproducible: yes
+- Related Files: N/A
+- See Also: LRN-20260424-004
+
+---

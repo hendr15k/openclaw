@@ -32,3 +32,28 @@ Key: `open-reader-voice` und `open-reader-speed` in localStorage. Initialisierun
 - Frequency: first_time
 - Related Features: open-reader dark mode persistence (LRN-20260421-005)
 
+
+## [FEAT-20260424-001] swipe_navigation
+
+**Logged**: 2026-04-24T12:55:00+02:00
+**Priority**: low
+**Status**: pending
+**Area**: frontend
+
+### Requested Capability
+Swipe left/right to navigate between tools on mobile.
+
+### User Context
+Users on mobile expect swipe gestures for navigation. Adding swipe support between tool views would make the app feel more native and reduce the need for the tool navigation bar.
+
+### Complexity Estimate
+medium
+
+### Suggested Implementation
+Use touchstart/touchmove/touchend events to detect horizontal swipes. When swipe threshold is reached, navigate to next/previous tool. Could use a circular list of tools for infinite swiping.
+
+### Metadata
+- Frequency: first_time
+- Related Features: mobile-tool-nav, bottom-toolbar
+
+---

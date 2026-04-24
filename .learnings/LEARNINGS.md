@@ -1602,3 +1602,26 @@ Vor Doku-Updates kurz die relevante Quelle live prüfen (z. B. `books.csv` zähl
 - Last-Seen: 2026-04-24
 
 ---
+
+## [LRN-20260424-004] best_practice
+
+**Logged**: 2026-04-24T22:32:38+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: workflow
+
+### Summary
+When Hendrik explicitly says "Alles" after `/autopilot ideas`, treat it as permission to execute the proposed bundle, not just acknowledge it.
+
+### Details
+An `/autopilot ideas` list was provided with multiple concrete next steps. Hendrik replied `Alles`, which in context meant approval to proceed with the whole proposed set. The response only acknowledged it instead of translating that into action or a clarifying execution start. For direct-chat workflow, this phrase should be interpreted as go-ahead when the immediately preceding assistant message was a bundled set of proposed tasks.
+
+### Suggested Action
+If Hendrik replies with `Alles`, `mach alles`, or equivalent immediately after a bounded proposal list, start executing the approved set or return a concise execution update instead of a bare acknowledgement.
+
+### Metadata
+- Source: user_feedback
+- Related Files: AGENTS.md, .learnings/LEARNINGS.md
+- Tags: approval, autopilot, workflow, direct-chat
+
+---
