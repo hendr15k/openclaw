@@ -1648,3 +1648,31 @@ Bei Fristen ohne exakte Uhrzeit standardmäßig eine erste Erinnerung am Vortag 
 - Tags: reminders, calendar, defaults, deadlines
 
 ---
+
+## [LRN-20260425-001] best_practice
+
+**Logged**: 2026-04-25T00:19:11+02:00
+**Priority**: high
+**Status**: pending
+**Area**: config
+
+### Summary
+Öffentliches OpenClaw-Gateway über `wss://` braucht neben TLS/Reverse-Proxy auch `gateway.controlUi.allowedOrigins`, sonst scheitert das Control UI mit `origin not allowed`.
+
+### Details
+Für `claw1896.duckdns.org` wurde Caddy als TLS-Reverse-Proxy vor das lokale Gateway gesetzt und `device-pair.config.publicUrl` auf `wss://claw1896.duckdns.org` umgestellt. Danach funktionierte HTTPS/WSS technisch, aber das browserbasierte Control UI scheiterte weiter mit `origin not allowed (open the Control UI from the gateway host or allow it in gateway.controlUi.allowedOrigins)`. Erst das Ergänzen von `gateway.controlUi.allowedOrigins = ["https://claw1896.duckdns.org"]` und ein Gateway-Restart machten die öffentliche Control-UI-Verbindung funktionsfähig.
+
+### Suggested Action
+Bei jeder öffentlichen Gateway-Expose-Umstellung Checkliste nutzen:
+1. Domain zeigt auf Host
+2. TLS/Reverse-Proxy läuft
+3. `device-pair.config.publicUrl` auf `wss://...` setzen
+4. `gateway.controlUi.allowedOrigins` auf die öffentliche UI-Origin setzen
+5. Gateway neu starten und Browser-Verbindung testen
+
+### Metadata
+- Source: conversation
+- Related Files: /home/openclaw/.openclaw/openclaw.json, /etc/caddy/Caddyfile
+- Tags: openclaw, gateway, wss, tls, caddy, cors, control-ui
+
+---
