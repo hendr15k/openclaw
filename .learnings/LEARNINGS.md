@@ -1699,3 +1699,30 @@ Bei neuen Node-Setups zuerst harmlose Capability-Checks durchführen (z. B. `nod
 - Tags: openclaw, android, node, camera, capabilities
 
 ---
+
+## [LRN-20260425-003] best_practice
+
+**Logged**: 2026-04-25T00:33:39+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: openclaw-nodes
+
+### Summary
+Bei mehrfach gepairten Android-Nodes mit gleichem Anzeigenamen führt `--node 'Xiaomi 13T Pro'` zu Ambiguitätsfehlern; für belastbare Automatisierung immer konkrete Node-ID oder vorherigen `nodes status`-Check verwenden.
+
+### Details
+Nach erneutem Pairing existierten zwei Node-Einträge mit identischem Namen `Xiaomi 13T Pro` (`afca140d...` und `cb318040...`). CLI-Aufrufe wie `openclaw nodes invoke --node 'Xiaomi 13T Pro' ...` scheiterten mit `ambiguous node`, obwohl zuvor einfache Tests funktioniert hatten. Zusätzlich kann die aktive Android-Node kurz darauf disconnecten, wenn die App in den Hintergrund geht oder das Netz wechselt. Namensbasierte Aufrufe sind daher bei mehrfach gepairten Mobilgeräten unzuverlässig.
+
+### Suggested Action
+Vor Node-Tests immer:
+1. `openclaw nodes status` ausführen
+2. aktive **connected** Node-ID notieren
+3. Invoke-/Media-Befehle mit dieser ID statt Anzeigenamen ausführen
+4. bei Android mit spontanen Disconnects rechnen
+
+### Metadata
+- Source: conversation
+- Related Files: none
+- Tags: openclaw, android, node, ambiguity, device-pairing
+
+---
