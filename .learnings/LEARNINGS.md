@@ -1749,3 +1749,26 @@ Für schnelle Canvas-Prototypen zuerst `data:`-URLs nutzen; nach erfolgreichem R
 - Tags: openclaw, canvas, android, data-url, prototyping
 
 ---
+
+## [LRN-20260425-005] best_practice
+
+**Logged**: 2026-04-25T00:45:21+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: openclaw-canvas
+
+### Summary
+Für mobile Canvas-Dashboards ist ein kurzer Live-Data-Flow robust: erst `device.status` abrufen, daraus HTML als `data:`-URL erzeugen, dann `canvas present` + `canvas snapshot` zur Verifikation.
+
+### Details
+Ein Live-Dashboard für das Xiaomi-13T-Pro wurde erfolgreich erzeugt, indem zuerst `openclaw nodes invoke --command device.status` auf der verbundenen Node ausgeführt wurde. Die Antwort wurde direkt in ein kleines HTML-Dashboard (Akku, Netz, Speicher, Uptime, Uhr) eingebettet, als `data:text/html` an `openclaw nodes canvas present` gesendet und anschließend mit `openclaw nodes canvas snapshot` überprüft. Dieser Workflow erlaubt personalisierte Gerätedashboards ohne separaten Webserver.
+
+### Suggested Action
+Bei mobilen UI-Demos dynamische Node-Daten zuerst lokal aggregieren und dann als selbstenthaltende `data:`-HTML-Seite rendern; danach immer Snapshot ziehen.
+
+### Metadata
+- Source: conversation
+- Related Files: none
+- Tags: openclaw, android, canvas, dashboard, data-url
+
+---
