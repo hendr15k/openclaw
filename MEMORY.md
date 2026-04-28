@@ -289,4 +289,19 @@ git clone https://github.com/username/skill-repo.git ~/.openclaw/workspace/skill
 
 ---
 
+### From 2026-04-27 Evening — OBD Simulator Setup
+
+#### ELM327 Bluetooth Server (Car Scanner compatible)
+- **Files on laptop:** `/home/hendrik/elm327_full.py` — vollständiger ELM327 Emulator
+- **Working:** ISO 15765-4 CAN mit korrekten Headern (`7E8 06 41 00...`)
+- **Key insight:** CAN-Responses MÜSSEN Header + Byte-Count haben bei ATH1 (z.B. `7E8 06 41 00 BE 3E B8 13`)
+- **SDP Record:** `sudo sdptool add --channel=1 SP` — RFCOMM Channel 1 als Serial Port
+- **BT Agent:** D-Bus Agent an `/org/bluez/agent` (NICHT `/test/agent`) — als root starten
+- **Discoverable:** `bluetoothctl discoverable-timeout 0` — kein Timeout
+- **Start:** `nohup /home/hendrik/obd-venv/bin/python3 /home/hendrik/elm327_full.py > /home/hendrik/obd_full.log 2>&1 &`
+- **Ngrok:** Free-Tunnel zu instabil → Scripts schreiben + SCP + ein einziger SSH-Call
+- **LRN-20260427-015:** CAN-Header Format (ATH1) für Car Scanner essentiell
+- **LRN-20260427-016:** SDP Record muss explizit registriert werden
+- **LRN-20260427-017:** D-Bus Agent Pfad `/org/bluez/agent`, nicht `/test/agent`
+
 *This is curated long-term memory — distilled from daily logs*

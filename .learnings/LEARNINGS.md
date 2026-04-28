@@ -1772,3 +1772,346 @@ Bei mobilen UI-Demos dynamische Node-Daten zuerst lokal aggregieren und dann als
 - Tags: openclaw, android, canvas, dashboard, data-url
 
 ---
+
+## [LRN-20260426-005] timeouts
+**Logged**: 2026-04-26
+**Rule**: IMMER kurze timeouts. exec: 30s, spawn: 60s. Länger -> background + polling.
+
+---
+
+## [LRN-20260427-001] infrastructure
+
+**Logged**: 2026-04-27
+**Rule**: Maton Google Drive Proxy — PATCH with `addParents`/`removeParents` is silently ignored (returns 200 but parents unchanged). Workaround: `files/{id}/copy` + `DELETE` original. Affects all move operations via Maton.
+**Details**: Tested with Python urllib — PATCH returns success but field never changes. Copy+Delete is the only reliable move method.
+**Metadata**
+- Area: infra
+- Status: pending
+- Related Files: TOOLS.md (noted)
+
+---
+
+## [LRN-20260427-002] infrastructure
+
+**Logged**: 2026-04-27
+**Rule**: Maton Google Drive `files.copy` + `DELETE` works reliably for flattening folder hierarchies. Rate limit ~0.15s/file is safe. Nested subfolders can't be copied as units — must enumerate files inside them first, then copy individually.
+**Details**: Used to merge 4 backup/archive folders (82 files total, ~55 GB logical size) into one. Copy+Delete at 0.2s/file completed in ~3 minutes for 40 files. Nested subfolders (7 subs in ISO_Downloads) were skipped — need second pass to enumerate and flatten.
+**Metadata**
+- Area: infra
+- Status: pending
+
+---
+
+## [LRN-20260427-003] best_practice
+
+**Logged**: 2026-04-27
+**Rule**: bookish-waffle subagent produced `odestats(sol)` (commit `e459cd3`) — always push subagent commits before spawning new work. The subagent commits locally but doesn't push. Verify with `git log origin/main..HEAD` after completion.
+**Details**: Subagent completed `e459cd3 feat(cas): add odestats(sol)` — I needed to explicitly `git push origin main`. Always do this immediately after subagent confirms commit.
+**Metadata**
+- Area: backend
+- Status: pending
+
+---
+
+## [LRN-20260427-004] best_practice
+
+**Logged**: 2026-04-27T01:25:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: infra
+
+### Summary
+Maton API intermittent 404s: some folder IDs return "File not found" even though listing shows them. Likely rate-limiting or transient issue.
+
+### Details
+When listing contents of subfolders in 02_Technik, some folder IDs returned 404. But the folders clearly exist (they show up in parent listing). Retrying with a fresh listing from the parent always works. The issue seems to be that folder IDs obtained from `api_list()` calls sometimes don't work immediately due to API rate limiting (0.15s between calls isn't always enough).
+
+### Suggested Action
+Always get fresh folder IDs from parent listing before querying. Add retry logic for 404s. Never assume IDs from previous listings are still valid.
+
+### Metadata
+- Source: conversation
+- Tags: maton, api, rate-limit
+- See Also: LRN-20260427-001 (related - Maton PATCH bug)
+
+---
+
+## [LRN-20260427-005] best_practice
+
+**Logged**: 2026-04-27T01:25:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: infra
+
+### Summary
+opl-monitor-free.apk was incorrectly assumed to be in Literatur/Technik_und_Installationen. Always verify file locations after copy+delete operations — the delete may have succeeded on the original but the copy might have gone to a different folder.
+
+### Details
+During Drive cleanup, the APK `opl-monitor-free.apk` (ID: `1l12mugGgJxVlMPL4DTW7bOT1T0V5Mn3C`) was supposedly moved from Literatur root to Literatur/Technik_und_Installationen. But checking showed it was still in Literatur root and NOT in Technik_und_Installationen. The copy+delete may have silently failed (copy to wrong folder, or copy failed but delete succeeded on a different version). Required explicit verification to discover the file was in the wrong location.
+
+### Suggested Action
+After ANY copy+delete operation, always verify: (1) new file exists in target, (2) old file no longer exists in source. Don't trust the operation succeeded just because the API returned 200.
+
+### Metadata
+- Source: conversation
+- Tags: google-drive, copy-delete, verification
+- See Also: LRN-20260427-001 (Copy+Delete workaround)
+
+---
+
+## [LRN-20260427-006] best_practice
+
+**Logged**: 2026-04-27T01:25:00+02:00
+**Priority**: medium
+**Status**: pending
+**Area**: infra
+
+### Summary
+When merging folder hierarchies, nested subfolders can't be copied as units. Must enumerate files inside each subfolder first, then copy individually.
+
+### Details
+Google Drive `files.copy` only works on individual files, not folders. When flattening a folder hierarchy (e.g., moving all files from ISO_Downloads and its 7 subfolders into OS_Images_und_VMs), you can't just copy the top-level folder. You must: (1) list the top-level folder, (2) for each subfolder, list its contents, (3) copy each file individually to the target. This was already documented in TOOLS.md but required a second pass to handle the nested files.
+
+### Suggested Action
+Always write merge scripts with nested folder enumeration built in. Don't assume only top-level files exist.
+
+### Metadata
+- Source: conversation
+- Tags: google-drive, folder-merge, nested
+- See Also: LRN-20260427-001 (Copy+Delete workaround)
+
+
+## LRN-20260427-004: humidity_hysteresis_control.py disable bug
+**Datum:** 2026-04-27
+**Was:** `disable` Kommando löscht das enabled-Flag UND die PID-Datei, aber killt den Prozess NICHT.
+**Beobachtung:** Nach `disable` zeigte `status` korrekt `enabled=no running=no`, aber `pgrep` fand den Prozess noch (PID 50129).
+**Root Cause:** `disable` löscht STATE_DIR files, liest aber nicht mehr nach ob der eigentliche Prozess noch läuft.
+**Fix:** `kill PID` manuell nötig nach disable, bis Bug im Script gefixt.
+**Was zu tun:** Process-Kill-Logik in `disable` einbauen (SIGTERM an alle bekannten PIDs).
+
+---
+
+## [LRN-20260427-008] best_practice
+
+**Logged**: 2026-04-27T15:58:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Android support library 25.4.0 `NotificationCompat.Builder` has no `setChannel()`/`setChannelId()` — must use native `Notification.Builder` with channel on API 26+.
+
+### Details
+HappyBlue used `NotificationCompat.Builder(context, channelId)` from support library 25.4.0. That constructor overload only exists in support library ≥26.1.0. The 25.4.0 version silently ignores the channel parameter, causing `CannotPostForegroundServiceNotificationException: Bad notification for startForeground` on Android 8.0+.
+
+Fix: Use native `android.app.Notification.Builder(context, CHANNEL_ID)` directly, with an if/else for API version.
+
+### Suggested Action
+When dealing with decompiled Android apps that use support library <26.1.0, always replace `NotificationCompat.Builder` with native `Notification.Builder` + `NotificationChannel`.
+
+### Metadata
+- Source: error
+- Related Files: happyblue-elm327/app/src/main/java/com/happyblue/bluetooth/BluetoothService.java
+- Tags: android, notification, support-library, api-compat
+- Pattern-Key: harden.android_notification_channel_compat
+- First-Seen: 2026-04-27
+
+---
+
+## [LRN-20260427-009] best_practice
+
+**Logged**: 2026-04-27T15:58:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Android crash cascade after decompile+rebuild: each fix reveals the next missing API requirement (Permission → PendingIntent → NotificationChannel)
+
+### Details
+HappyBlue crashed 3 times in sequence:
+1. `SecurityException: FOREGROUND_SERVICE` → Added permission + foregroundServiceType
+2. `IllegalArgumentException: PendingIntent requires FLAG_IMMUTABLE` → Added flags
+3. `CannotPostForegroundServiceNotification: Bad notification` → Added NotificationChannel
+
+Each fix only exposed the next missing Android 12+/14+ requirement. The original app targets API 33 but was compiled against older APIs.
+
+### Suggested Action
+When fixing Android API-level crashes, fix ALL known requirements in one pass:
+- FOREGROUND_SERVICE permission
+- foregroundServiceType on service
+- FLAG_IMMUTABLE on all PendingIntents
+- NotificationChannel for API 26+
+Don't fix one, build, test, and wait for the next crash.
+
+### Metadata
+- Source: error
+- Related Files: happyblue-elm327/
+- Tags: android, crash, api-level, sequential-fixes
+- Pattern-Key: harden.android_fix_all_api_requirements
+- See Also: LRN-20260427-008
+
+---
+
+## [LRN-20260427-010] insight
+
+**Logged**: 2026-04-27T15:58:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+Android 15 (API 35) blocks `logcat -d` without `READ_LOGS` permission — must use internal file-based logging for debug
+
+### Details
+HappyBlue's BT Log export showed empty logcat on Xiaomi 13T Pro (Android 15, API 35). The `logcat -d -s TAG:D` command returns nothing without the system `READ_LOGS` permission (which requires ADB grant or system app status).
+
+Fix: Added internal file-based logging (`bt_connect_debug.txt`) that writes directly from the app's Java code, independent of logcat. This captures connection attempts even when logcat is empty.
+
+### Suggested Action
+For decompiled Android apps debug logging, always add internal file-based logging. Don't rely on logcat for user-facing diagnostics.
+
+### Metadata
+- Source: error
+- Related Files: happyblue-elm327/app/src/main/java/com/happyblue/bluetooth/BluetoothService.java
+- Tags: android, logcat, api-35, xiaomi, debug, logging
+- Pattern-Key: harden.android_file_based_debug_log
+- First-Seen: 2026-04-27
+
+---
+
+## [LRN-20260427-011] insight
+
+**Logged**: 2026-04-27T16:34:00+02:00
+**Priority**: high
+**Status**: pending
+**Area**: frontend
+
+### Summary
+ELM327 Bluetooth clones on Xiaomi + Android 15: `read ret: -1` on all RFCOMM methods — fix with 1.5s delay after cancelDiscovery + removeBond/createBond retry
+
+### Details
+Connection debug log showed all 3 fallback methods (SDP, insecure, direct RFCOMM channel 1) fail with identical `IOException: read failed, socket might closed or timeout, read ret: -1`. This is a known pattern with ELM327 clones on Xiaomi devices with aggressive BT power management.
+
+Fix approach:
+1. 1.5s delay after `cancelDiscovery()` before `socket.connect()`
+2. Fallback 3: removeBond → 2s wait → createBond → 3s wait → retry socket.connect()
+
+This often resolves the "first connection fails, second succeeds" pattern.
+
+### Suggested Action
+When ELM327 clone fails with `read ret: -1` on all methods, add discovery delay + bond refresh cycle.
+
+### Metadata
+- Source: error
+- Related Files: happyblue-elm327/app/src/main/java/com/happyblue/bluetooth/BluetoothService.java
+- Tags: bluetooth, elm327, xiaomi, clone, connection, rfcomm
+- Pattern-Key: harden.elm327_clone_xiaomi_bluetooth
+- First-Seen: 2026-04-27
+
+## [LRN-20260427-015] best_practice
+
+**Logged**: 2026-04-27T23:15:00+02:00
+**Priority**: critical
+**Status**: resolved
+**Area**: infra
+
+### Summary
+ELM327 Bluetooth server must return CAN-formatted responses with ISO 15765-4 headers when ATH1 is active — bare OBD payloads (`41 00 BE3EB813`) are rejected by Car Scanner. Correct format: `7E8 06 41 00 BE 3E B8 13`.
+
+### Details
+The first ELM327 server returned raw OBD responses. Car Scanner cycled through protocols without success. Root cause: when ATH1 (headers on) is set, the ELM327 protocol requires CAN frames to include the 3-byte CAN header + byte count prefix. Without it, Car Scanner cannot detect a valid protocol.
+
+### Suggested Action
+Any ELM327 emulator must: (1) support ATH1/ATH0 toggle, (2) format responses with `7E8 NN <data>` when headers on, (3) support ATFCSH/ATFCSD/ATFCSM CAN Flow Control commands (return OK).
+
+### Metadata
+- Source: error
+- Related Files: elm327_full.py
+- Tags: obd2, elm327, car-scanner, can-protocol, bluetooth
+- Pattern-Key: elm327.can_header_format
+- First-Seen: 2026-04-27
+
+## [LRN-20260427-016] knowledge_gap
+
+**Logged**: 2026-04-27T23:15:00+02:00
+**Priority**: high
+**Status**: resolved
+**Area**: infra
+
+### Summary
+RFCOMM socket open does NOT advertise the service — SDP record must be explicitly registered with `sdptool add --channel=1 SP`. Without it, Bluetooth clients cannot discover which RFCOMM channel to use.
+
+### Details
+Socket was bound and listening (confirmed in /proc/net/rfcomm) but Car Scanner couldn't connect. The Serial Port Service record was missing from the SDP database. Fixed with `sudo sdptool add --channel=1 SP`. Note: SDP records are volatile — they disappear after BT daemon restart and must be re-registered.
+
+### Suggested Action
+For any RFCOMM server: (1) register SDP record before listening, (2) verify with `sudo sdptool browse local | grep -A15 "Serial Port"`, (3) re-register after BT daemon restarts.
+
+### Metadata
+- Source: error
+- Related Files: setup_obd.sh
+- Tags: bluetooth, rfcomm, sdp, service-discovery
+- Pattern-Key: bluetooth.sdp_registration
+- First-Seen: 2026-04-27
+
+## [LRN-20260427-017] knowledge_gap
+
+**Logged**: 2026-04-27T23:15:00+02:00
+**Priority**: high
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Bluetooth auto-pairing agent must use D-Bus path `/org/bluez/agent` — `/test/agent` is wrong and silently fails. Also: Python dbus module cannot claim `org.bluez` bus name (AccessDenied).
+
+### Details
+bluetoothctl agent + default-agent kept failing with "No agent available". Python D-Bus Agent registered at `/test/agent` but bluetoothd expects `/org/bluez/agent`. Fix: use `/org/bluez/agent` object path for RegisterAgent + RequestDefaultAgent. Also: don't try to claim org.bluez bus name in Python — not allowed by D-Bus security policy. Run as root instead.
+
+### Suggested Action
+For Bluetooth auto-pairing: use D-Bus path `/org/bluez/agent`, run as root, call RegisterAgent + RequestDefaultAgent on AgentManager1 at /org/bluez.
+
+### Metadata
+- Source: error
+- Related Files: bt_agent_dbus.py
+- Tags: bluetooth, dbus, pairing, agent
+- Pattern-Key: bluetooth.agent_dbus_path
+- First-Seen: 2026-04-27
+
+## [LRN-20260427-018] best_practice
+
+**Logged**: 2026-04-27T23:15:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Ngrok Free tunnels are too unstable for multi-step SSH sequences — write self-contained scripts, SCP them over, execute in one call.
+
+### Details
+SSH commands over ngrok Free broke (exit 255) mid-execution. Complex multi-step operations almost always failed. Solution: write everything into a bash script, SCP it, execute in single SSH call.
+
+### Metadata
+- Source: error
+- Tags: ngrok, ssh, stability, scripting
+- Pattern-Key: ngrok.unstable_ssh
+- First-Seen: 2026-04-27
+
+## [LRN-20260427-019] knowledge_gap
+
+**Logged**: 2026-04-27T23:15:00+02:00
+**Priority**: medium
+**Status**: resolved
+**Area**: infra
+
+### Summary
+Bluetooth discoverable timeout defaults to 180s — set `bluetoothctl discoverable-timeout 0` for permanent visibility.
+
+### Details
+Discovered multiple times during session: Discoverable=yes became Discoverable=no after 180 seconds. Had to re-run `bluetoothctl discoverable on` repeatedly. Permanent fix: set timeout to 0 (never expires).
+
+### Metadata
+- Source: error
+- Tags: bluetooth, discoverable, timeout
+- Pattern-Key: bluetooth.discoverable_timeout
+- First-Seen: 2026-04-27
